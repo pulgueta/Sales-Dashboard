@@ -2,8 +2,8 @@ import { FC, useEffect, useState } from 'react'
 
 import { Heading, VStack } from '@chakra-ui/react'
 
-import { ProductCard } from '../../components'
-import { ProductCardSkeleton } from '../../components/skeleton'
+import { ProductCard } from '../../../components'
+import { ProductCardSkeleton } from '../../../components/skeleton'
 import { LazyLoadComponent } from 'react-lazy-load-image-component'
 
 const Products: FC = (): JSX.Element => {

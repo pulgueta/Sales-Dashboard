@@ -7,6 +7,7 @@ import { Home } from './views/home'
 import { Login } from './views/auth'
 import { AddProduct } from './views/addProduct'
 import { Products } from './views/products'
+import { NotFound } from './views'
 
 const App: FC = (): JSX.Element => {
   return (
@@ -14,9 +15,14 @@ const App: FC = (): JSX.Element => {
       <Navbar />
       <Routes>
         <Route index element={<Home />} />
+        <Route path='/admin' element={null}>
+          <Route path='/add' element={<AddProduct />} />
+
+        </Route>
         <Route path='/login' element={<Login />} />
-        <Route path='/add' element={<AddProduct />} />
         <Route path='/products' element={<Products />} />
+
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   )

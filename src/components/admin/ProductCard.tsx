@@ -2,8 +2,8 @@ import { FC } from 'react'
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Button, ButtonGroup, Card, CardBody, Divider, Heading, Stack, Text } from '@chakra-ui/react'
-import { priceFormat } from '../utils';
-import { ProductInformation } from '../interfaces';
+import { priceFormat } from '../../utils';
+import { ProductInformation } from '../../interfaces';
 
 const ProductCard: FC<ProductInformation> = ({ image, title, description, price }): JSX.Element => {
     return (
