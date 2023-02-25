@@ -1,3 +1,3 @@
-import { lazy } from "react";
+import { FC, lazy, LazyExoticComponent } from "react";
 
-export const Login = lazy(() => import("./Login"));
+export const Login: LazyExoticComponent<FC> = lazy(() => import("./Login"));

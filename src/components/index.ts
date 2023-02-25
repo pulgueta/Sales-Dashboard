@@ -1,3 +1,7 @@
+import { FC, lazy, LazyExoticComponent } from "react";
+
 export * from "./Sidebar";
 export * from "./SignOutModal";
-export * from "./Navbar";
+
+export const Navbar: LazyExoticComponent<FC> = lazy(() => import('./Navbar'))
+export const ProductCard: LazyExoticComponent<FC> = lazy(() => import('./ProductCard'))

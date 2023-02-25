@@ -1,20 +1,8 @@
 import { FC, useRef } from 'react'
 
-import {
-    useDisclosure,
-    Button,
-    Drawer,
-    DrawerBody,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
-    Text,
-    Divider
-} from '@chakra-ui/react'
-import { MdMenu } from 'react-icons/md'
+import { Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Icon, Text, useDisclosure, } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
+import { FaAlignRight } from 'react-icons/fa'
 
 import { SignOutModal } from './'
 
@@ -25,35 +13,32 @@ export const Sidebar: FC = (): JSX.Element => {
 
     return (
         <>
-            <Button
-                ref={btnRef}
-                colorScheme='whiteAlpha'
-                onClick={onOpen}
-            ><MdMenu /></Button>
-            <Drawer
-                isOpen={isOpen}
-                placement='right'
-                onClose={onClose}
-                finalFocusRef={btnRef}
-            >
+            <Button ref={btnRef} colorScheme='whiteAlpha' onClick={onOpen}><Icon as={FaAlignRight} /></Button>
+            <Drawer isOpen={isOpen} placement='right' onClose={onClose} finalFocusRef={btnRef}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
                     <DrawerHeader>¡Hola, usuario!</DrawerHeader>
                     <DrawerBody>
-                        <Text mb={2} onClick={onClose}>
+                        <Text mb={2.5} onClick={onClose}>
                             <Link to='/add'>
                                 Agregar producto
                             </Link>
                         </Text>
                         <Divider />
-                        <Text my={2} onClick={onClose}>
+                        <Text my={2.5} onClick={onClose}>
                             <Link to='/products'>
                                 Productos
                             </Link>
                         </Text>
                         <Divider />
-                        <Text my={2} onClick={onClose}>
+                        <Text my={2.5} onClick={onClose}>
+                            <Link to='/user'>
+                                Agregar usuario
+                            </Link>
+                        </Text>
+                        <Divider />
+                        <Text my={2.5} onClick={onClose}>
                             <Link to='/dashboard'>
                                 Ventas
                             </Link>

@@ -11,7 +11,7 @@ import {
     AlertDialogOverlay,
 } from '@chakra-ui/react'
 
-import { MdLogout } from 'react-icons/md'
+import { FaSignOutAlt } from 'react-icons/fa'
 
 export const SignOutModal: FC = () => {
     const cancelRef = useRef<any>()
@@ -20,7 +20,7 @@ export const SignOutModal: FC = () => {
 
     return (
         <>
-            <Button leftIcon={<MdLogout />} colorScheme='red' onClick={onOpen}>Cerrar sesión</Button>
+            <Button leftIcon={<FaSignOutAlt />} colorScheme='red' onClick={onOpen}>Cerrar sesión</Button>
             <AlertDialog
                 isOpen={isOpen}
                 leastDestructiveRef={cancelRef}

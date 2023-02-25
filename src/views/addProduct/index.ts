@@ -1,3 +1,3 @@
-import { lazy } from "react";
+import { FC, lazy, LazyExoticComponent } from "react";
 
-export const AddProduct = lazy(() => import("./AddProduct"));
+export const AddProduct: LazyExoticComponent<FC> = lazy(() => import("./AddProduct"));

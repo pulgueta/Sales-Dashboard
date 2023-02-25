@@ -19,17 +19,22 @@ const links: NavbarItems[] = [
     },
     {
         id: 3,
+        text: 'Agregar usuario',
+        path: '/user',
+    },
+    {
+        id: 4,
         text: 'Ventas',
         path: '/dashboard',
     },
 ]
 
-export const Navbar: FC = (): JSX.Element => {
+const Navbar: FC = (): JSX.Element => {
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
 
     return (
-        <HStack justifyContent='space-between' alignItems='center' bgColor='gray' textAlign='center' h='64px' px={[4, 8, 12, 32, 128, 256]} width='100%'>
-            <Heading color='gray.900' fontSize={['2xl', '3xl']}>
+        <HStack justifyContent='space-between' alignItems='center' bgColor='gray' textAlign='center' h='64px' px={[4, 8, 12]} width='100%'>
+            <Heading color='gray.900' fontSize={['xl', '2xl']}>
                 Panel de administrador
             </Heading>
             {
@@ -39,7 +44,7 @@ export const Navbar: FC = (): JSX.Element => {
                         <HStack>
                             {links.map((item: NavbarItems) => (
                                 <Link to={item.path} key={item.id}>
-                                    <Text fontWeight='semibold' _hover={{ color: 'gray.300', transition: 'all 200ms ease' }} mx={4}>{item.text}</Text>
+                                    <Text fontWeight='semibold' _hover={{ color: 'gray.300', transition: 'all 200ms ease' }} mx={[1, 1, 1, 4, 8]}>{item.text}</Text>
                                 </Link>
                             ))}
                         </HStack>
@@ -49,3 +54,5 @@ export const Navbar: FC = (): JSX.Element => {
         </HStack>
     )
 }
+
+export default Navbar;
