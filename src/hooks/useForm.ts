@@ -11,7 +11,7 @@ export const useForm = () => {
         title: '',
         price: 0,
         description: '',
-        image: null,
+        image: undefined,
     })
     const [errorMessage, setErrorMessage] = useState<string>("")
     
