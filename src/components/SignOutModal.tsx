@@ -1,15 +1,6 @@
 import { FC, useRef } from 'react'
 
-import {
-    useDisclosure,
-    Button,
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogContent,
-    AlertDialogOverlay,
-} from '@chakra-ui/react'
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, } from '@chakra-ui/react'
 
 import { FaSignOutAlt } from 'react-icons/fa'
 

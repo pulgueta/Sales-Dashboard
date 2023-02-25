@@ -8,7 +8,6 @@ import { Login } from './views/auth'
 import { AddProduct } from './views/addProduct'
 import { Products } from './views/products'
 
-
 const App: FC = (): JSX.Element => {
   return (
     <>

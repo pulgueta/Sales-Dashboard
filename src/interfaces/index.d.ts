@@ -10,13 +10,3 @@ export interface ProductInformation {
   description: string;
   image: string | null | undefined;
 }
-
-export interface FirebaseConfig {
-  apiKey: string;
-  authDomain: string;
-  projectId: string;
-  storageBucket: string;
-  messagingSenderId: string;
-  appId: string;
-  measurementId: string;
-}
