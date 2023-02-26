@@ -2,8 +2,9 @@ import { FC, useEffect, useState } from 'react'
 
 import { Heading, VStack } from '@chakra-ui/react'
 
-import { ProductCard } from '../../components'
-import { ProductCardSkeleton } from '../../components/skeleton'
+import { ProductCard } from '../../../components'
+import { ProductCardSkeleton } from '../../../components/skeleton'
+import { LazyLoadComponent } from 'react-lazy-load-image-component'
 
 const Products: FC = (): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(true)
@@ -19,7 +20,15 @@ const Products: FC = (): JSX.Element => {
             <Heading my={8}>
                 Products
             </Heading>
-            {loading ? <ProductCardSkeleton /> : <ProductCard />}
+            {
+                loading
+                    ?
+                    <ProductCardSkeleton />
+                    :
+                    <LazyLoadComponent>
+                        <ProductCard />
+                    </LazyLoadComponent>
+            }
         </VStack>
     )
 }

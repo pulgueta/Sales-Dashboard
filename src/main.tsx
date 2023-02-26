@@ -17,5 +17,5 @@ createRoot(document.getElementById('root') as HTMLElement).render(
         </ChakraProvider>
       </BrowserRouter>
     </Suspense>
-  </StrictMode>,
+  </StrictMode>
 )
