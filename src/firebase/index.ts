@@ -19,5 +19,3 @@ export const analytics: Analytics = getAnalytics(app);
 export const auth: Auth = getAuth(app);
 export const db: Firestore = getFirestore(app);
 export const storage: FirebaseStorage = getStorage(app);
-
-auth.tenantId = import.meta.env.VITE_TENANTID || "";

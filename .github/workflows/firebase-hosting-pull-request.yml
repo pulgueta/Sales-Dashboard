@@ -13,5 +13,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_XOCHICALLI_STORE }}'
-          projectId: xochicalli-store
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_XOCHICALLI_COMMERCE }}'
+          projectId: xochicalli-commerce

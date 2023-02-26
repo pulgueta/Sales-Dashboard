@@ -1,12 +1,15 @@
 import { FC } from 'react'
 
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, InputGroup, InputLeftAddon, InputRightAddon, Textarea, VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import { Inputs } from '../../../interfaces';
+import { addProduct, uploadImage } from '../../../utils';
+import { auth } from '../../../firebase';
 
-const AddProduct: FC = () => {
+const AddProduct: FC = (): JSX.Element => {
 
     const { handleSubmit, register, formState: { errors, isSubmitting }, } = useForm<Inputs>()
 
@@ -14,16 +17,16 @@ const AddProduct: FC = () => {
 
     const handleGoProducts = () => navigate('/admin/products')
 
-    const onSubmit: SubmitHandler<Inputs> = (values: any) => new Promise((resolve: any) => {
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2))
-            resolve()
-        }, 3000)
-    })
+    const onSubmit: SubmitHandler<Inputs> = async (values: Inputs) => {
+        const prod = await addProduct(values)
+
+        console.log(values.image)
+        console.log(prod)
+    }
 
     return (
-        <VStack h='calc(100vh - 64px)' bgColor='gray.200'>
-            <Heading my={8}>
+        <VStack minHeight='calc(100vh - 112px)' bgColor='gray.200' py={4}>
+            <Heading my={4}>
                 Añadir un producto
             </Heading>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -41,8 +44,8 @@ const AddProduct: FC = () => {
                             })}
                         />
                         {errors.title && <FormErrorMessage>El título es requerido</FormErrorMessage>}
-
                     </FormControl>
+
                     <FormControl isInvalid={!!errors.description} mb={4}>
                         <FormLabel htmlFor='description'>Descripción del producto</FormLabel>
                         <Textarea
@@ -51,12 +54,27 @@ const AddProduct: FC = () => {
                             placeholder='Planta con aroma agradable para curar enfermedades'
                             {...register('description', {
                                 required: true,
-                                minLength: { value: 4, message: 'Descripción es requerida' },
+                                minLength: 8,
                             })}
                         />
                         {errors.description && <FormErrorMessage>La descripción es requerida</FormErrorMessage>}
-
                     </FormControl>
+
+                    <FormControl isInvalid={!!errors.category} mb={4}>
+                        <FormLabel htmlFor='category'>Categoría</FormLabel>
+                        <Input
+                            type='text'
+                            id='category'
+                            borderColor='gray.200'
+                            placeholder='Carnívora'
+                            {...register('category', {
+                                required: true,
+                                minLength: 4
+                            })}
+                        />
+                        {errors.category && <FormErrorMessage>La categoría es requerida</FormErrorMessage>}
+                    </FormControl>
+
                     <FormControl isInvalid={!!errors.price} mb={4}>
                         <FormLabel htmlFor='price'>Precio</FormLabel>
                         <InputGroup>
@@ -78,10 +96,12 @@ const AddProduct: FC = () => {
 
                     <FormControl isInvalid={!!errors.image} mb={4}>
                         <FormLabel htmlFor='image'>Imagen</FormLabel>
-                        <Input 
-                            id='image'
+                        <input
                             type='file'
+                            id='image'
+                            onChange={uploadImage}
                         />
+                        {errors.price && <FormErrorMessage>La imagen es requerida</FormErrorMessage>}
                     </FormControl>
 
                     <Button

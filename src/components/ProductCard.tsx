@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Button, ButtonGroup, Card, CardBody, Divider, Heading, Stack, Text } from '@chakra-ui/react'
+import { Button, ButtonGroup, Card, CardBody, Divider, Heading, Stack, Tag, Text } from '@chakra-ui/react'
 import { priceFormat } from '../utils';
 
 const ProductCard: FC = (): JSX.Element => {
@@ -13,13 +13,14 @@ const ProductCard: FC = (): JSX.Element => {
                     effect='blur'
                     style={{ borderRadius: 12 }}
                 />
-                <Stack spacing='3' my='3'>
+                <Stack spacing='3' my='2'>
                     <Heading size='lg'>Sons of the Forest</Heading>
+                    <Tag width='max-content'>Sample Tag</Tag>
                     <Text>ChatGPT is a browser extension that enhance search engines with
                         the power of ChatGPT.
                     </Text>
                 </Stack>
-                <Text fontSize='lg' fontWeight='medium'>{priceFormat(5600)}</Text>
+                <Text fontSize='lg' fontWeight='medium' my={1}>{priceFormat(5600)}</Text>
                 <Divider />
                 <ButtonGroup mt='3'>
                     <Button colorScheme='telegram'>Editar</Button>

@@ -5,14 +5,19 @@ import { Heading, VStack } from '@chakra-ui/react'
 import { ProductCard } from '../../../components'
 import { ProductCardSkeleton } from '../../../components/skeleton'
 import { LazyLoadComponent } from 'react-lazy-load-image-component'
+import { getProducts } from '../../../utils'
 
 const Products: FC = (): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
-        setTimeout(() => {
-            setLoading(false)
-        }, 1000)
+        const ara = async () => {
+            await getProducts().then((lol) => {
+                console.log(lol)
+                setLoading(false)
+            })
+        }
+
     }, [loading])
 
     return (

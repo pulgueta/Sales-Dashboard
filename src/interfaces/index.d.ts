@@ -9,6 +9,7 @@ export interface NavbarItems {
 export interface Inputs {
   title: string;
   description: string;
+  category: string;
   price: number;
   image: string;
 }
