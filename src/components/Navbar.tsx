@@ -1,31 +1,31 @@
 import { FC } from 'react'
 
 import { Text, HStack, useMediaQuery, Heading } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 import { Sidebar } from '.'
 import { NavbarItems } from '../interfaces'
-import { Link } from 'react-router-dom'
 
 const links: NavbarItems[] = [
     {
         id: 1,
         text: 'Agregar producto',
-        path: '/add',
+        path: '/admin/add',
     },
     {
         id: 2,
         text: 'Productos',
-        path: '/products',
+        path: '/admin/products',
     },
     {
         id: 3,
         text: 'Agregar usuario',
-        path: '/user',
+        path: '/admin/user',
     },
     {
         id: 4,
         text: 'Ventas',
-        path: '/dashboard',
+        path: '/admin/dashboard',
     },
 ]
 

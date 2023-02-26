@@ -3,11 +3,14 @@ import { FC } from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 import { Navbar } from './components'
-import { Home } from './views/home'
-import { Login } from './views/auth'
-import { AddProduct } from './views/addProduct'
-import { Products } from './views/products'
-import { NotFound } from './views'
+import { Home } from './pages/home'
+import { Login } from './pages/auth'
+import { AddProduct } from './pages/admin/addProduct'
+import { Products } from './pages/products'
+import { NotFound } from './pages'
+
+import { Dashboard } from './pages/admin/dashboard'
+import { DashboardTitle } from './components/admin'
 
 const App: FC = (): JSX.Element => {
   return (
@@ -15,10 +18,12 @@ const App: FC = (): JSX.Element => {
       <Navbar />
       <Routes>
         <Route index element={<Home />} />
-        <Route path='/admin' element={null}>
-          <Route path='/add' element={<AddProduct />} />
-
+        
+        <Route path='/admin' element={<DashboardTitle />}>
+          <Route path='add' element={<AddProduct />} />
+          <Route path='dashboard' element={<Dashboard />} />
         </Route>
+
         <Route path='/login' element={<Login />} />
         <Route path='/products' element={<Products />} />
 

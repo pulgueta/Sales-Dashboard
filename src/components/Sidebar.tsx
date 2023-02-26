@@ -21,25 +21,25 @@ export const Sidebar: FC = (): JSX.Element => {
                     <DrawerHeader>¡Hola, usuario!</DrawerHeader>
                     <DrawerBody>
                         <Text mb={2.5} onClick={onClose}>
-                            <Link to='/add'>
+                            <Link to='/admin/add'>
                                 Agregar producto
                             </Link>
                         </Text>
                         <Divider />
                         <Text my={2.5} onClick={onClose}>
-                            <Link to='/products'>
+                            <Link to='/admin/products'>
                                 Productos
                             </Link>
                         </Text>
                         <Divider />
                         <Text my={2.5} onClick={onClose}>
-                            <Link to='/user'>
+                            <Link to='/admin/user'>
                                 Agregar usuario
                             </Link>
                         </Text>
                         <Divider />
                         <Text my={2.5} onClick={onClose}>
-                            <Link to='/dashboard'>
+                            <Link to='/admin/dashboard'>
                                 Ventas
                             </Link>
                         </Text>
