@@ -18,8 +18,6 @@ const Products: FC = (): JSX.Element => {
         category: '',
     }])
 
-
-
     useEffect(() => {
         const ara = async () => {
             const data = await getProducts()
