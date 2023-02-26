@@ -11,14 +11,15 @@ export interface Inputs {
   description: string;
   category: string;
   price: number;
-  image: string;
+  image: any;
 }
 
 export interface ProductInformation {
   title: string;
   price: number;
   description: string;
-  image: string | undefined;
+  image: string;
+  category: string,
 }
 
 export interface RatingProps {

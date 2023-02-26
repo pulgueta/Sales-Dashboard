@@ -1,26 +1,82 @@
-import { FC } from 'react'
+import { FC, RefObject, useRef, useState } from 'react'
 
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, InputGroup, InputLeftAddon, InputRightAddon, Textarea, VStack } from '@chakra-ui/react';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, InputGroup, InputLeftAddon, InputRightAddon, Textarea, useToast, VStack, } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
 
 import { Inputs } from '../../../interfaces';
-import { addProduct, uploadImage } from '../../../utils';
-import { auth } from '../../../firebase';
+import { addProduct } from '../../../utils';
+import { storage } from '../../../firebase';
 
 const AddProduct: FC = (): JSX.Element => {
 
-    const { handleSubmit, register, formState: { errors, isSubmitting }, } = useForm<Inputs>()
+    const [imageUrl, setImageUrl] = useState<string>('')
+    const fileRef = useRef<HTMLInputElement>(null);
+
+    const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<Inputs>()
+
+    const toast = useToast();
 
     const navigate = useNavigate();
-
     const handleGoProducts = () => navigate('/admin/products')
 
-    const onSubmit: SubmitHandler<Inputs> = async (values: Inputs) => {
-        const prod = await addProduct(values)
+    const uploadImage = async (fileRef: RefObject<HTMLInputElement>) => {
+        try {
+            const file = fileRef.current?.files?.[0];
+            const fileName = file?.name;
+            const imgRef = ref(storage, `products/${uuidv4() + fileName}`);
 
-        console.log(values.image)
+            const imgUpload = uploadBytesResumable(imgRef, file);
+
+            if (!file) {
+                console.error('No file selected');
+                return;
+            }
+
+            imgUpload.on("state_changed", ({ state }) => {
+                switch (state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                    default:
+                        break;
+                }
+            }, (err) => {
+                console.error(err);
+            }, async () => {
+                const url = await getDownloadURL(imgUpload.snapshot.ref);
+                setImageUrl(url)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const onSubmit: SubmitHandler<Inputs> = async (values: Inputs) => {
+        const prod = await addProduct(values, imageUrl).then(() => {
+            toast({
+                title: 'Producto subido correctamente',
+                duration: 2000,
+                status: 'success',
+                position: 'top-right'
+            })
+            reset()
+        }).catch(() => {
+            toast({
+                title: '¡Algo salió mal!',
+                duration: 2000,
+                status: 'error',
+                position: 'top-right'
+            })
+        })
+
+
+        console.log(imageUrl)
         console.log(prod)
     }
 
@@ -99,7 +155,8 @@ const AddProduct: FC = (): JSX.Element => {
                         <input
                             type='file'
                             id='image'
-                            onChange={uploadImage}
+                            ref={fileRef}
+                            onChange={() => uploadImage(fileRef)}
                         />
                         {errors.price && <FormErrorMessage>La imagen es requerida</FormErrorMessage>}
                     </FormControl>
