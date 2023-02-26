@@ -24,10 +24,9 @@ const AddProduct: FC = (): JSX.Element => {
 
     const uploadImage = async (fileRef: RefObject<HTMLInputElement>) => {
         try {
-            const file = fileRef.current?.files?.[0];
+            const file = fileRef.current?.files?.[0] ?? new Blob();
             const fileName = file?.name;
             const imgRef = ref(storage, `products/${uuidv4() + fileName}`);
-
             const imgUpload = uploadBytesResumable(imgRef, file);
 
             if (!file) {
