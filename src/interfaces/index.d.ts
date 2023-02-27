@@ -6,6 +6,11 @@ export interface NavbarItems {
   path: string;
 }
 
+export interface AdminLoginInputs {
+  email: string;
+  password: string;
+}
+
 export interface Inputs {
   title: string;
   description: string;

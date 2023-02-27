@@ -8,7 +8,7 @@ const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }, { name: 'Page A'
 export const Dashboard: FC = (): JSX.Element => {
 
   return (
-    <Stack minHeight='calc(100vh - 64px)' bgColor='gray.200'>
+    <Stack minHeight='calc(100vh - 115px)' bgColor='gray.200'>
       <Heading textAlign='center'>Dashboard</Heading>
       <ResponsiveContainer width={700} height="80%">
         <LineChart width={730} height={250} data={data}

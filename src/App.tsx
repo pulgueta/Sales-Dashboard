@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { DashboardTitle } from './components/admin'
 import { Navbar } from './components'
@@ -13,6 +13,7 @@ import { NotFound } from './pages'
 import { AddProduct } from './pages/admin/addProduct'
 import { Dashboard } from './pages/admin/dashboard'
 import { Products as AdminProducts } from './pages/admin/products'
+import { AdminLogin } from './pages/admin/login'
 
 const App: FC = (): JSX.Element => {
   return (
@@ -22,9 +23,12 @@ const App: FC = (): JSX.Element => {
         <Route index element={<Home />} />
 
         <Route path='/admin' element={<DashboardTitle />}>
+          <Route path='login' element={<AdminLogin />} />
           <Route path='add' element={<AddProduct />} />
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='products' element={<AdminProducts />} />
+
+          <Route path='/admin/' element={<Navigate to='login' />} />
         </Route>
 
         <Route path='/login' element={<Login />} />
