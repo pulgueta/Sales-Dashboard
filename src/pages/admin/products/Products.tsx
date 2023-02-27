@@ -19,13 +19,13 @@ const Products: FC = (): JSX.Element => {
     }])
 
     useEffect(() => {
-        const ara = async () => {
+        const fetchProducts = async () => {
             const data = await getProducts()
             setProducts(data)
             setLoading(false)
         }
 
-        ara()
+        fetchProducts()
 
     }, [loading, products])
 
