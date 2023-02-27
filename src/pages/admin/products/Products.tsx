@@ -23,11 +23,13 @@ const Products: FC = (): JSX.Element => {
             const data = await getProducts()
             setProducts(data)
             setLoading(false)
+
+            console.log(data)
         }
 
         fetchProducts()
 
-    }, [loading, products])
+    }, [loading])
 
     return (
         <VStack minH='calc(100vh - 115px)' bgColor='gray.200'>
