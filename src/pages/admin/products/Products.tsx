@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react'
 
 import { Center, Container, Grid, GridItem, Heading, Text, VStack } from '@chakra-ui/react'
+import { LazyLoadComponent } from 'react-lazy-load-image-component'
 
 import { ProductCard } from '../../../components/admin'
 import { ProductCardSkeleton } from '../../../components/skeleton'
-import { LazyLoadComponent } from 'react-lazy-load-image-component'
 import { getProducts } from '../../../utils'
 import { ProductInformation } from '../../../interfaces'
 
@@ -23,13 +23,10 @@ const Products: FC = (): JSX.Element => {
             const data = await getProducts()
             setProducts(data)
             setLoading(false)
-
-            console.log(data)
         }
 
         fetchProducts()
-
-    }, [loading])
+    }, [])
 
     return (
         <VStack minH='calc(100vh - 115px)' bgColor='gray.200'>

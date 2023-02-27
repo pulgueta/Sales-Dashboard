@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Inputs } from '../../../interfaces';
 import { addProduct } from '../../../utils';
 import { storage } from '../../../firebase';
+import { Helmet } from 'react-helmet-async';
 
 const AddProduct: FC = (): JSX.Element => {
 
@@ -81,6 +82,9 @@ const AddProduct: FC = (): JSX.Element => {
 
     return (
         <VStack minHeight='calc(100vh - 115px)' bgColor='gray.200' py={4}>
+            <Helmet>
+                <title>Agregar producto</title>
+            </Helmet>
             <Heading my={4}>
                 Añadir un producto
             </Heading>

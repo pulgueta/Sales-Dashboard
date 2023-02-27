@@ -1,5 +1,6 @@
 import { FC } from 'react'
 
+import { HelmetProvider } from 'react-helmet-async'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { DashboardTitle } from './components/admin'
@@ -17,7 +18,7 @@ import { AdminLogin } from './pages/admin/login'
 
 const App: FC = (): JSX.Element => {
   return (
-    <>
+    <HelmetProvider>
       <Navbar />
       <Routes>
         <Route index element={<Home />} />
@@ -36,7 +37,7 @@ const App: FC = (): JSX.Element => {
 
         <Route path='*' element={<NotFound />} />
       </Routes>
-    </>
+    </HelmetProvider>
   )
 }
 

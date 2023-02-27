@@ -27,7 +27,7 @@ const Products: FC = (): JSX.Element => {
 
         fetchProducts()
 
-    }, [loading, products])
+    }, [])
 
     return (
         <VStack h='calc(100vh - 64px)' bgColor='gray.200'>
