@@ -14,12 +14,12 @@ export const ProductCard: FC<ProductInformation> = ({ image, title, description,
                 style={{ borderRadius: 12, width: 512, objectFit: 'cover', height: 256 }}
             />
             <Stack spacing='3' my='3'>
-                <Heading noOfLines={1} size={['lg', 'md']}>{title}</Heading>
+                <Heading noOfLines={1} size={['lg', 'md', 'lg']}>{title}</Heading>
                 <Tag width='max-content'>{category}</Tag>
                 <Text noOfLines={2}>{description}</Text>
             </Stack>
             <Text fontSize='lg' fontWeight='medium'>{priceFormat(price)}</Text>
-            <Divider />
+            <Divider my={2} />
             <ButtonGroup mt='3'>
                 <Button colorScheme='telegram'>Editar</Button>
                 <Button colorScheme='red'>Eliminar</Button>

@@ -1,13 +1,24 @@
-import { FC, useRef } from 'react'
+import { FC, useRef} from 'react'
 
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, } from '@chakra-ui/react'
-
+import { useNavigate } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
 
-export const SignOutModal: FC = () => {
+import { logOut } from '../../utils'
+
+export const SignOutModal: FC = (): JSX.Element => {
     const cancelRef = useRef<any>()
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const navigate = useNavigate()
+
+    const onLogout = async () => {
+        await logOut()
+        onClose()
+        navigate('/')
+        window.location.reload();
+    }
 
     return (
         <>
@@ -30,7 +41,7 @@ export const SignOutModal: FC = () => {
                             <Button ref={cancelRef} onClick={onClose}>
                                 No
                             </Button>
-                            <Button colorScheme='red' onClick={onClose} ml={3}>
+                            <Button colorScheme='red' onClick={onLogout} ml={3}>
                                 Sí
                             </Button>
                         </AlertDialogFooter>

@@ -80,7 +80,7 @@ const AddProduct: FC = (): JSX.Element => {
     }
 
     return (
-        <VStack minHeight='calc(100vh - 112px)' bgColor='gray.200' py={4}>
+        <VStack minHeight='calc(100vh - 115px)' bgColor='gray.200' py={4}>
             <Heading my={4}>
                 Añadir un producto
             </Heading>
