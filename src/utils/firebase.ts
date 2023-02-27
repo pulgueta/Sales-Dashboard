@@ -4,20 +4,6 @@ import { addDoc, collection, DocumentData, DocumentReference, getDocs } from "fi
 import { auth, db } from "../firebase"
 import { Inputs } from "../interfaces"
 
-export const getProducts = async () => {
-    try {
-        const { docs } = await getDocs(collection(db, 'products'))
-
-        return docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-        }))
-
-    } catch (error) {
-        console.error(error)
-    }
-}
-
 export const loginWithProvider = async (provider: string): Promise<UserCredential | undefined> => {
     try {
         switch (provider) {
@@ -27,6 +13,48 @@ export const loginWithProvider = async (provider: string): Promise<UserCredentia
 
                 return result
         }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const loginWithEmail = async (email: string, password: string): Promise<User | undefined> => {
+    try {
+        const { user } = await signInWithEmailAndPassword(auth, email, password)
+        return user
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const signUpWithEmail = async (email: string, password: string): Promise<User | undefined> => {
+    try {
+        const { user } = await createUserWithEmailAndPassword(auth, email, password)
+        return user
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const logOut = async (): Promise<boolean | undefined> => {
+    try {
+        await signOut(auth);
+        console.log('logged out')
+        return true
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const getProducts = async () => {
+    try {
+        const { docs } = await getDocs(collection(db, 'products'))
+
+        return docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+        }))
+
     } catch (error) {
         console.error(error)
     }
@@ -48,32 +76,4 @@ export const addProduct = async ({ title, description, price, category }: Inputs
     }
 }
 
-export const loginWithEmail = async (email: string, password: string): Promise<User | undefined> => {
-    try {
-        const { user } = await signInWithEmailAndPassword(auth, email, password)
-        console.log(user)
-        return user
-    } catch (error) {
-        console.error(error)
-    }
-}
 
-export const signUpWithEmail = async (email: string, password: string): Promise<User | undefined> => {
-    try {
-        const { user } = await createUserWithEmailAndPassword(auth, email, password)
-        console.log(user)
-        return user
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-export const logOut = async (): Promise<boolean | undefined> => {
-    try {
-        await signOut(auth);
-        console.log('logged out')
-        return true
-    } catch (error) {
-        console.error(error)
-    }
-}

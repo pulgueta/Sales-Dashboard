@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react'
 
 import { onAuthStateChanged } from 'firebase/auth'
 import { Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Icon, Text, useDisclosure, } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { FaAlignRight } from 'react-icons/fa'
 
 import { auth } from '../../firebase'
@@ -14,6 +14,13 @@ export const Sidebar: FC = (): JSX.Element => {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    const navigate = useNavigate();
+
+    const handleNavigate = (route: string) => {
+        navigate(route)
+        onClose()
+    }
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -22,7 +29,7 @@ export const Sidebar: FC = (): JSX.Element => {
                 setIsUser(false)
             }
         });
-    }, [isUser])
+    }, [isUser, isOpen])
 
     return (
         <>
@@ -34,27 +41,27 @@ export const Sidebar: FC = (): JSX.Element => {
                     <DrawerHeader>¡Hola, usuario!</DrawerHeader>
                     <DrawerBody>
                         <Text mb={2.5} onClick={onClose}>
-                            <Link to='/admin/add'>
+                            <Button color='black' fontWeight='normal' variant='link' onClick={() => handleNavigate('/admin/add')}>
                                 Agregar producto
-                            </Link>
+                            </Button>
                         </Text>
                         <Divider />
                         <Text my={2.5} onClick={onClose}>
-                            <Link to='/admin/products'>
+                            <Button color='black' fontWeight='normal' variant='link' onClick={() => handleNavigate('/admin/products')}>
                                 Productos
-                            </Link>
+                            </Button>
                         </Text>
                         <Divider />
                         <Text my={2.5} onClick={onClose}>
-                            <Link to='/admin/user'>
+                            <Button color='black' fontWeight='normal' variant='link' onClick={() => handleNavigate('/admin/user')}>
                                 Agregar usuario
-                            </Link>
+                            </Button>
                         </Text>
                         <Divider />
                         <Text my={2.5} onClick={onClose}>
-                            <Link to='/admin/dashboard'>
+                            <Button color='black' fontWeight='normal' variant='link' onClick={() => handleNavigate('/admin/dashboard')}>
                                 Ventas
-                            </Link>
+                            </Button>
                         </Text>
                     </DrawerBody>
                     {
