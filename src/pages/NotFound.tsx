@@ -15,7 +15,7 @@ export const NotFound: FC = (): JSX.Element => {
                 <title>404</title>
             </Helmet>
             <Img
-                src='https://firebasestorage.googleapis.com/v0/b/xochicalli-commerce.appspot.com/o/assets%2Fplant-sad-512.webp?alt=media&token=50a7864e-dd95-4902-9561-7065fa1f655d'
+                src={import.meta.env.VITE_NOTFOUND_IMAGE}
                 width='256px'
             />
             <Text fontWeight='medium'>No pudimos encontrar la página que buscaste</Text>

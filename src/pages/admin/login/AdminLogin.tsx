@@ -69,7 +69,7 @@ export const AdminLogin: FC = (): JSX.Element => {
                     </Heading>
 
                     <Img
-                        src='https://firebasestorage.googleapis.com/v0/b/xochicalli-commerce.appspot.com/o/assets%2Flogo.png?alt=media&token=f538e20e-ee96-4dd3-a037-ea36d805c657'
+                        src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
                         width='128px'
                         mx='auto'
                         my={4}
