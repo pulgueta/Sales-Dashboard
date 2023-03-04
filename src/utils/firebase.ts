@@ -1,7 +1,8 @@
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, User, UserCredential } from "firebase/auth"
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDocs } from "firebase/firestore"
+import { deleteObject, ref } from "firebase/storage"
 
-import { auth, db } from "../firebase"
+import { auth, db, storage } from "../firebase"
 import { Inputs } from "../interfaces"
 
 export const loginWithProvider = async (provider: string): Promise<UserCredential | undefined> => {
@@ -77,9 +78,10 @@ export const addProduct = async ({ title, description, price, category }: Inputs
     }
 }
 
-export const deleteProduct = async (id: string): Promise<void> => {
+export const deleteProduct = async (id: string, image: string): Promise<void> => {
     try {
         await deleteDoc(doc(db, 'products', id))
+        await deleteObject(ref(storage, image))
 
         return window.location.reload()
     } catch (error) {
