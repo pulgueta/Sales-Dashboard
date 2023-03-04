@@ -1,6 +1,6 @@
-import { FC, useRef } from 'react'
+import { FC, useRef, useState } from 'react'
 
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, Card, CardBody, Divider, Heading, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react'
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, Card, CardBody, Divider, Heading, HStack, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
 import { LazyLoadComponent, LazyLoadImage } from 'react-lazy-load-image-component';
@@ -10,12 +10,19 @@ import { ProductInformation } from '../../interfaces';
 
 export const ProductCard: FC<ProductInformation> = ({ image, title, description, price, category, id }): JSX.Element => {
 
+    const [loading, setLoading] = useState<boolean>(false)
     const cancelRef = useRef<any>()
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toProduct = useNavigate();
 
     const handleToProduct = () => toProduct(`/admin/products/${id}`)
+
+    const handleDelete = async () => {
+        setLoading(true)
+        await deleteProduct(id, image)
+        setLoading(false)
+    }
 
     return (
         <>
@@ -30,15 +37,17 @@ export const ProductCard: FC<ProductInformation> = ({ image, title, description,
                         <Stack spacing='3' my='3'>
                             <Heading noOfLines={1} size={['lg', 'md', 'lg']}>{title}</Heading>
                             <Text>id: {id}</Text>
+                            <Divider />
                             <Tag width='max-content'>{category}</Tag>
                             <Text noOfLines={2}>{description}</Text>
                         </Stack>
-                        <Text fontSize='lg' fontWeight='medium'>{priceFormat(price)}</Text>
-                        <Divider my={2} />
-                        <ButtonGroup mt='3' width='100%' justifyContent='space-between'>
-                            <Button onClick={onOpen} colorScheme='red'>Eliminar</Button>
-                            <Button onClick={handleToProduct} variant='link' colorScheme='telegram'>Ver más</Button>
-                        </ButtonGroup>
+                        <HStack alignItems='center' justifyContent='space-between' width='100%' mt={4}>
+                            <ButtonGroup spacing={4}>
+                                <Button onClick={onOpen} colorScheme='red'>Eliminar</Button>
+                                <Button onClick={handleToProduct} variant='link' colorScheme='telegram'>Ver más</Button>
+                            </ButtonGroup>
+                            <Text fontSize='xl' fontWeight='medium'>{priceFormat(price)}</Text>
+                        </HStack>
                     </CardBody>
                 </LazyLoadComponent>
             </Card>
@@ -60,7 +69,12 @@ export const ProductCard: FC<ProductInformation> = ({ image, title, description,
                             <Button ref={cancelRef} onClick={onClose}>
                                 No, cancelar
                             </Button>
-                            <Button leftIcon={<FaTrash />} colorScheme='red' onClick={() => deleteProduct(id)} ml={3}>
+                            <Button
+                                isLoading={loading}
+                                leftIcon={<FaTrash />}
+                                colorScheme='red'
+                                onClick={handleDelete} ml={3}
+                            >
                                 Sí, eliminar
                             </Button>
                         </AlertDialogFooter>

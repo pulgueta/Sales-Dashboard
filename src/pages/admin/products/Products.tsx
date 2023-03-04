@@ -25,7 +25,10 @@ const Products: FC = (): JSX.Element => {
                         products.length !== 0
                             ?
                             <VStack gap={6}>
-                                <Grid gap={6} templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}>
+                                <Grid
+                                    gap={6}
+                                    templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
+                                >
                                     {products.slice(more - 3, more).map(({ category, description, id, image, price, title }: ProductInformation) => {
                                         return (
                                             <GridItem key={id}>
