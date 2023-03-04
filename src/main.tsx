@@ -1,12 +1,11 @@
-import { StrictMode, Suspense, lazy } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter } from 'react-router-dom'
 
+import { App } from './App'
 import { Spinner } from './components/loading'
-
-const App = lazy(() => import('./App'))
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>

@@ -1,23 +1,7 @@
 import { FC, useState } from 'react'
 
 import {
-    Box,
-    Button,
-    ButtonGroup,
-    Center,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Heading,
-    HStack,
-    IconButton,
-    Img,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Stack,
-    useToast,
-    VStack
+    Box, Button, ButtonGroup, Center, FormControl, FormErrorMessage, FormLabel, Heading, HStack, IconButton, Img, Input, InputGroup, InputRightElement, Stack, useToast, VStack
 } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Helmet } from 'react-helmet-async'

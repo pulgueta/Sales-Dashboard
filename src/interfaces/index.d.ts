@@ -20,6 +20,7 @@ export interface Inputs {
 }
 
 export interface ProductInformation {
+  id: string;
   title: string;
   price: number;
   description: string;
@@ -32,4 +33,9 @@ export interface RatingProps {
   max?: number
   size?: 'sm' | 'md' | 'lg' | 'xl'
   rootProps?: StackProps
+}
+
+export interface DeleteItems {
+  title: string
+  id: string
 }

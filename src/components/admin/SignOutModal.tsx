@@ -1,4 +1,4 @@
-import { FC, useRef} from 'react'
+import { FC, useRef } from 'react'
 
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'

@@ -4,7 +4,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, InputGroup, InputLeftAddon, InputRightAddon, Textarea, useToast, VStack, } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 } from 'uuid'
 
 import { Inputs } from '../../../interfaces';
 import { addProduct } from '../../../utils';
@@ -27,7 +27,7 @@ const AddProduct: FC = (): JSX.Element => {
         try {
             const file = fileRef.current?.files?.[0] ?? new Blob();
             const fileName = file?.name;
-            const imgRef = ref(storage, `products/${uuidv4() + fileName}`);
+            const imgRef = ref(storage, `products/${v4() + fileName}`);
             const imgUpload = uploadBytesResumable(imgRef, file);
 
             if (!file) {
@@ -58,7 +58,7 @@ const AddProduct: FC = (): JSX.Element => {
     }
 
     const onSubmit: SubmitHandler<Inputs> = async (values: Inputs) => {
-        const prod = await addProduct(values, imageUrl).then(() => {
+        await addProduct(values, imageUrl).then(() => {
             toast({
                 title: 'Producto subido correctamente',
                 duration: 2000,
@@ -74,10 +74,6 @@ const AddProduct: FC = (): JSX.Element => {
                 position: 'top-right'
             })
         })
-
-
-        console.log(imageUrl)
-        console.log(prod)
     }
 
     return (
