@@ -1,18 +1,18 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, User, UserCredential } from "firebase/auth"
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, User } from "firebase/auth"
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDocs } from "firebase/firestore"
 import { deleteObject, ref } from "firebase/storage"
 
 import { auth, db, storage } from "../firebase"
 import { Inputs } from "../interfaces"
 
-export const loginWithProvider = async (provider: string): Promise<UserCredential | undefined> => {
+export const loginWithProvider = async (provider: string): Promise<User | undefined> => {
     try {
         switch (provider) {
             case 'Google':
                 const prov = new GoogleAuthProvider()
-                const result = await signInWithPopup(auth, prov)
+                const { user } = await signInWithPopup(auth, prov)
 
-                return result
+                return user
         }
     } catch (error) {
         console.error(error)

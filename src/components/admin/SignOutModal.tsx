@@ -15,9 +15,11 @@ export const SignOutModal: FC = (): JSX.Element => {
 
     const onLogout = async () => {
         await logOut()
-        onClose()
-        navigate('/')
-        window.location.reload();
+            .then(() => {
+                navigate('/')
+                window.location.reload()
+            })
+            .catch((err) => console.log(err))
     }
 
     return (

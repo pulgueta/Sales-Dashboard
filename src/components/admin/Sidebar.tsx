@@ -1,15 +1,13 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useRef } from 'react'
 
-import { onAuthStateChanged } from 'firebase/auth'
 import { Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Icon, Text, useDisclosure, } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { FaAlignRight } from 'react-icons/fa'
 
-import { auth } from '../../firebase'
 import { SignOutModal } from './'
+import { ActiveUser } from '../../interfaces'
 
-export const Sidebar: FC = (): JSX.Element => {
-    const [isUser, setIsUser] = useState<boolean>(false)
+const Sidebar: FC<ActiveUser> = ({ isUser }): JSX.Element => {
     const btnRef = useRef<HTMLButtonElement | any>()
 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -17,19 +15,9 @@ export const Sidebar: FC = (): JSX.Element => {
     const navigate = useNavigate();
 
     const handleNavigate = (route: string) => {
-        navigate(route)
         onClose()
+        navigate(route)
     }
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setIsUser(true)
-            } else {
-                setIsUser(false)
-            }
-        });
-    }, [isUser, isOpen])
 
     return (
         <>
@@ -54,7 +42,7 @@ export const Sidebar: FC = (): JSX.Element => {
                         <Divider />
                         <Text my={2.5} onClick={onClose}>
                             <Button color='black' fontWeight='normal' variant='link' onClick={() => handleNavigate('/admin/user')}>
-                                Agregar usuario
+                                Usuarios
                             </Button>
                         </Text>
                         <Divider />
@@ -76,3 +64,5 @@ export const Sidebar: FC = (): JSX.Element => {
         </>
     )
 }
+
+export default Sidebar;

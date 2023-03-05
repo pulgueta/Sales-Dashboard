@@ -6,7 +6,7 @@ export interface NavbarItems {
   path: string;
 }
 
-export interface AdminLoginInputs {
+export interface LoginInputs {
   email: string;
   password: string;
 }
@@ -38,4 +38,8 @@ export interface RatingProps {
 export interface DeleteItems {
   title: string
   id: string
+}
+
+export interface ActiveUser {
+  isUser: boolean
 }

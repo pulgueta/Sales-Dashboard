@@ -3,18 +3,19 @@ import { FC } from 'react'
 import { Card, CardBody, Divider, HStack, Skeleton, SkeletonText, Stack } from '@chakra-ui/react'
 
 const ProductCardSkeleton: FC = (): JSX.Element => (
-    <Card maxW={['xs', 'sm']} borderRadius='xl'>
+    <Card w='sm' borderRadius='xl'>
         <CardBody>
-            <Skeleton height='44' w='64' />
+            <Skeleton
+                borderRadius='lg'
+                height='256'
+            />
             <Stack spacing='3' my='3'>
-                <SkeletonText noOfLines={1} skeletonHeight='8' size='lg' />
-                <SkeletonText skeletonHeight='2' noOfLines={5} w='256px' />
+                <Skeleton noOfLines={1} size={['lg', 'md', 'lg']} />
+                <SkeletonText />
+                <Divider />
+                <Skeleton width='max-content' />
+                <SkeletonText noOfLines={2} />
             </Stack>
-            <Divider />
-            <HStack mt='3'>
-                <Skeleton height='12' width='24' />
-                <Skeleton height='12' width='24' />
-            </HStack>
         </CardBody>
     </Card>
 )
