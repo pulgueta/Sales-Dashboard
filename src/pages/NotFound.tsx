@@ -4,7 +4,7 @@ import { Button, Img, Text, VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
-export const NotFound: FC = (): JSX.Element => {
+const NotFound: FC = (): JSX.Element => {
     const navigate = useNavigate()
 
     const handleGoBack = () => navigate('/')
@@ -25,3 +25,5 @@ export const NotFound: FC = (): JSX.Element => {
         </VStack>
     )
 }
+
+export default NotFound;

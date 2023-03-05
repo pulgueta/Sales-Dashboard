@@ -1,12 +1,13 @@
-import { FC } from 'react'
+import { FC, lazy } from 'react'
 
 import { Center, GridItem, Heading, Text, VStack, Grid, ButtonGroup, Button } from '@chakra-ui/react'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 
-import { ProductCard } from '../../../components/admin'
 import { ProductCardSkeleton } from '../../../components/skeleton'
 import { ProductInformation } from '../../../interfaces'
 import { useProducts } from '../../../hooks'
+
+const ProductCard = lazy(() => import('../../../components/admin/ProductCard'))
 
 const Products: FC = (): JSX.Element => {
     const { handleNextProd, handlePrevProd, loading, more, products } = useProducts();

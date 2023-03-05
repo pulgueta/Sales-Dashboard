@@ -8,7 +8,7 @@ import { LazyLoadComponent, LazyLoadImage } from 'react-lazy-load-image-componen
 import { deleteProduct, priceFormat } from '../../utils';
 import { ProductInformation } from '../../interfaces';
 
-export const ProductCard: FC<ProductInformation> = ({ image, title, description, price, category, id }): JSX.Element => {
+const ProductCard: FC<ProductInformation> = ({ image, title, description, price, category, id }): JSX.Element => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const cancelRef = useRef<any>()
@@ -84,3 +84,5 @@ export const ProductCard: FC<ProductInformation> = ({ image, title, description,
         </>
     )
 }
+
+export default ProductCard;
