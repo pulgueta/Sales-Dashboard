@@ -1,9 +1,8 @@
-import { FC, useState, useEffect, lazy, Suspense } from 'react'
+import { FC, lazy, Suspense, useContext } from 'react'
 
 import { Spinner, VStack } from '@chakra-ui/react'
 import { HelmetProvider } from 'react-helmet-async'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { onAuthStateChanged } from 'firebase/auth'
 
 import { DashboardTitle } from './components/admin'
 import { Navbar } from './components/admin'
@@ -11,7 +10,8 @@ import { Home } from './pages/home'
 import { Products } from './pages/products'
 import { AddProduct } from './pages/admin/addProduct'
 import { Dashboard } from './pages/admin/dashboard'
-import { auth } from './firebase'
+import { UserContext } from './context/auth'
+import { PrivateRoute } from './components/auth'
 
 const Login = lazy(() => import('./pages/auth/Login'))
 const NotFound = lazy(() => import('./pages/NotFound'))
@@ -24,39 +24,51 @@ const Loader: FC = (): JSX.Element => (
 )
 
 export const App: FC = (): JSX.Element => {
-  const [isUser, setIsUser] = useState<boolean>(false)
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsUser(true)
-      } else {
-        setIsUser(false)
-      }
-    });
-  }, [isUser])
+  const { user } = useContext(UserContext)
 
   return (
     <Suspense fallback={<Loader />}>
       <HelmetProvider>
         {
-          isUser && (
-            <Navbar isUser={isUser} />
+          user && (
+            <Navbar isUser={user} />
           )
         }
+
         <Routes>
           <Route index element={<Home />} />
 
-          <Route path='/admin' element={<DashboardTitle />}>
-            <Route path='add' element={<AddProduct />} />
-            <Route path='dashboard' element={<Dashboard />} />
-            <Route path='products' element={<AdminProducts />} />
-            <Route path='products/:id' element={<AdminProducts />} />
+          <Route path='/admin' element={
+            <PrivateRoute>
+              <DashboardTitle />
+            </PrivateRoute>
+          }>
+            <Route path='add' element={
+              <PrivateRoute>
+                <AddProduct />
+              </PrivateRoute>
+            } />
+            <Route path='dashboard' element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            } />
+            <Route path='products' element={
+              <PrivateRoute>
+                <AdminProducts />
+              </PrivateRoute>
+            } />
+            <Route path='products/:id' element={
+              <PrivateRoute>
+                <AdminProducts />
+              </PrivateRoute>
+            } />
 
-            <Route path='/admin/' element={<Navigate to={isUser ? '/login' : '/admin/add'} />} />
+            <Route path='/admin/' element={<NotFound />} />
           </Route>
 
-          <Route path='/login' element={<Login />} />
+          <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
           <Route path='/products' element={<Products />} />
 
           <Route path='*' element={<NotFound />} />

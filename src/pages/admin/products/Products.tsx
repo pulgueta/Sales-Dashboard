@@ -6,6 +6,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { ProductCardSkeleton } from '../../../components/skeleton'
 import { ProductInformation } from '../../../interfaces'
 import { useProducts } from '../../../hooks'
+import { Helmet } from 'react-helmet-async'
 
 const ProductCard = lazy(() => import('../../../components/admin/ProductCard'))
 
@@ -14,6 +15,9 @@ const Products: FC = (): JSX.Element => {
 
     return (
         <VStack minH='calc(100vh - 115px)' bgColor='gray.200' p={4}>
+            <Helmet>
+                <title>Productos</title>
+            </Helmet>
             <Heading my={8}>
                 Productos
             </Heading>

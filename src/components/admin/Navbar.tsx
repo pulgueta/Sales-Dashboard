@@ -32,7 +32,7 @@ const links: NavbarItems[] = [
     },
 ]
 
-export const Navbar: FC<ActiveUser> = ({ isUser }: ActiveUser): JSX.Element => {
+export const Navbar: FC<ActiveUser> = ({ isUser }): JSX.Element => {
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
     const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
@@ -87,7 +87,7 @@ export const Navbar: FC<ActiveUser> = ({ isUser }: ActiveUser): JSX.Element => {
                             }
                         </HStack>
                     </>
-                    :
+                    : 
                     <Sidebar isUser={isUser} />
             }
         </HStack >

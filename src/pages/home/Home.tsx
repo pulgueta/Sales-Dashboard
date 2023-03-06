@@ -1,37 +1,22 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 
-import { onAuthStateChanged } from 'firebase/auth'
-import { Button, VStack } from '@chakra-ui/react'
-
-import { loginWithEmail, logOut } from '../../utils'
-import { auth } from '../../firebase'
+import { Button, Heading, VStack } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 const Home: FC = (): JSX.Element => {
 
-    const [isActive, setIsActive] = useState<boolean | null>(false)
+    const navigate = useNavigate()
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setIsActive(true)
-            } else {
-                setIsActive(false)
-            }
-        });
-    }, [isActive])
+    const handleProducts = () => navigate('/admin/products')
 
     return (
-        <VStack h='calc(100vh - 64px)' bgColor='green.500'>
-            {
-                !isActive ?
-                    <Button onClick={() => loginWithEmail('correo@admin.com', 'administrador')}>
-                        Login
-                    </Button>
-                    :
-                    <Button onClick={logOut}>
-                        Logout
-                    </Button>
-            }
+        <VStack h='100vh' bgColor='green.500' alignItems='center' justifyContent='center'>
+            <VStack>
+                <Heading>
+                    Home
+                </Heading>
+                <Button onClick={handleProducts}>Go to products</Button>
+            </VStack>
         </VStack>
     )
 }

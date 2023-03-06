@@ -17,6 +17,7 @@ import {
     InputRightElement,
     Stack,
     Text,
+    useMediaQuery,
     useToast,
 } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -24,7 +25,6 @@ import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-
 
 import { LoginInputs } from '../../interfaces'
 import { loginWithEmail } from '../../utils'
@@ -35,6 +35,7 @@ const AdminLogin: FC = (): JSX.Element => {
     const [show, setShow] = useState<boolean>(true)
 
     const toast = useToast();
+    const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
 
     const navigate = useNavigate();
 
@@ -47,6 +48,7 @@ const AdminLogin: FC = (): JSX.Element => {
                 duration: 1500,
                 isClosable: false,
                 title: 'Inicio de sesión',
+                position: isLargerThan800 ? 'bottom' : 'top-right',
                 description: `¡Bienvenido ${user?.displayName}!`
             })
             reset()
@@ -57,6 +59,7 @@ const AdminLogin: FC = (): JSX.Element => {
                 duration: 1500,
                 isClosable: false,
                 title: 'Inicio de sesión',
+                position: isLargerThan800 ? 'bottom' : 'top-right',
                 description: error
             })
         })
