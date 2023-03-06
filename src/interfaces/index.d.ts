@@ -1,4 +1,5 @@
 import { StackProps } from "@chakra-ui/react";
+import { User } from "firebase/auth";
 
 export interface NavbarItems {
   id: number;
@@ -41,5 +42,5 @@ export interface DeleteItems {
 }
 
 export interface ActiveUser {
-  isUser: boolean
+  isUser: User
 }

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { Card, CardBody, Divider, HStack, Skeleton, SkeletonText, Stack } from '@chakra-ui/react'
+import { Card, CardBody, Divider, Skeleton, SkeletonText, Stack } from '@chakra-ui/react'
 
 const ProductCardSkeleton: FC = (): JSX.Element => (
     <Card w='sm' borderRadius='xl'>

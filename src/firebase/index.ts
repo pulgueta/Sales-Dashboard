@@ -4,7 +4,7 @@ import { Auth, getAuth } from "firebase/auth";
 import { Firestore, getFirestore } from "firebase/firestore";
 import { FirebaseStorage, getStorage } from 'firebase/storage'
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY || "",
   authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN || "",
   projectId: import.meta.env.VITE_FIREBASE_PROJECTID || "",
