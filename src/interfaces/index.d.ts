@@ -20,6 +20,10 @@ export interface Inputs {
   image: any;
 }
 
+interface UserContextProps {
+  user: User | null;
+}
+
 export interface ProductInformation {
   id: string;
   title: string;

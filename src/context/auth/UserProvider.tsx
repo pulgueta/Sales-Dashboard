@@ -1,14 +1,11 @@
-import { useState, useEffect, FC, ReactNode } from 'react'
+import { useState, useEffect, FC } from 'react'
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 
+import { ContextProps } from '../../types';
 import { app } from '../../firebase';
 import { UserContext } from "."
 
-type TContextProps = {
-  children: ReactNode;
-}
-
-export const UserProvider: FC<TContextProps> = ({ children }) => {
+export const UserProvider: FC<ContextProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {

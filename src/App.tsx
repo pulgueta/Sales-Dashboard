@@ -5,13 +5,14 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { DashboardTitle } from './components/admin'
-import { Navbar } from './components/admin'
+import { Navbar as AdminNavbar } from './components/admin'
 import { Home } from './pages/home'
 import { Products } from './pages/products'
 import { AddProduct } from './pages/admin/addProduct'
 import { Dashboard } from './pages/admin/dashboard'
 import { UserContext } from './context/auth'
 import { PrivateRoute } from './components/auth'
+import { Navbar } from './components'
 
 const Login = lazy(() => import('./pages/auth/Login'))
 const NotFound = lazy(() => import('./pages/NotFound'))
@@ -31,9 +32,11 @@ export const App: FC = (): JSX.Element => {
     <Suspense fallback={<Loader />}>
       <HelmetProvider>
         {
-          user && (
-            <Navbar isUser={user} />
-          )
+          user
+            ?
+            <AdminNavbar isUser={user} />
+            :
+            <Navbar />
         }
 
         <Routes>

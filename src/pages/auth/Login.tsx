@@ -1,24 +1,10 @@
 import { FC, useState } from 'react'
 
 import {
-    Box,
-    Button,
-    ButtonGroup,
-    Container,
-    Divider,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Heading,
-    HStack,
-    IconButton,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Stack,
-    Text,
-    useMediaQuery,
-    useToast,
+    Box, Button, ButtonGroup, Container, Divider,
+    FormControl, FormErrorMessage, FormLabel, Heading, HStack,
+    IconButton, Input, InputGroup, InputRightElement, Stack,
+    Text, useMediaQuery, useToast,
 } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -48,7 +34,7 @@ const AdminLogin: FC = (): JSX.Element => {
                 duration: 1500,
                 isClosable: false,
                 title: 'Inicio de sesión',
-                position: isLargerThan800 ? 'bottom' : 'top-right',
+                position: isLargerThan800 ? 'top-right' : 'bottom',
                 description: `¡Bienvenido ${user?.displayName}!`
             })
             reset()
@@ -164,9 +150,6 @@ const AdminLogin: FC = (): JSX.Element => {
                 </Stack>
             </Container>
         </Box>
-
-
-
     )
 }
 
