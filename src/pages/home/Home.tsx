@@ -1,6 +1,6 @@
-import { FC, lazy } from 'react'
+import { FC } from 'react'
 
-import { Box, Button, Center, Flex, Heading, HStack, IconButton, Image, Text, VStack } from '@chakra-ui/react'
+import { Box, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import ImageSlider from 'react-simple-image-slider';
 
 const images = [
