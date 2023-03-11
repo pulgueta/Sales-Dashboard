@@ -1,7 +1,7 @@
 import { FC, RefObject, useRef, useState } from 'react'
 
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, InputGroup, InputLeftAddon, InputRightAddon, Textarea, useToast, VStack, } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Textarea, useToast, VStack, } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { v4 } from 'uuid'
@@ -109,7 +109,7 @@ const AddProduct: FC = (): JSX.Element => {
                             placeholder='Planta con aroma agradable para curar enfermedades'
                             {...register('description', {
                                 required: true,
-                                minLength: 8,
+                                minLength: 50,
                             })}
                         />
                         {errors.description && <FormErrorMessage>La descripción es requerida</FormErrorMessage>}
@@ -117,16 +117,18 @@ const AddProduct: FC = (): JSX.Element => {
 
                     <FormControl isInvalid={!!errors.category} mb={4}>
                         <FormLabel htmlFor='category'>Categoría</FormLabel>
-                        <Input
-                            type='text'
-                            id='category'
-                            borderColor='gray.200'
-                            placeholder='Carnívora'
+                        <Select
+                            defaultValue='Plantas'
                             {...register('category', {
-                                required: true,
-                                minLength: 4
+                                required: true
                             })}
-                        />
+                        >
+                            <option value="Plantas">Plantas</option>
+                            <option value="Macetas">Macetas</option>
+                            <option value="Abonos">Abonos</option>
+                            <option value="Fertilizantes">Fertilizantes</option>
+                            <option value="Herramientas">Herramientas</option>
+                        </Select>
                         {errors.category && <FormErrorMessage>La categoría es requerida</FormErrorMessage>}
                     </FormControl>
 

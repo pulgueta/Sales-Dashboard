@@ -6,6 +6,7 @@ export const useProducts = () => {
     const [more, setMore] = useState<number>(3)
     const [loading, setLoading] = useState<boolean>(true)
     const [products, setProducts] = useState<any>([{
+        id: '',
         title: '',
         price: 0,
         description: '',

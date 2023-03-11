@@ -17,6 +17,7 @@ import { Navbar } from './components'
 const Login = lazy(() => import('./pages/auth/Login'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const AdminProducts = lazy(() => import('./pages/admin/products/Products'))
+const Footer = lazy(() => import('./components/Footer'))
 
 const Loader: FC = (): JSX.Element => (
   <VStack minH='100vh' alignItems='center' justifyContent='center'>
@@ -41,6 +42,8 @@ export const App: FC = (): JSX.Element => {
 
         <Routes>
           <Route index element={<Home />} />
+          <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
+          <Route path='/products' element={<Products />} />
 
           <Route path='/admin' element={
             <PrivateRoute>
@@ -71,11 +74,12 @@ export const App: FC = (): JSX.Element => {
             <Route path='/admin/' element={<NotFound />} />
           </Route>
 
-          <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
-          <Route path='/products' element={<Products />} />
 
           <Route path='*' element={<NotFound />} />
         </Routes>
+        {
+          !user && <Footer />
+        }
       </HelmetProvider>
     </Suspense>
   )

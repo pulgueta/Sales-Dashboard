@@ -51,11 +51,12 @@ export const getProducts = async () => {
     try {
         const { docs } = await getDocs(collection(db, 'products'))
 
-        return docs.map((doc) => ({
+        const products = docs.map((doc) => ({
             ...doc.data(),
-            id: doc.id,
+            id: doc.id
         }))
 
+        return products
     } catch (error) {
         console.error(error)
     }
@@ -82,8 +83,6 @@ export const deleteProduct = async (id: string, image: string): Promise<void> =>
     try {
         await deleteDoc(doc(db, 'products', id))
         await deleteObject(ref(storage, image))
-
-        return window.location.reload()
     } catch (error) {
         console.error(error)
     }

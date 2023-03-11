@@ -1,17 +1,17 @@
 import { FC, lazy } from 'react'
 
 import { Center, GridItem, Heading, Text, VStack, Grid, ButtonGroup, Button } from '@chakra-ui/react'
+import { Helmet } from 'react-helmet-async'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 
 import { ProductCardSkeleton } from '../../../components/skeleton'
 import { ProductInformation } from '../../../interfaces'
 import { useProducts } from '../../../hooks'
-import { Helmet } from 'react-helmet-async'
 
 const ProductCard = lazy(() => import('../../../components/admin/ProductCard'))
 
 const Products: FC = (): JSX.Element => {
-    const { handleNextProd, handlePrevProd, loading, more, products } = useProducts();
+    const { handleNextProd, handlePrevProd, loading, more, products } = useProducts(); 
 
     return (
         <VStack minH='calc(100vh - 115px)' bgColor='gray.200' p={4}>
