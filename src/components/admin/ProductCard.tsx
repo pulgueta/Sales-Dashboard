@@ -22,6 +22,7 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
         setLoading(true)
         await deleteProduct(id, image)
         setLoading(false)
+        onClose()
     }
 
     return (

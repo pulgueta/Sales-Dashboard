@@ -6,7 +6,7 @@ import { priceFormat } from '../utils';
 import { ProductInformation } from '../interfaces';
 
 const ProductCard: FC<ProductInformation> = ({ image, title, description, price, category }): JSX.Element => (
-    <Card maxW={['xs', 'sm']} borderRadius='xl'>
+    <Card maxW={['xs', 'sm']} h='550px' borderRadius='xl'>
         <CardBody>
             <LazyLoadImage
                 src={image}
