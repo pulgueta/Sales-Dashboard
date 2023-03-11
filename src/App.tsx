@@ -1,6 +1,6 @@
 import { FC, lazy, Suspense, useContext } from 'react'
 
-import { Spinner, VStack } from '@chakra-ui/react'
+import { Box, Spinner, VStack } from '@chakra-ui/react'
 import { HelmetProvider } from 'react-helmet-async'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
@@ -32,54 +32,48 @@ export const App: FC = (): JSX.Element => {
   return (
     <Suspense fallback={<Loader />}>
       <HelmetProvider>
-        {
-          user
-            ?
-            <AdminNavbar isUser={user} />
-            :
-            <Navbar />
-        }
+        <Box overflowX='hidden'>
+          {user ? <AdminNavbar isUser={user} /> : <Navbar />}
 
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
-          <Route path='/products' element={<Products />} />
+          <Routes>
+            <Route index element={<Home />} />
+            <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
+            <Route path='/products' element={<Products />} />
 
-          <Route path='/admin' element={
-            <PrivateRoute>
-              <DashboardTitle />
-            </PrivateRoute>
-          }>
-            <Route path='add' element={
+            <Route path='/admin' element={
               <PrivateRoute>
-                <AddProduct />
+                <DashboardTitle />
               </PrivateRoute>
-            } />
-            <Route path='dashboard' element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            } />
-            <Route path='products' element={
-              <PrivateRoute>
-                <AdminProducts />
-              </PrivateRoute>
-            } />
-            <Route path='products/:id' element={
-              <PrivateRoute>
-                <AdminProducts />
-              </PrivateRoute>
-            } />
+            }>
+              <Route path='add' element={
+                <PrivateRoute>
+                  <AddProduct />
+                </PrivateRoute>
+              } />
+              <Route path='dashboard' element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              } />
+              <Route path='products' element={
+                <PrivateRoute>
+                  <AdminProducts />
+                </PrivateRoute>
+              } />
+              <Route path='products/:id' element={
+                <PrivateRoute>
+                  <AdminProducts />
+                </PrivateRoute>
+              } />
 
-            <Route path='/admin/' element={<NotFound />} />
-          </Route>
+              <Route path='/admin/' element={<NotFound />} />
+            </Route>
 
 
-          <Route path='*' element={<NotFound />} />
-        </Routes>
-        {
-          !user && <Footer />
-        }
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+          {!user && <Footer />}
+        </Box>
       </HelmetProvider>
     </Suspense>
   )
