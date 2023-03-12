@@ -1,17 +1,23 @@
-import { FC, useRef, useState } from 'react'
+import { FC, useMemo, useRef, useState } from 'react'
 
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, Card, CardBody, Divider, Heading, HStack, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
 import { LazyLoadComponent, LazyLoadImage } from 'react-lazy-load-image-component';
 
-import { deleteProduct, priceFormat } from '../../utils';
-import { ProductInformation } from '../../interfaces';
+import { deleteProduct } from '@/utils';
+import { ProductInformation } from '@/interfaces';
 
 const ProductCard: FC<ProductInformation> = ({ image, title, description, price, category, id }): JSX.Element => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const cancelRef = useRef<any>()
+
+    const memoPrice: string = useMemo(() => {
+        return new Intl.NumberFormat('es-MX', {
+            style: 'currency', currency: 'MXN'
+        }).format(price);
+    }, [price])
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toProduct = useNavigate();
@@ -23,6 +29,7 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
         await deleteProduct(id, image)
         setLoading(false)
         onClose()
+        toProduct('/admin/products')
     }
 
     return (
@@ -47,7 +54,7 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
                                 <Button onClick={onOpen} colorScheme='red'>Eliminar</Button>
                                 <Button onClick={handleToProduct} variant='link' colorScheme='telegram'>Ver más</Button>
                             </ButtonGroup>
-                            <Text fontSize='xl' fontWeight='medium'>{priceFormat(price)}</Text>
+                            <Text fontSize='xl' fontWeight='medium'>{memoPrice.replace('.00', '')}</Text>
                         </HStack>
                     </CardBody>
                 </LazyLoadComponent>

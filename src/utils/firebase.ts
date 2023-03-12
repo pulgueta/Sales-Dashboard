@@ -1,9 +1,10 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, User } from "firebase/auth"
-import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDocs } from "firebase/firestore"
+import { FirebaseError } from "firebase/app"
+import { createUserWithEmailAndPassword, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, User } from "firebase/auth"
+import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDocs, onSnapshot, query, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, ref } from "firebase/storage"
 
-import { auth, db, storage } from "../firebase"
-import { Inputs } from "../interfaces"
+import { auth, db, storage } from "@/firebase"
+import { Inputs } from "@/interfaces"
 
 export const loginWithProvider = async (provider: string): Promise<User | undefined> => {
     try {
@@ -19,19 +20,35 @@ export const loginWithProvider = async (provider: string): Promise<User | undefi
     }
 }
 
-export const loginWithEmail = async (email: string, password: string): Promise<User | undefined> => {
+export const loginWithEmail = async (email: string, password: string): Promise<User> => {
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
         return user
     } catch (error) {
-        console.error(error)
+        if (error instanceof FirebaseError) {
+            throw new Error(error.message)
+        }
+
+        throw error
     }
 }
 
 export const signUpWithEmail = async (email: string, password: string): Promise<User | undefined> => {
     try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
         return user
+    } catch (error) {
+        console.error(error)
+    }
+
+}
+
+export const forgotPassword = async (email: string): Promise<boolean | undefined> => {
+    try {
+        await sendPasswordResetEmail(auth, email)
+
+        return true
     } catch (error) {
         console.error(error)
     }
@@ -61,6 +78,27 @@ export const getProducts = async () => {
         console.error(error)
     }
 }
+
+export const getProductsWithQuery = async (collectionName: string, operator: WhereFilterOp, desired: string, info: string) => {
+    const q = query(collection(db, collectionName), where(desired, operator, info));
+
+    const found: { data: DocumentData; id: string }[] = [];
+
+    return new Promise<{ data: DocumentData; id: string }[]>((resolve, reject) => {
+        onSnapshot(q, (snapshot) => {
+            snapshot.docChanges().forEach(({ doc }) => {
+                found.push({
+                    data: doc.data(),
+                    id: doc.id,
+                });
+            });
+
+            resolve(found);
+        }, reject);
+    });
+};
+
+
 
 export const addProduct = async ({ title, description, price, category }: Inputs, image: string): Promise<DocumentReference<DocumentData> | undefined> => {
     try {

@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { HStack, Icon, useColorModeValue } from '@chakra-ui/react'
 import { FaStar } from 'react-icons/fa'
 
-import { RatingProps } from '../interfaces'
+import { RatingProps } from '@/interfaces'
 
 export const Rating: FC<RatingProps> = (props: RatingProps): JSX.Element => {
     const { defaultValue = 0, max = 5, size = 'md', rootProps } = props

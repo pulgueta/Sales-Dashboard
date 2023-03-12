@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { v4 } from 'uuid'
 
-import { Inputs } from '../../../interfaces';
-import { addProduct } from '../../../utils';
-import { storage } from '../../../firebase';
+import { Inputs } from '@/@/interfaces';
+import { addProduct } from '@/@/utils';
+import { storage } from '@/@/firebase';
 import { Helmet } from 'react-helmet-async';
 
 const AddProduct: FC = (): JSX.Element => {

@@ -4,11 +4,11 @@ import { Center, GridItem, Heading, Text, VStack, Grid, ButtonGroup, Button } fr
 import { Helmet } from 'react-helmet-async'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 
-import { ProductCardSkeleton } from '../../../components/skeleton'
-import { ProductInformation } from '../../../interfaces'
-import { useProducts } from '../../../hooks'
+import { ProductCardSkeleton } from '@/@/components/skeleton'
+import { ProductInformation } from '@/@/interfaces'
+import { useProducts } from '@/@/hooks'
 
-const ProductCard = lazy(() => import('../../../components/admin/ProductCard'))
+const ProductCard = lazy(() => import('@/@/components/admin/ProductCard'))
 
 const Products: FC = (): JSX.Element => {
     const { handleNextProd, handlePrevProd, loading, more, products } = useProducts(); 

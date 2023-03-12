@@ -26,11 +26,11 @@ interface UserContextProps {
 
 export interface ProductInformation {
   id: string;
-  title: string;
+  title?: string;
   price: number;
-  description: string;
+  description?: string;
   image: string;
-  category: string;
+  category?: string;
   sold?: number;
 }
 

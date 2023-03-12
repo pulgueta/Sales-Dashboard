@@ -12,7 +12,6 @@ const Footer: FC = (): JSX.Element => (
                     <LazyLoadImage
                         src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
                         width='128px'
-                        style={{ margin: '8px auto' }}
                         effect='blur'
                     />
                 </HStack>

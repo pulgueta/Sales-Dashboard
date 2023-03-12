@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { getProducts } from "../utils";
+import { getProducts } from "@/utils";
 
 export const useProducts = () => {
     const [more, setMore] = useState<number>(3)
