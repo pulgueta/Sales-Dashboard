@@ -1,10 +1,10 @@
 import { FC, useRef } from 'react'
 
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, } from '@chakra-ui/react'
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { FaSignOutAlt } from 'react-icons/fa'
 
-import { logOut } from '../../utils'
+import { logOut } from '@/utils'
 
 export const SignOutModal: FC = (): JSX.Element => {
     const cancelRef = useRef<any>()
@@ -36,6 +36,7 @@ export const SignOutModal: FC = (): JSX.Element => {
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
                             Cerrar sesión
                         </AlertDialogHeader>
+                        <AlertDialogCloseButton />
                         <AlertDialogBody>
                             ¿Seguro que quieres cerrar sesión?
                         </AlertDialogBody>

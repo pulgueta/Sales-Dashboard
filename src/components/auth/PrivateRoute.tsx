@@ -1,8 +1,8 @@
 import { useContext, FC } from 'react'
 import { Navigate } from 'react-router-dom'
 
-import { PrivateRouteProps } from '../../types'
-import { UserContext } from '../../context/auth'
+import { PrivateRouteProps } from '@/types'
+import { UserContext } from '@/context/auth'
 
 export const PrivateRoute: FC<PrivateRouteProps> = ({ children }) => {
 

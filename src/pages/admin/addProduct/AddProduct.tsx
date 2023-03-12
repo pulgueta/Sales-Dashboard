@@ -4,12 +4,12 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Textarea, useToast, VStack, } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { Helmet } from 'react-helmet-async';
 import { v4 } from 'uuid'
 
-import { Inputs } from '../../../interfaces';
-import { addProduct } from '../../../utils';
-import { storage } from '../../../firebase';
-import { Helmet } from 'react-helmet-async';
+import { Inputs } from '@/interfaces';
+import { addProduct } from '@/utils';
+import { storage } from '@/firebase';
 
 const AddProduct: FC = (): JSX.Element => {
 

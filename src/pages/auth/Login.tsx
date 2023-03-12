@@ -12,23 +12,26 @@ import { Helmet } from 'react-helmet-async'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
-import { LoginInputs } from '../../interfaces'
-import { loginWithEmail } from '../../utils'
-import { ProviderButtons } from '../../components'
+import { LoginInputs } from '@/interfaces'
+import { loginWithEmail } from '@/utils'
+import { ProviderButtons } from '@/components'
+import { ForgotPassword } from '@/components/auth'
 
-const AdminLogin: FC = (): JSX.Element => {
+const Login: FC = (): JSX.Element => {
 
     const [show, setShow] = useState<boolean>(true)
 
     const toast = useToast();
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
 
+
     const navigate = useNavigate();
 
     const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<LoginInputs>();
 
     const onSubmit: SubmitHandler<LoginInputs> = async (values: LoginInputs) => {
-        await loginWithEmail(values.email, values.password).then((user) => {
+        try {
+            const user = await loginWithEmail(values.email, values.password)
             toast({
                 status: 'success',
                 duration: 1500,
@@ -39,16 +42,16 @@ const AdminLogin: FC = (): JSX.Element => {
             })
             reset()
             navigate(-1)
-        }).catch((error) => {
+        } catch ({ message }) {
             toast({
                 status: 'error',
                 duration: 1500,
                 isClosable: false,
                 title: 'Inicio de sesión',
                 position: isLargerThan800 ? 'bottom' : 'top-right',
-                description: error
+                description: message as string // Cast error to string
             })
-        })
+        }
     }
 
     return (
@@ -129,9 +132,7 @@ const AdminLogin: FC = (): JSX.Element => {
                                     {errors.password && <FormErrorMessage>La contraseña es requerida</FormErrorMessage>}
                                 </FormControl>
                                 <HStack alignItems='right' mt={4} mb={1} justifyContent='flex-end'>
-                                    <Button variant="link" colorScheme="blue" size="sm" onClick={() => console.log('forgot')}>
-                                        Olvidé mi contraseña
-                                    </Button>
+                                    <ForgotPassword />
                                 </HStack>
                                 <ButtonGroup pt={4} width='100%' colorScheme='green'>
                                     <Button type='submit' isLoading={isSubmitting} width='100%'>Iniciar sesión</Button>
@@ -153,4 +154,4 @@ const AdminLogin: FC = (): JSX.Element => {
     )
 }
 
-export default AdminLogin;
+export default Login;

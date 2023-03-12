@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { FaAlignRight } from 'react-icons/fa'
 
 import { SignOutModal } from './'
-import { ActiveUser } from '../../interfaces'
+import { ActiveUser } from '@/interfaces'
 
 const Sidebar: FC<ActiveUser> = ({ isUser }): JSX.Element => {
     const btnRef = useRef<HTMLButtonElement | any>()

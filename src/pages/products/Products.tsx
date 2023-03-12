@@ -3,10 +3,10 @@ import { FC } from 'react'
 import { Button, ButtonGroup, Center, Grid, GridItem, Heading, Text, VStack } from '@chakra-ui/react'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 
-import { ProductCard } from '../../components'
-import { ProductCardSkeleton } from '../../components/skeleton'
-import { ProductInformation } from '../../interfaces'
-import { useProducts } from '../../hooks'
+import { ProductCard } from '@/components'
+import { ProductCardSkeleton } from '@/components/skeleton'
+import { ProductInformation } from '@/interfaces'
+import { useProducts } from '@/hooks'
 
 const Products: FC = (): JSX.Element => {
     const { handleNextProd, handlePrevProd, loading, more, products } = useProducts();

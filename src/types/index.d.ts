@@ -4,6 +4,10 @@ export type ContextProps = {
     children: ReactNode;
 }
 
-type PrivateRouteProps = {
+export type PrivateRouteProps = {
     children: ReactNode;
+}
+
+export type Query = {
+    querySelector: '==', '<=', '>='
 }

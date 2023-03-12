@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 import { Button, ButtonGroup, createIcon } from '@chakra-ui/react'
-import { loginWithProvider } from '../utils'
+import { loginWithProvider } from '@/utils'
 
 const GoogleIcon = createIcon({
     displayName: 'GoogleIcon',

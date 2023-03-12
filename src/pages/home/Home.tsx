@@ -1,7 +1,10 @@
-import { FC } from 'react'
+import { FC, lazy } from 'react'
 
 import { Box, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import ImageSlider from 'react-simple-image-slider';
+import { Helmet } from 'react-helmet-async';
+
+const Footer = lazy(() => import('@/components/Footer'))
 
 const images = [
     {
@@ -24,7 +27,10 @@ const images = [
 const Home: FC = (): JSX.Element => {
 
     return (
-        <Box overflow='hidden'>
+        <Box overflowX='hidden'>
+            <Helmet>
+                <title>Xochicalli Commerce</title>
+            </Helmet>
             <ImageSlider
                 width='100%'
                 autoPlay
@@ -34,19 +40,20 @@ const Home: FC = (): JSX.Element => {
                 showBullets
                 showNavs
             />
-            <HStack justifyContent='center' py={16} px={[8, 0]} bgColor='green.400'>
+            <HStack justifyContent='center' py={28} px={[8, 0]} bgGradient='linear(to-b, white, gray.100)'>
                 <Center>
                     <VStack>
-                        <Heading>
+                        <Heading fontSize={[32, 48]}>
                             Xochicalli Commerce
                         </Heading>
-                        <Text fontSize='20px' textAlign='center' fontWeight={600}>Planta tus sueños y que florezcan tus objetivos</Text>
+                        <Text fontSize={[20, 24]} py={6} textAlign='center' fontWeight={600}>Planta tus sueños y que florezcan tus objetivos</Text>
                         <Text fontSize='18px' textAlign='center'>
                             En Xochicalli Commerce nos interesa proporcionar plantas, macetas, fertilizantes y todo tipo de herramientas que le permiten a tus plantas crecer de una forma más fácil y eficaz
                         </Text>
                     </VStack>
                 </Center>
             </HStack>
+            <Footer />
         </Box>
     )
 }

@@ -1,8 +1,10 @@
-import { FC } from "react";
+import { FC, lazy } from "react";
 
 import { Box, Button, CloseButton, Flex, Heading, HStack, IconButton, Link, Text, useDisclosure, VStack } from "@chakra-ui/react";
-import { FaAlignRight, FaUser } from "react-icons/fa";
+import { FaAlignRight, FaShoppingCart, FaUser } from "react-icons/fa";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+
+const SearchDrawer = lazy(() => import("./SearchDrawer"));
 
 const links = [
     {
@@ -38,7 +40,6 @@ export const Navbar: FC = (): JSX.Element => {
         <>
             {
                 isInLogin !== '/login' &&
-
                 <Heading bgColor='green.500' w="full" px={{ base: 2, sm: 4, }} py={4} shadow="md">
                     <Flex alignItems="center" justifyContent="space-between" mx="auto">
                         <Link to="/" title="Xochicalli Commerce - Inicio" as={RouterLink}>
@@ -47,7 +48,7 @@ export const Navbar: FC = (): JSX.Element => {
                             </Text>
                         </Link>
                         <HStack display="flex" alignItems="center" spacing={1}>
-                            <HStack spacing={[1, 1, 2, 4]} mr={1} color="brand.500" display={["none", "none", "inline-flex"]}>
+                            <HStack spacing={[1, 1, 1, 2, 4]} mr={1} color="brand.500" display={["none", "none", "inline-flex"]}>
                                 {
                                     links.map(({ id, text, route }) => (
                                         <Button color='white' variant='ghost' _hover={{ bg: 'gray.200', color: 'gray.800' }}
@@ -57,13 +58,30 @@ export const Navbar: FC = (): JSX.Element => {
                                         </Button>
                                     ))
                                 }
-                                <Button colorScheme='blue' leftIcon={<FaUser />}
+                                <SearchDrawer />
+                                <IconButton
+                                    aria-label="login"
+                                    variant='ghost'
+                                    color='white'
+                                    _hover={{ bgColor: 'white', color: 'gray.800' }}
+                                    icon={<FaUser />}
                                     onClick={() => onRoute('/login')}
-                                >Iniciar sesión</Button>
+                                />
+                                <IconButton
+                                    aria-label="carrito"
+                                    variant='ghost'
+                                    color='white'
+                                    _hover={{ bgColor: 'white', color: 'gray.800' }}
+                                    icon={<FaShoppingCart />}
+                                    onClick={() => onRoute('/cart')}
+                                />
+
                             </HStack>
                             <Box display={["inline-flex", "inline-flex", "none"]}>
                                 <IconButton display={["flex", "flex", "none"]} aria-label="Open menu" fontSize="20px"
-                                    color="gray.800" variant="ghost"
+                                    variant='ghost'
+                                    color='white'
+                                    _hover={{ bgColor: 'whiteAlpha.400' }}
                                     icon={<FaAlignRight />}
                                     onClick={mobileNav.onOpen}
                                 />
@@ -83,7 +101,20 @@ export const Navbar: FC = (): JSX.Element => {
                                             </Button>
                                         ))
                                     }
-                                    <Button leftIcon={<FaUser />} w="full" colorScheme='blue'>
+                                    <Button
+                                        leftIcon={<FaShoppingCart />}
+                                        w="full"
+                                        colorScheme='green'
+                                        onClick={() => onRoute('/cart')}
+                                    >
+                                        Ver carrito
+                                    </Button>
+                                    <Button
+                                        leftIcon={<FaUser />}
+                                        w="full"
+                                        colorScheme='blue'
+                                        onClick={() => onRoute('/login')}
+                                    >
                                         Iniciar sesión
                                     </Button>
                                 </VStack>

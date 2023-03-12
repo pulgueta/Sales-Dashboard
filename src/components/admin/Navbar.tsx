@@ -4,8 +4,8 @@ import { Text, HStack, useMediaQuery, Heading, Button, IconButton } from '@chakr
 import { FaSignOutAlt } from 'react-icons/fa'
 import { NavLink, useNavigate } from 'react-router-dom'
 
-import { ActiveUser, NavbarItems } from '../../interfaces'
-import { logOut } from '../../utils'
+import { ActiveUser, NavbarItems } from '@/interfaces'
+import { logOut } from '@/utils'
 
 const Sidebar = lazy(() => import('./Sidebar'))
 
