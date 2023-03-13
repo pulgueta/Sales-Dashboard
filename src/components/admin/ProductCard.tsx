@@ -17,7 +17,7 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
         return new Intl.NumberFormat('es-MX', {
             style: 'currency', currency: 'MXN'
         }).format(price);
-    }, [price])
+    }, [price]).replace('.00', '')
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toProduct = useNavigate();
@@ -54,7 +54,7 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
                                 <Button onClick={onOpen} colorScheme='red'>Eliminar</Button>
                                 <Button onClick={handleToProduct} variant='link' colorScheme='telegram'>Ver más</Button>
                             </ButtonGroup>
-                            <Text fontSize='xl' fontWeight='medium'>{memoPrice.replace('.00', '')}</Text>
+                            <Text fontSize='xl' fontWeight='medium'>{memoPrice}</Text>
                         </HStack>
                     </CardBody>
                 </LazyLoadComponent>

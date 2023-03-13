@@ -1,23 +1,24 @@
 import { FC, lazy, Suspense, useContext } from 'react'
 
-import { Box, IconButton, Spinner, Tooltip, VStack } from '@chakra-ui/react'
-import { HelmetProvider } from 'react-helmet-async'
+import { Spinner, VStack } from '@chakra-ui/react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { DashboardTitle } from '@/components/admin'
 import { Navbar as AdminNavbar } from '@/components/admin'
 import { Home } from '@/pages/home'
-import { Products } from '@/pages/products'
 import { AddProduct } from '@/pages/admin/addProduct'
 import { Dashboard } from '@/pages/admin/dashboard'
 import { UserContext } from '@/context/auth'
 import { PrivateRoute } from '@/components/auth'
 import { Navbar } from '@/components'
-import { FaWhatsapp } from 'react-icons/fa'
 
+const Products = lazy(() => import('@/pages/products/Products'))
+const Product = lazy(() => import('@/pages/products/Product'))
 const Login = lazy(() => import('@/pages/auth/Login'))
+const Signup = lazy(() => import('@/pages/auth/Signup'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 const AdminProducts = lazy(() => import('@/pages/admin/products/Products'))
+const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
 
 const Loader: FC = (): JSX.Element => (
   <VStack minH='100vh' alignItems='center' justifyContent='center'>
@@ -25,34 +26,20 @@ const Loader: FC = (): JSX.Element => (
   </VStack>
 )
 
-const WhatsAppButton: FC = (): JSX.Element => (
-  <Box position='fixed' bottom={6} right={6}>
-    <Tooltip label='Hablar en nuestro WhatsApp' placement='left' hasArrow rounded='sm'>
-      <IconButton
-        colorScheme='whatsapp'
-        aria-label='whatsapp-btn'
-        isRound
-        size='lg'
-        fontSize='32px'
-        icon={<FaWhatsapp />}
-        onClick={() => window.location.assign(`https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER}`)}
-      />
-    </Tooltip>
-  </Box>
-)
-
 export const App: FC = (): JSX.Element => {
 
   const { user } = useContext(UserContext)
 
   return (
-    <Suspense fallback={<Loader />}>
-      <HelmetProvider>
-        {user ? <AdminNavbar isUser={user} /> : <Navbar />}
+    <>
+      {user ? <AdminNavbar isUser={user} /> : <Navbar />}
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route index element={<Home />} />
           <Route path='/products' element={<Products />} />
+          <Route path='/products/:id' element={<Product />} />
           <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
+          <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/admin/products' replace />} />
 
           <Route path='/admin' element={
             <PrivateRoute>
@@ -83,11 +70,10 @@ export const App: FC = (): JSX.Element => {
             <Route path='/admin/' element={<NotFound />} />
           </Route>
 
-
           <Route path='*' element={<NotFound />} />
         </Routes>
-        {!user && <WhatsAppButton />}
-      </HelmetProvider>
-    </Suspense>
+      </Suspense>
+      {!user && <WhatsAppButton />}
+    </>
   )
 }

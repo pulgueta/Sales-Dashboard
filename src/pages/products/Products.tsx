@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
-import { Button, ButtonGroup, Center, Grid, GridItem, Heading, Text, VStack } from '@chakra-ui/react'
+import { Button, ButtonGroup, Center, Grid, GridItem, Heading, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 
 import { ProductCard } from '@/components'
@@ -12,10 +13,18 @@ const Products: FC = (): JSX.Element => {
     const { handleNextProd, handlePrevProd, loading, more, products } = useProducts();
 
     return (
-        <VStack minH='calc(100vh - 64px)' bgColor='gray.200' p={4}>
-            <Heading my={8}>
+        <VStack minH='calc(100vh - 75px)' bgColor='gray.100' p={4}>
+            <Heading mt={4}>
                 Products
             </Heading>
+                <Breadcrumb py={2} pb={4}>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink as={Link} to='/'>Inicio</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink as={Link} to='/products' isCurrentPage>Productos</BreadcrumbLink>
+                    </BreadcrumbItem>
+                </Breadcrumb>
             <Center>
                 {
                     loading
