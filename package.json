@@ -15,6 +15,7 @@
     "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@hookform/resolvers": "^2.9.11",
     "@types/uuid": "^9.0.1",
     "firebase": "^9.17.1",
     "framer-motion": "^9.0.2",
@@ -27,7 +28,8 @@
     "react-router-dom": "^6.9.0",
     "react-simple-image-slider": "^2.4.1",
     "recharts": "^2.4.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",

@@ -1,6 +1,6 @@
 import { FirebaseError } from "firebase/app"
 import { createUserWithEmailAndPassword, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, User } from "firebase/auth"
-import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDocs, onSnapshot, query, where, WhereFilterOp } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, ref } from "firebase/storage"
 
 import { auth, db, storage } from "@/firebase"
@@ -39,7 +39,11 @@ export const signUpWithEmail = async (email: string, password: string): Promise<
 
         return user
     } catch (error) {
-        console.error(error)
+        if (error instanceof FirebaseError) {
+            throw new Error(error.message)
+        }
+
+        throw error
     }
 
 }
@@ -74,6 +78,20 @@ export const getProducts = async () => {
         }))
 
         return products
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const getProduct = async (collectionName: string, id: string) => {
+    try {
+        const docRef = doc(db, collectionName, id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log(docSnap.data());
+            return docSnap.data()
+        }
     } catch (error) {
         console.error(error)
     }

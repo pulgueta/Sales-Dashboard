@@ -1,6 +1,6 @@
 import { FC, lazy } from "react";
 
-import { Box, Button, CloseButton, Flex, Heading, HStack, IconButton, Link, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import { Badge, Box, Button, CloseButton, Flex, Heading, HStack, IconButton, Link, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { FaAlignRight, FaShoppingCart, FaUser } from "react-icons/fa";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
@@ -39,7 +39,7 @@ export const Navbar: FC = (): JSX.Element => {
     return (
         <>
             {
-                isInLogin !== '/login' &&
+                (isInLogin !== '/login' && isInLogin !== '/signup') &&
                 <Heading bgColor='green.500' w="full" px={{ base: 2, sm: 4, }} py={4} shadow="md">
                     <Flex alignItems="center" justifyContent="space-between" mx="auto">
                         <Link to="/" title="Xochicalli Commerce - Inicio" as={RouterLink}>
@@ -74,7 +74,18 @@ export const Navbar: FC = (): JSX.Element => {
                                     _hover={{ bgColor: 'white', color: 'gray.800' }}
                                     icon={<FaShoppingCart />}
                                     onClick={() => onRoute('/cart')}
-                                />
+                                >
+                                    <Badge
+                                        ml={2}
+                                        colorScheme="purple"
+                                        borderRadius="full"
+                                        px={2}
+                                        fontSize="0.8em"
+                                        variant="subtle"
+                                    >
+                                        4
+                                    </Badge>
+                                </IconButton>
 
                             </HStack>
                             <Box display={["inline-flex", "inline-flex", "none"]}>

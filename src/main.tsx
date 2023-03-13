@@ -3,18 +3,25 @@ import { createRoot } from 'react-dom/client'
 
 import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 
-import { App } from './App'
-import { UserProvider } from './context/auth'
+import { App } from '@/App'
+import { UserProvider } from '@/context/auth'
+import { ErrorBoundaryComponent } from '@/components'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
-    <BrowserRouter>
-      <UserProvider>
-        <ChakraProvider>
-          <App />
-        </ChakraProvider>
-      </UserProvider>
-    </BrowserRouter>
+    <ChakraProvider>
+      <ErrorBoundary fallback={<ErrorBoundaryComponent />}>
+        <HelmetProvider>
+          <UserProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </UserProvider>
+        </HelmetProvider>
+      </ErrorBoundary>
+    </ChakraProvider>
   </StrictMode>
 )

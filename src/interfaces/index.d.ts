@@ -12,6 +12,13 @@ export interface LoginInputs {
   password: string;
 }
 
+export interface RegisterInputs {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+
 export interface Inputs {
   title: string;
   description: string;

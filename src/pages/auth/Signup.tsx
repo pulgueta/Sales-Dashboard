@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 
 import {
-    Box, Button, ButtonGroup, Container, Divider,
+    Box, Button, Container, Divider,
     FormControl, FormErrorMessage, FormLabel, Heading, HStack,
     IconButton, Input, InputGroup, InputRightElement, Stack,
     Text, useMediaQuery, useToast,
@@ -14,12 +14,11 @@ import { Helmet } from 'react-helmet-async'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
-import { LoginInputs } from '@/interfaces'
-import { loginWithEmail } from '@/utils'
+import { RegisterInputs } from '@/interfaces'
+import { signUpWithEmail } from '@/utils'
 import { ProviderButtons } from '@/components'
-import { ForgotPassword } from '@/components/auth'
 
-const Login: FC = (): JSX.Element => {
+const Signup: FC = (): JSX.Element => {
 
     const [show, setShow] = useState<boolean>(true)
 
@@ -36,22 +35,25 @@ const Login: FC = (): JSX.Element => {
         password: yup
             .string()
             .required('La contraseña es requerida')
-            .min(6, 'La contraseña debe tener mínimo 6 caracteres')
+            .min(6, 'La contraseña debe tener mínimo 6 caracteres'),
+        confirmPassword: yup
+            .string()
+            .oneOf([yup.ref('password')], 'Las contraseñas deben ser idénticas')
+            .required('Debes confirmar la contraseña')
     });
 
-    const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<LoginInputs>({ resolver: yupResolver(validationSchema) });
+    const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<RegisterInputs>({ resolver: yupResolver(validationSchema) });
 
-    const onSubmit: SubmitHandler<LoginInputs> = async (values: LoginInputs) => {
+    const onSubmit: SubmitHandler<RegisterInputs> = async (values: RegisterInputs) => {
         try {
-            const user = await loginWithEmail(values.email, values.password)
-            console.log(user);
+            const user = await signUpWithEmail(values.email, values.password)
             toast({
                 status: 'success',
                 duration: 1500,
                 isClosable: false,
-                title: 'Inicio de sesión',
+                title: 'Registro',
                 position: isLargerThan800 ? 'top-right' : 'bottom',
-                description: `¡Bienvenido ${user?.displayName}!`
+                description: `¡Te has registrado con el correo ${user?.email}!`
             })
             reset()
             navigate(-1)
@@ -60,7 +62,7 @@ const Login: FC = (): JSX.Element => {
                 status: 'error',
                 duration: 1500,
                 isClosable: false,
-                title: 'Inicio de sesión',
+                title: 'Error de registro',
                 position: isLargerThan800 ? 'bottom' : 'top-right',
                 description: message as string // Cast error to string
             })
@@ -70,7 +72,7 @@ const Login: FC = (): JSX.Element => {
     return (
         <Box bgColor='gray.100' minHeight='100vh'>
             <Helmet>
-                <title>Iniciar sesión</title>
+                <title>Crear cuenta</title>
             </Helmet>
             <Container maxW="lg" py={{ base: '12', md: '24' }} px={{ base: '0', sm: '8' }}>
                 <Stack spacing="8">
@@ -83,11 +85,11 @@ const Login: FC = (): JSX.Element => {
                             />
                         </HStack>
                         <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-                            <Heading size={{ base: 'xl', md: 'lg' }}>Iniciar sesión</Heading>
+                            <Heading size={{ base: 'xl', md: 'lg' }}>Crear cuenta</Heading>
                             <HStack spacing="1" justify="center">
-                                <Text color="muted">¿No tienes cuenta?</Text>
-                                <Button variant="link" as={Link} to='/signup' colorScheme="blue">
-                                    Registrarme
+                                <Text color="muted">¿Ya tienes cuenta?</Text>
+                                <Button variant="link" as={Link} to='/login' colorScheme="blue">
+                                    Iniciar sesión
                                 </Button>
                             </HStack>
                         </Stack>
@@ -108,8 +110,8 @@ const Login: FC = (): JSX.Element => {
                                         type='email'
                                         id='email'
                                         bgColor={['white', 'transparent']}
-                                        placeholder='correo@electronico.com'
                                         borderColor='gray.200'
+                                        placeholder='correo@electronico.com'
                                         {...register('email')}
                                     />
                                     {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
@@ -138,17 +140,43 @@ const Login: FC = (): JSX.Element => {
                                     </InputGroup>
                                     {errors.password && <FormErrorMessage>{errors.password.message}</FormErrorMessage>}
                                 </FormControl>
-                                <HStack alignItems='right' mt={4} mb={1} justifyContent='flex-end'>
-                                    <ForgotPassword />
-                                </HStack>
-                                <ButtonGroup pt={4} width='100%' colorScheme='green'>
-                                    <Button type='submit' isLoading={isSubmitting} width='100%'>Iniciar sesión</Button>
-                                </ButtonGroup>
+
+                                <FormControl isInvalid={!!errors.confirmPassword} mt={4}>
+                                    <FormLabel htmlFor='confirmPassword'>Confirmar contraseña</FormLabel>
+                                    <InputGroup>
+                                        <InputRightElement>
+                                            <IconButton
+                                                variant='link'
+                                                aria-label='Show password'
+                                                icon={show ? <FaEye /> : <FaEyeSlash />}
+                                                onClick={() => setShow(!show)}
+                                            />
+                                        </InputRightElement>
+                                        <Input
+                                            autoComplete='false'
+                                            type={show ? 'password' : 'text'}
+                                            id='confirmPassowrd'
+                                            bgColor={['white', 'transparent']}
+                                            placeholder='********'
+                                            borderColor='gray.200'
+                                            {...register('confirmPassword')}
+                                        />
+                                    </InputGroup>
+                                    {errors.confirmPassword && <FormErrorMessage>{errors.confirmPassword.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <Button
+                                    mt={8}
+                                    width='100%'
+                                    colorScheme='green'
+                                    type='submit'
+                                    isLoading={isSubmitting}
+                                >Registrarme</Button>
                             </form>
                             <HStack>
                                 <Divider borderColor={['gray.400', 'gray.200']} />
                                 <Text fontSize="sm" whiteSpace="nowrap" color="muted">
-                                    O ingresa con:
+                                    O regístrate con:
                                 </Text>
                                 <Divider borderColor={['gray.400', 'gray.200']} />
                             </HStack>
@@ -161,4 +189,4 @@ const Login: FC = (): JSX.Element => {
     )
 }
 
-export default Login;
+export default Signup;
