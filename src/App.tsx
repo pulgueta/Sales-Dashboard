@@ -1,9 +1,8 @@
 import { FC, lazy, Suspense, useContext } from 'react'
 
 import { Spinner, VStack } from '@chakra-ui/react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 
-import { DashboardTitle } from '@/components/admin'
 import { Navbar as AdminNavbar } from '@/components/admin'
 import { Home } from '@/pages/home'
 import { AddProduct } from '@/pages/admin/addProduct'
@@ -18,6 +17,7 @@ const Login = lazy(() => import('@/pages/auth/Login'))
 const Signup = lazy(() => import('@/pages/auth/Signup'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 const AdminProducts = lazy(() => import('@/pages/admin/products/Products'))
+const Users = lazy(() => import('@/pages/admin/users/Users'))
 const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
 
 const Loader: FC = (): JSX.Element => (
@@ -43,7 +43,7 @@ export const App: FC = (): JSX.Element => {
 
           <Route path='/admin' element={
             <PrivateRoute>
-              <DashboardTitle />
+              <Outlet />
             </PrivateRoute>
           }>
             <Route path='add' element={
@@ -64,6 +64,11 @@ export const App: FC = (): JSX.Element => {
             <Route path='products/:id' element={
               <PrivateRoute>
                 <AdminProducts />
+              </PrivateRoute>
+            } />
+            <Route path='user' element={
+              <PrivateRoute>
+                <Users />
               </PrivateRoute>
             } />
 
