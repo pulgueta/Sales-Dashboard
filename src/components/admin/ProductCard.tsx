@@ -29,7 +29,7 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
         await deleteProduct(id, image)
         setLoading(false)
         onClose()
-        toProduct('/admin/products')
+        window.location.reload();
     }
 
     return (
