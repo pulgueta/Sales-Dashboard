@@ -1,22 +1,9 @@
 import {
-    Avatar,
-    Badge,
-    Box,
-    Checkbox,
-    HStack,
-    Icon,
-    IconButton,
-    Table,
-    TableProps,
-    Tbody,
-    Td,
-    Text,
-    Th,
-    Thead,
-    Tr,
-    StackProps, useColorModeValue, Container, Stack, InputGroup, InputLeftElement, Input, ButtonGroup, Button, useBreakpointValue
+    Box, Checkbox, HStack, Icon, IconButton,
+    Table, TableProps, Tbody, Td, Text, Th, Thead, Tr,
+    StackProps, useColorModeValue, Container, Stack, ButtonGroup, Button, useBreakpointValue
 } from '@chakra-ui/react'
-import { FiEdit2, FiTrash2, FiStar, FiSearch } from 'react-icons/fi'
+import { FiEdit2, FiTrash2, FiStar } from 'react-icons/fi'
 import { IoArrowDown } from 'react-icons/io5'
 
 const Users = (props: TableProps) => {

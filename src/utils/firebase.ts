@@ -1,10 +1,10 @@
 import { FirebaseError } from "firebase/app"
 import { createUserWithEmailAndPassword, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, User } from "firebase/auth"
-import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, where, WhereFilterOp } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, ref } from "firebase/storage"
 
 import { auth, db, storage } from "@/firebase"
-import { Inputs } from "@/interfaces"
+import { Inputs, RegisterUserInfo } from "@/interfaces"
 
 export const loginWithProvider = async (provider: string): Promise<User | undefined> => {
     try {
@@ -33,9 +33,42 @@ export const loginWithEmail = async (email: string, password: string): Promise<U
     }
 }
 
-export const signUpWithEmail = async (email: string, password: string): Promise<User | undefined> => {
+export const signUpWithEmail = async (email: string, password: string,
+    { birthday, fatherSurname, gender, motherSurname, name, phoneNumber }: RegisterUserInfo): Promise<User | undefined> => {
     try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
+        let parsedDate: string = '';
+
+        if (birthday) {
+            const stringDate = new Date(birthday);
+            if (!isNaN(stringDate.getTime())) {
+                parsedDate = stringDate.toLocaleDateString('en-US', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    year: 'numeric'
+                });
+            } else {
+                throw new Error('Invalid date format');
+            }
+        }
+
+        await setDoc(doc(db, 'users', user.uid), {
+            birthday: parsedDate,
+            createdAt: new Date().toLocaleDateString('en-US', {
+                month: '2-digit',
+                day: '2-digit',
+                year: 'numeric'
+            }),
+            email: user.email,
+            fatherSurname,
+            gender,
+            motherSurname,
+            name,
+            phoneNumber,
+            role: 'user',
+            uid: user.uid,
+        })
 
         return user
     } catch (error) {
@@ -47,6 +80,7 @@ export const signUpWithEmail = async (email: string, password: string): Promise<
     }
 
 }
+
 
 export const forgotPassword = async (email: string): Promise<boolean | undefined> => {
     try {

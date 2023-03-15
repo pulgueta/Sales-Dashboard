@@ -1,5 +1,8 @@
+
 import { StackProps } from "@chakra-ui/react";
 import { User } from "firebase/auth";
+
+
 
 export interface NavbarItems {
   id: number;
@@ -16,8 +19,22 @@ export interface RegisterInputs {
   email: string;
   password: string;
   confirmPassword: string;
+  gender: string;
+  birthday: Date;
+  fatherSurname: string;
+  motherSurname: string;
+  name: string;
+  phoneNumber: string;
 }
 
+export interface RegisterUserInfo {
+  gender: string;
+  name: string;
+  birthday: Date;
+  fatherSurname: string;
+  motherSurname: string;
+  phoneNumber: string;
+}
 
 export interface Inputs {
   title: string;
@@ -27,7 +44,7 @@ export interface Inputs {
   image: any;
 }
 
-interface UserContextProps {
+export interface UserContextProps {
   user: User | null;
 }
 
