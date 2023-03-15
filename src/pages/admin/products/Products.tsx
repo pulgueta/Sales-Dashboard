@@ -8,13 +8,13 @@ import { ProductCardSkeleton } from '@/components/skeleton'
 import { ProductInformation } from '@/interfaces'
 import { useProducts } from '@/hooks'
 
-const ProductCard = lazy(() => import('@/components/products/ProductCard'))
+const ProductCard = lazy(() => import('@/components/admin/ProductCard'))
 
 const Products: FC = (): JSX.Element => {
     const { handleNextProd, handlePrevProd, loading, more, products } = useProducts(); 
 
     return (
-        <VStack minH='calc(100vh - 115px)' bgColor='gray.200' p={4}>
+        <VStack h='calc(100vh - 64px)' bgColor='gray.200' gap={4}>
             <Helmet>
                 <title>Productos</title>
             </Helmet>

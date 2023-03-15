@@ -51,7 +51,7 @@ const Login: FC = (): JSX.Element => {
                 isClosable: false,
                 title: 'Inicio de sesión',
                 position: isLargerThan800 ? 'top-right' : 'bottom',
-                description: `¡Bienvenido ${user?.displayName}!`
+                description: `¡Bienvenido ${user?.email}!`
             })
             reset()
             navigate(-1)
@@ -75,13 +75,16 @@ const Login: FC = (): JSX.Element => {
             <Container maxW="lg" py={{ base: '12', md: '24' }} px={{ base: '0', sm: '8' }}>
                 <Stack spacing="8">
                     <Stack spacing="6">
-                        <HStack justifyContent='center'>
-                            <LazyLoadImage
-                                src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
-                                width='128px'
-                                effect='blur'
-                            />
-                        </HStack>
+                        {
+                            isLargerThan800 &&
+                            <HStack justifyContent='center'>
+                                <LazyLoadImage
+                                    src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
+                                    width='128px'
+                                    effect='blur'
+                                />
+                            </HStack>
+                        }
                         <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
                             <Heading size={{ base: 'xl', md: 'lg' }}>Iniciar sesión</Heading>
                             <HStack spacing="1" justify="center">

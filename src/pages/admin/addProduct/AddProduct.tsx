@@ -77,7 +77,7 @@ const AddProduct: FC = (): JSX.Element => {
     }
 
     return (
-        <VStack minHeight='calc(100vh - 115px)' bgColor='gray.200' py={4}>
+        <VStack h='calc(100vh - 64px)' bgColor='gray.200' gap={4}>
             <Helmet>
                 <title>Agregar producto</title>
             </Helmet>
@@ -167,6 +167,7 @@ const AddProduct: FC = (): JSX.Element => {
                         loadingText='Agregando producto...'
                         colorScheme='blue'
                         width='100%'
+                        isDisabled={imageUrl ? false : true}
                         type='submit'
                         mb={2}
                     >

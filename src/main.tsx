@@ -7,8 +7,7 @@ import { HelmetProvider } from 'react-helmet-async'
 
 import { App } from '@/App'
 import { UserProvider } from '@/context/auth'
-import { ErrorBoundaryComponent } from '@/components'
-import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { ErrorBoundaryComponent, ErrorBoundary } from '@/components/errors'
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>

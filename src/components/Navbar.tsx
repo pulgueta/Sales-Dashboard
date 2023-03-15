@@ -1,7 +1,7 @@
 import { FC, lazy } from "react";
 
-import { Badge, Box, Button, CloseButton, Flex, Heading, HStack, IconButton, Link, Text, useDisclosure, VStack } from "@chakra-ui/react";
-import { FaAlignRight, FaShoppingCart, FaUser } from "react-icons/fa";
+import { Box, Button, CloseButton, Flex, Heading, HStack, IconButton, Link, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import { FiMenu, FiShoppingCart, FiUser } from "react-icons/fi";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const SearchDrawer = lazy(() => import("./SearchDrawer"));
@@ -64,7 +64,7 @@ export const Navbar: FC = (): JSX.Element => {
                                     variant='ghost'
                                     color='white'
                                     _hover={{ bgColor: 'white', color: 'gray.800' }}
-                                    icon={<FaUser />}
+                                    icon={<FiUser />}
                                     onClick={() => onRoute('/login')}
                                 />
                                 <IconButton
@@ -72,28 +72,16 @@ export const Navbar: FC = (): JSX.Element => {
                                     variant='ghost'
                                     color='white'
                                     _hover={{ bgColor: 'white', color: 'gray.800' }}
-                                    icon={<FaShoppingCart />}
+                                    icon={<FiShoppingCart />}
                                     onClick={() => onRoute('/cart')}
-                                >
-                                    <Badge
-                                        ml={2}
-                                        colorScheme="purple"
-                                        borderRadius="full"
-                                        px={2}
-                                        fontSize="0.8em"
-                                        variant="subtle"
-                                    >
-                                        4
-                                    </Badge>
-                                </IconButton>
-
+                                />
                             </HStack>
                             <Box display={["inline-flex", "inline-flex", "none"]}>
                                 <IconButton display={["flex", "flex", "none"]} aria-label="Open menu" fontSize="20px"
                                     variant='ghost'
                                     color='white'
                                     _hover={{ bgColor: 'whiteAlpha.400' }}
-                                    icon={<FaAlignRight />}
+                                    icon={<FiMenu />}
                                     onClick={mobileNav.onOpen}
                                 />
 
@@ -113,7 +101,7 @@ export const Navbar: FC = (): JSX.Element => {
                                         ))
                                     }
                                     <Button
-                                        leftIcon={<FaShoppingCart />}
+                                        leftIcon={<FiShoppingCart />}
                                         w="full"
                                         colorScheme='green'
                                         onClick={() => onRoute('/cart')}
@@ -121,7 +109,7 @@ export const Navbar: FC = (): JSX.Element => {
                                         Ver carrito
                                     </Button>
                                     <Button
-                                        leftIcon={<FaUser />}
+                                        leftIcon={<FiUser />}
                                         w="full"
                                         colorScheme='blue'
                                         onClick={() => onRoute('/login')}
@@ -133,6 +121,7 @@ export const Navbar: FC = (): JSX.Element => {
                         </HStack>
                     </Flex>
                 </Heading>
+
             }
         </>
     );

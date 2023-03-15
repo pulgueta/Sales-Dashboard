@@ -5,7 +5,7 @@ import {
     IconButton, Input, InputGroup, InputRightAddon,
     useDisclosure
 } from "@chakra-ui/react"
-import { FaSearch } from "react-icons/fa"
+import { FiSearch } from "react-icons/fi"
 
 import { DrawerCard } from "./"
 import { getProductsWithQuery } from "@/utils"
@@ -36,7 +36,7 @@ const SearchDrawer = () => {
                 ref={btnRef}
                 color='white'
                 _hover={{ bgColor: 'white', color: 'gray.800' }}
-                icon={<FaSearch />}
+                icon={<FiSearch />}
                 onClick={searchBar.onOpen}
             />
             <Drawer
@@ -55,7 +55,7 @@ const SearchDrawer = () => {
                         <>
                             <InputGroup>
                                 <Input mb={8} value={searchText} onChange={onSearchPlant} placeholder='Planta decorativa...' />
-                                <InputRightAddon children={<FaSearch />} cursor='pointer' />
+                                <InputRightAddon children={<FiSearch />} cursor='pointer' />
                             </InputGroup>
                             {searchText.length >= 2 && filteredProducts.map((filtered: any) => {
                                 // console.log(filtered)
