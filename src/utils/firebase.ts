@@ -39,6 +39,7 @@ export const signUpWithEmail = async (email: string, password: string,
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
         let parsedDate: string = '';
+        let age: number | null = null;
 
         if (birthday) {
             const stringDate = new Date(birthday);
@@ -48,12 +49,21 @@ export const signUpWithEmail = async (email: string, password: string,
                     day: '2-digit',
                     year: 'numeric'
                 });
+
+                const now = new Date();
+                const birthDate = new Date(birthday);
+                age = now.getFullYear() - birthDate.getFullYear();
+                const monthDiff = now.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
+                    age--;
+                }
             } else {
                 throw new Error('Invalid date format');
             }
         }
 
         await setDoc(doc(db, 'users', user.uid), {
+            age,
             birthday: parsedDate,
             createdAt: new Date().toLocaleDateString('en-US', {
                 month: '2-digit',
@@ -78,7 +88,6 @@ export const signUpWithEmail = async (email: string, password: string,
 
         throw error
     }
-
 }
 
 

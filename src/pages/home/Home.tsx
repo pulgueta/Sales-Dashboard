@@ -36,7 +36,7 @@ const Home: FC = (): JSX.Element => {
                 autoPlay
                 height={592}
                 images={images}
-                slideDuration={2}
+                slideDuration={1}
                 showBullets
                 showNavs
             />

@@ -43,15 +43,14 @@ const Login: FC = (): JSX.Element => {
 
     const onSubmit: SubmitHandler<LoginInputs> = async (values: LoginInputs) => {
         try {
-            const user = await loginWithEmail(values.email, values.password)
-            console.log(user);
+            await loginWithEmail(values.email, values.password)
             toast({
                 status: 'success',
                 duration: 1500,
                 isClosable: false,
                 title: 'Inicio de sesión',
                 position: isLargerThan800 ? 'top-right' : 'bottom',
-                description: `¡Bienvenido ${user?.email}!`
+                description: '¡Bienvenido de vuelta!'
             })
             reset()
             navigate(-1)
@@ -62,7 +61,7 @@ const Login: FC = (): JSX.Element => {
                 isClosable: false,
                 title: 'Inicio de sesión',
                 position: isLargerThan800 ? 'bottom' : 'top-right',
-                description: message as string // Cast error to string
+                description: message as string
             })
         }
     }
