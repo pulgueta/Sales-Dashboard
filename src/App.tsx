@@ -1,16 +1,16 @@
 import { FC, lazy, Suspense, useContext } from 'react'
 
-import { Spinner, VStack } from '@chakra-ui/react'
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 
 import { Navbar as AdminNavbar } from '@/components/admin'
-import { Home } from '@/pages/home'
 import { AddProduct } from '@/pages/admin/addProduct'
 import { Dashboard } from '@/pages/admin/dashboard'
 import { UserContext } from '@/context/auth'
 import { PrivateRoute } from '@/components/auth'
 import { Navbar } from '@/components'
+import { Spinner } from '@/components/loading'
 
+const Home = lazy(() => import('@/pages/home/Home'))
 const Products = lazy(() => import('@/pages/products/Products'))
 const Product = lazy(() => import('@/pages/products/Product'))
 const Login = lazy(() => import('@/pages/auth/Login'))
@@ -20,12 +20,6 @@ const AdminProducts = lazy(() => import('@/pages/admin/products/Products'))
 const Users = lazy(() => import('@/pages/admin/users/Users'))
 const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
 
-const Loader: FC = (): JSX.Element => (
-  <VStack minH='100vh' alignItems='center' justifyContent='center'>
-    <Spinner />
-  </VStack>
-)
-
 export const App: FC = (): JSX.Element => {
 
   const { user } = useContext(UserContext)
@@ -33,7 +27,7 @@ export const App: FC = (): JSX.Element => {
   return (
     <>
       {user ? <AdminNavbar isUser={user} /> : <Navbar />}
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Spinner />}>
         <Routes>
           <Route index element={<Home />} />
           <Route path='/products' element={<Products />} />

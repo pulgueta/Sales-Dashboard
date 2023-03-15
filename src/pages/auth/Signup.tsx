@@ -47,6 +47,11 @@ const Signup: FC = (): JSX.Element => {
         password: yup
             .string()
             .required('La contraseña no puede estar vacía')
+            .matches(
+                // eslint-disable-next-line no-useless-escape
+                /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/,
+                'La contraseña debe contener al menos 1 letra minúscula, 1 letra mayúscula, 1 número y 1 caracter especial'
+            )
             .min(6, 'La contraseña debe tener mínimo 6 caracteres'),
         confirmPassword: yup
             .string()
@@ -93,14 +98,14 @@ const Signup: FC = (): JSX.Element => {
         console.log(birthday);
 
         try {
-            const user = await signUpWithEmail(values.email, values.password, { birthday, fatherSurname, motherSurname, gender, name, phoneNumber })
+            await signUpWithEmail(values.email, values.password, { birthday, fatherSurname, motherSurname, gender, name, phoneNumber })
             toast({
                 status: 'success',
                 duration: 1500,
                 isClosable: false,
                 title: 'Registro',
                 position: isLargerThan800 ? 'top-right' : 'bottom',
-                description: `¡Te has registrado con el correo ${user?.email}!`
+                description: `¡Hola, ${values.name}!`
             })
             reset()
             navigate(-1)

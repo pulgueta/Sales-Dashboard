@@ -43,7 +43,7 @@ export const Navbar: FC = (): JSX.Element => {
                 <Heading bgColor='green.500' w="full" px={{ base: 2, sm: 4, }} py={4} shadow="md">
                     <Flex alignItems="center" justifyContent="space-between" mx="auto">
                         <Link to="/" title="Xochicalli Commerce - Inicio" as={RouterLink}>
-                            <Text fontWeight="bold" ml={["2", "2", "0"]} color='gray.100' textDecoration='none'>
+                            <Text fontWeight="bold" ml={2} color='gray.100' textDecoration='none'>
                                 Xochicalli Plantas
                             </Text>
                         </Link>
