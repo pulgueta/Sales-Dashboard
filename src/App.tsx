@@ -13,6 +13,7 @@ import { Spinner } from '@/components/loading'
 const Home = lazy(() => import('@/pages/home/Home'))
 const Products = lazy(() => import('@/pages/products/Products'))
 const Product = lazy(() => import('@/pages/products/Product'))
+const Contact = lazy(() => import('@/pages/contact/Contact'))
 const Login = lazy(() => import('@/pages/auth/Login'))
 const Signup = lazy(() => import('@/pages/auth/Signup'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
@@ -32,6 +33,7 @@ export const App: FC = (): JSX.Element => {
           <Route index element={<Home />} />
           <Route path='/products' element={<Products />} />
           <Route path='/products/:id' element={<Product />} />
+          <Route path='/contact' element={<Contact />} />
           <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
           <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/admin/products' replace />} />
 

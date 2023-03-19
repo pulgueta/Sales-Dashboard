@@ -1,8 +1,8 @@
 import { FC, lazy } from 'react'
 
-import { Text, HStack, useMediaQuery, Heading, Button, IconButton } from '@chakra-ui/react'
-import { FaSignOutAlt } from 'react-icons/fa'
+import { Text, HStack, useMediaQuery, Heading, IconButton } from '@chakra-ui/react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { FiLogOut } from 'react-icons/fi'
 
 import { ActiveUser, NavbarItems } from '@/interfaces'
 import { logOut } from '@/utils'
@@ -34,7 +34,6 @@ const links: NavbarItems[] = [
 
 export const Navbar: FC<ActiveUser> = ({ isUser }): JSX.Element => {
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
-    const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
 
     const navigate = useNavigate()
 
@@ -75,19 +74,11 @@ export const Navbar: FC<ActiveUser> = ({ isUser }): JSX.Element => {
                                 ))}
                             </HStack>
                             {
-                                isUser && (
-                                    isLargerThan1280
-                                        ?
-                                        <Button aria-label='logout' colorScheme='red' leftIcon={<FaSignOutAlt />} onClick={onLogout}>
-                                            Cerrar sesión
-                                        </Button>
-                                        :
-                                        <IconButton aria-label='logout' colorScheme='red' icon={<FaSignOutAlt />} onClick={onLogout} />
-                                )
+                                isUser && <IconButton aria-label='logout' colorScheme='red' icon={<FiLogOut />} onClick={onLogout} />
                             }
                         </HStack>
                     </>
-                    : 
+                    :
                     <Sidebar isUser={isUser} />
             }
         </HStack >

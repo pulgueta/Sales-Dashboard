@@ -1,7 +1,10 @@
+import { RefObject } from "react"
+
 import { FirebaseError } from "firebase/app"
 import { createUserWithEmailAndPassword, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, User } from "firebase/auth"
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, where, WhereFilterOp } from "firebase/firestore"
-import { deleteObject, ref } from "firebase/storage"
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
+import { v4 } from 'uuid'
 
 import { auth, db, storage } from "@/firebase"
 import { Inputs, RegisterUserInfo } from "@/interfaces"
@@ -75,7 +78,7 @@ export const signUpWithEmail = async (email: string, password: string,
             gender,
             motherSurname,
             name,
-            phoneNumber,
+            phoneNumber: String(phoneNumber),
             role: 'user',
             uid: user.uid,
         })
@@ -140,6 +143,50 @@ export const getProduct = async (collectionName: string, id: string) => {
     }
 }
 
+export const uploadImage = async (fileRef: RefObject<HTMLInputElement>): Promise<string | null> => {
+    try {
+        const file = fileRef.current?.files?.[0] ?? new Blob();
+        const fileName = file?.name;
+        const imgRef = ref(storage, `products/${v4() + fileName}`);
+        const imgUpload = uploadBytesResumable(imgRef, file);
+
+        if (!file) {
+            console.error('No file selected');
+            return null; // Return null instead of void
+        }
+
+        const url = await new Promise<string>((resolve, reject) => {
+            imgUpload.on("state_changed", ({ state }) => {
+                switch (state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                    default:
+                        break;
+                }
+            }, (err) => {
+                reject(err); // Reject the promise if there's an error
+            }, async () => {
+                try {
+                    const url = await getDownloadURL(imgUpload.snapshot.ref);
+                    resolve(url); // Resolve the promise with the URL
+                } catch (err) {
+                    reject(err); // Reject the promise if there's an error
+                }
+            });
+        });
+
+        return url; // Return the URL
+    } catch (error) {
+        console.error(error);
+        return null; // Return null instead of throwing an error
+    }
+}
+
+
 export const getProductsWithQuery = async (collectionName: string, operator: WhereFilterOp, desired: string, info: string) => {
     const q = query(collection(db, collectionName), where(desired, operator, info));
 
@@ -161,15 +208,16 @@ export const getProductsWithQuery = async (collectionName: string, operator: Whe
 
 
 
-export const addProduct = async ({ title, description, price, category }: Inputs, image: string): Promise<DocumentReference<DocumentData> | undefined> => {
+export const addProduct = async ({ title, description, price, category, stock }: Inputs, image: string | null): Promise<DocumentReference<DocumentData> | undefined> => {
     try {
         const product = await addDoc(collection(db, 'products'), {
-            title,
-            description,
-            price,
             category,
+            description,
             image,
+            price,
             sold: 0,
+            stock: Number(stock),
+            title,
         })
 
         return product

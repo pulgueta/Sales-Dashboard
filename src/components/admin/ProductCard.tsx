@@ -1,11 +1,12 @@
-import { FC, useMemo, useRef, useState } from 'react'
+import { FC, useRef, useState } from 'react'
 
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, Card, CardBody, Divider, Heading, HStack, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
-import { FaTrash } from 'react-icons/fa';
+import { FiTrash } from 'react-icons/fi';
 import { LazyLoadComponent, LazyLoadImage } from 'react-lazy-load-image-component';
 
 import { deleteProduct } from '@/utils';
+import { usePrice } from '@/hooks';
 import { ProductInformation } from '@/interfaces';
 
 const ProductCard: FC<ProductInformation> = ({ image, title, description, price, category, id }): JSX.Element => {
@@ -13,11 +14,7 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
     const [loading, setLoading] = useState<boolean>(false)
     const cancelRef = useRef<any>()
 
-    const memoPrice: string = useMemo(() => {
-        return new Intl.NumberFormat('es-MX', {
-            style: 'currency', currency: 'MXN'
-        }).format(price);
-    }, [price]).replace('.00', '')
+    const { newPrice } = usePrice(price)
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toProduct = useNavigate();
@@ -47,14 +44,14 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
                             <Text>id: {id}</Text>
                             <Divider />
                             <Tag width='max-content'>{category}</Tag>
-                            <Text noOfLines={2}>{description}</Text>
+                            <Text noOfLines={1}>{description}</Text>
                         </Stack>
                         <HStack alignItems='center' justifyContent='space-between' width='100%' mt={4}>
                             <ButtonGroup spacing={4}>
                                 <Button onClick={onOpen} colorScheme='red'>Eliminar</Button>
                                 <Button onClick={handleToProduct} variant='link' colorScheme='telegram'>Ver más</Button>
                             </ButtonGroup>
-                            <Text fontSize='xl' fontWeight='medium'>{memoPrice}</Text>
+                            <Text fontSize='xl' fontWeight='medium'>{newPrice}</Text>
                         </HStack>
                     </CardBody>
                 </LazyLoadComponent>
@@ -79,7 +76,7 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
                             </Button>
                             <Button
                                 isLoading={loading}
-                                leftIcon={<FaTrash />}
+                                leftIcon={<FiTrash />}
                                 colorScheme='red'
                                 onClick={handleDelete} ml={3}
                             >

@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { Button, ButtonGroup, Center, Grid, GridItem, Heading, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
 import { ProductCard } from '@/components'
 import { ProductCardSkeleton } from '@/components/skeleton'
@@ -53,8 +53,8 @@ const Products: FC = (): JSX.Element => {
                                 {
                                     products.length >= 4 && (
                                         <ButtonGroup mt={8}>
-                                            <Button onClick={handlePrevProd} colorScheme='blue' leftIcon={<FaArrowLeft size='0.75em' />}>Anterior</Button>
-                                            <Button onClick={handleNextProd} colorScheme='green' rightIcon={<FaArrowRight size='0.75em' />}>Siguiente</Button>
+                                            <Button onClick={handlePrevProd} colorScheme='blue' leftIcon={<FiArrowLeft size='0.75em' />}>Anterior</Button>
+                                            <Button onClick={handleNextProd} colorScheme='green' rightIcon={<FiArrowRight size='0.75em' />}>Siguiente</Button>
                                         </ButtonGroup>
                                     )
                                 }

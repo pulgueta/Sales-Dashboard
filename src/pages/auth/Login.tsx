@@ -12,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
 
 import { LoginInputs } from '@/interfaces'
 import { loginWithEmail } from '@/utils'
@@ -124,7 +124,7 @@ const Login: FC = (): JSX.Element => {
                                             <IconButton
                                                 variant='link'
                                                 aria-label='Show password'
-                                                icon={show ? <FaEye /> : <FaEyeSlash />}
+                                                icon={show ? <FiEye /> : <FiEyeOff />}
                                                 onClick={() => setShow(!show)}
                                             />
                                         </InputRightElement>

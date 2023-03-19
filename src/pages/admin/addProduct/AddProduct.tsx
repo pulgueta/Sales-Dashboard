@@ -109,7 +109,7 @@ const AddProduct: FC = (): JSX.Element => {
                             placeholder='Planta con aroma agradable para curar enfermedades'
                             {...register('description', {
                                 required: true,
-                                minLength: 50,
+                                minLength: 10,
                             })}
                         />
                         {errors.description && <FormErrorMessage>La descripción es requerida</FormErrorMessage>}
@@ -130,6 +130,21 @@ const AddProduct: FC = (): JSX.Element => {
                             <option value="Herramientas">Herramientas</option>
                         </Select>
                         {errors.category && <FormErrorMessage>La categoría es requerida</FormErrorMessage>}
+                    </FormControl>
+
+                    <FormControl isInvalid={!!errors.stock} mb={4}>
+                        <FormLabel htmlFor='stock'>Stock</FormLabel>
+                        <Input
+                            id='stock'
+                            type='number'
+                            borderColor='gray.200'
+                            placeholder='5'
+                            {...register('stock', {
+                                required: true,
+                                min: 5,
+                            })}
+                        />
+                        {errors.stock && <FormErrorMessage>El stock de producto es requerido</FormErrorMessage>}
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.price} mb={4}>
