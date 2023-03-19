@@ -78,9 +78,10 @@ const Signup: FC = (): JSX.Element => {
             .required('Debes seleccionar un género')
             .oneOf(['Masculino', 'Femenino'], `El género debe ser "Masculino" o "Femenino"`),
         phoneNumber: yup
-            .string()
-            .matches(/^\d{10}$/, 'El número de teléfono no es válido')
+            .number()
             .required('El número de teléfono no puede estar vacío')
+            .min(10, 'El número de teléfono debe ser de 10 dígitos')
+            .max(10, 'El número de teléfono no puede tener más de 10 dígitos')
     });
 
     const {

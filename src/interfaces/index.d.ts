@@ -24,7 +24,7 @@ export interface RegisterInputs {
   fatherSurname: string;
   motherSurname: string;
   name: string;
-  phoneNumber: string;
+  phoneNumber: number;
 }
 
 export interface RegisterUserInfo {
@@ -33,14 +33,21 @@ export interface RegisterUserInfo {
   birthday: Date;
   fatherSurname: string;
   motherSurname: string;
-  phoneNumber: string;
+  phoneNumber: number;
+}
+
+export interface ContactInputs {
+  name: string;
+  email: string;
+  message: string;
 }
 
 export interface Inputs {
   title: string;
   description: string;
-  category: string;
   price: number;
+  stock: number;
+  category: string;
   image: any;
 }
 

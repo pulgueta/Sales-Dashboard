@@ -1,8 +1,8 @@
 import { FC, lazy } from 'react'
 
-import { Center, GridItem, Heading, Text, VStack, Grid, ButtonGroup, Button } from '@chakra-ui/react'
+import { Center, GridItem, Heading, Text, VStack, HStack, ButtonGroup, Button } from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
 import { ProductCardSkeleton } from '@/components/skeleton'
 import { ProductInformation } from '@/interfaces'
@@ -11,7 +11,7 @@ import { useProducts } from '@/hooks'
 const ProductCard = lazy(() => import('@/components/admin/ProductCard'))
 
 const Products: FC = (): JSX.Element => {
-    const { handleNextProd, handlePrevProd, loading, more, products } = useProducts(); 
+    const { handleNextProd, handlePrevProd, loading, more, products } = useProducts();
 
     return (
         <VStack h='calc(100vh - 64px)' bgColor='gray.200' gap={4}>
@@ -30,10 +30,7 @@ const Products: FC = (): JSX.Element => {
                         products.length !== 0
                             ?
                             <VStack gap={6}>
-                                <Grid
-                                    gap={6}
-                                    templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
-                                >
+                                <HStack wrap='wrap' gap={6} justifyContent='center'>
                                     {products.slice(more - 3, more).map(({ category, description, id, image, price, title }: ProductInformation) => {
                                         return (
                                             <GridItem key={id}>
@@ -48,12 +45,12 @@ const Products: FC = (): JSX.Element => {
                                             </GridItem>
                                         )
                                     })}
-                                </Grid>
+                                </HStack>
                                 {
                                     products.length >= 4 && (
                                         <ButtonGroup mt={8}>
-                                            <Button onClick={handlePrevProd} colorScheme='blue' leftIcon={<FaArrowLeft size='0.75em' />}>Anterior</Button>
-                                            <Button onClick={handleNextProd} colorScheme='green' rightIcon={<FaArrowRight size='0.75em' />}>Siguiente</Button>
+                                            <Button onClick={handlePrevProd} colorScheme='blue' leftIcon={<FiArrowLeft size='0.75em' />}>Anterior</Button>
+                                            <Button onClick={handleNextProd} colorScheme='green' rightIcon={<FiArrowRight size='0.75em' />}>Siguiente</Button>
                                         </ButtonGroup>
                                     )
                                 }
