@@ -13,7 +13,7 @@ const Products: FC = (): JSX.Element => {
     const { handleNextProd, handlePrevProd, loading, more, products } = useProducts();
 
     return (
-        <VStack minH='calc(100vh - 75px)' bgColor='gray.100' p={4}>
+        <VStack minH='calc(100vh - 101px)' bgColor='gray.100' p={4}>
             <Heading mt={4}>
                 Products
             </Heading>

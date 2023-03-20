@@ -10,6 +10,12 @@ export interface NavbarItems {
   path: string;
 }
 
+export interface PasswordReset {
+  email: string;
+  securitySelect: string;
+  securityQuestion: string;
+}
+
 export interface LoginInputs {
   email: string;
   password: string;
@@ -25,6 +31,8 @@ export interface RegisterInputs {
   motherSurname: string;
   name: string;
   phoneNumber: number;
+  securityQuestion: string;
+  securitySelect: string;
 }
 
 export interface RegisterUserInfo {
@@ -34,6 +42,8 @@ export interface RegisterUserInfo {
   fatherSurname: string;
   motherSurname: string;
   phoneNumber: number;
+  securityQuestion: string;
+  securitySelect: string;
 }
 
 export interface ContactInputs {

@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from 'yup'
 
 import { ContactInputs } from "@/interfaces"
+import { sendEmail } from "@/utils"
 
 const Contact: FC = (): JSX.Element => {
 
@@ -31,16 +32,9 @@ const Contact: FC = (): JSX.Element => {
     const { handleSubmit, register, formState: { isSubmitting, errors }, reset } = useForm<ContactInputs>({ resolver: yupResolver(validateSchema) })
 
     const onSubmit: SubmitHandler<ContactInputs> = async (values: ContactInputs) => {
-        const res = await fetch(import.meta.env.VITE_DEV_FUNCTION, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ...values, secret: import.meta.env.VITE_NODEMAILER_SECRET })
-        })
+        try {
+            await sendEmail(values)
 
-        res.ok
-            ?
             toast({
                 status: 'success',
                 title: '¡Correo enviado!',
@@ -48,7 +42,9 @@ const Contact: FC = (): JSX.Element => {
                 duration: 2000,
                 isClosable: true
             })
-            :
+        } catch (err) {
+            console.log(err);
+
             toast({
                 status: 'error',
                 title: '¡Error!',
@@ -56,13 +52,13 @@ const Contact: FC = (): JSX.Element => {
                 duration: 2000,
                 isClosable: true
             })
-
+        }
 
         reset()
     }
 
     return (
-        <VStack minH='calc(100vh - 75px)' bgColor='gray.100' p={4}>
+        <VStack minH='calc(100vh - 101px)' bgColor='gray.100' p={4}>
             <Helmet>
                 <title>Contacto</title>
             </Helmet>

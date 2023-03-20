@@ -1,9 +1,11 @@
 import { useState, useRef, ChangeEvent } from "react"
 
 import {
+    Button,
     Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay,
-    IconButton, Input, InputGroup, InputRightAddon,
-    useDisclosure
+    Input, InputGroup, InputRightAddon,
+    useDisclosure,
+    useMediaQuery
 } from "@chakra-ui/react"
 import { FiSearch } from "react-icons/fi"
 
@@ -16,6 +18,7 @@ const SearchDrawer = () => {
     const [filteredProducts, setFilteredProducts] = useState<DocumentData>([{}])
     const btnRef = useRef<any>()
 
+    const [isLargerThan860] = useMediaQuery('(min-width: 860px)')
     const searchBar = useDisclosure()
 
     const onSearchPlant = ({ target }: ChangeEvent<HTMLInputElement>): void => {
@@ -30,15 +33,28 @@ const SearchDrawer = () => {
 
     return (
         <>
-            <IconButton
-                aria-label="search"
-                variant='ghost'
-                ref={btnRef}
-                color='white'
-                _hover={{ bgColor: 'white', color: 'gray.800' }}
-                icon={<FiSearch />}
-                onClick={searchBar.onOpen}
-            />
+            {
+                isLargerThan860
+                    ?
+                    <Button
+                        leftIcon={<FiSearch />}
+                        color='white'
+                        variant='ghost'
+                        _hover={{ bg: 'gray.200', color: 'gray.800' }}
+                        onClick={searchBar.onOpen}
+                    >
+                        Buscar
+                    </Button>
+                    :
+                    <Button
+                        color='white'
+                        variant='ghost'
+                        _hover={{ bg: 'gray.200', color: 'gray.800' }}
+                        onClick={searchBar.onOpen}
+                    >
+                        Buscar
+                    </Button>
+            }
             <Drawer
                 isOpen={searchBar.isOpen}
                 placement='right'

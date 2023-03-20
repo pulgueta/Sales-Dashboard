@@ -7,7 +7,7 @@ import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebas
 import { v4 } from 'uuid'
 
 import { auth, db, storage } from "@/firebase"
-import { Inputs, RegisterUserInfo } from "@/interfaces"
+import { ContactInputs, Inputs, PasswordReset, RegisterUserInfo } from "@/interfaces"
 
 export const loginWithProvider = async (provider: string): Promise<User | undefined> => {
     try {
@@ -20,6 +20,26 @@ export const loginWithProvider = async (provider: string): Promise<User | undefi
         }
     } catch (error) {
         console.error(error)
+    }
+}
+
+export const sendEmail = async ({ name, email, message }: ContactInputs): Promise<DocumentReference<DocumentData> | undefined> => {
+    const emailContent = {
+        to: import.meta.env.VITE_TO_EMAIL,
+        message: {
+            subject: 'Nuevo mensaje de cliente - Xochicalli Commerce',
+            text: message,
+            html: `
+            <h1>Nuevo mensaje de: ${name}</h1>
+            <h3>Correo del cliente: ${email}</h3>
+            <p>Mensaje: ${message}</p>
+            `,
+        }
+    }
+    try {
+        return await addDoc(collection(db, 'emails'), emailContent)
+    } catch (error) {
+        console.error(error);
     }
 }
 
@@ -37,7 +57,7 @@ export const loginWithEmail = async (email: string, password: string): Promise<U
 }
 
 export const signUpWithEmail = async (email: string, password: string,
-    { birthday, fatherSurname, gender, motherSurname, name, phoneNumber }: RegisterUserInfo): Promise<User | undefined> => {
+    { birthday, fatherSurname, gender, motherSurname, name, phoneNumber, securitySelect, securityQuestion }: RegisterUserInfo): Promise<User | undefined> => {
     try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -81,6 +101,8 @@ export const signUpWithEmail = async (email: string, password: string,
             phoneNumber: String(phoneNumber),
             role: 'user',
             uid: user.uid,
+            securitySelect,
+            securityQuestion,
         })
 
         return user
@@ -94,8 +116,22 @@ export const signUpWithEmail = async (email: string, password: string,
 }
 
 
-export const forgotPassword = async (email: string): Promise<boolean | undefined> => {
+export const forgotPassword = async ({ email, securityQuestion, securitySelect }: PasswordReset): Promise<boolean | undefined> => {
     try {
+        const { docs } = await getDocs(collection(db, 'users'))
+
+        const users = docs.map((doc) => doc.data())
+
+        users.forEach((user) => {
+            if (Object.keys(user).find((key) => user[key] === email)) {
+                if (user.securityQuestion === securityQuestion && user.securitySelect === securitySelect) {
+                    console.log(user.email, email);
+                    console.log(`securityQuestion -> ${user.securityQuestion}`);
+                    console.log(`securitySelect -> ${user.securitySelect}`);
+                }
+            }
+        })
+
         await sendPasswordResetEmail(auth, email)
 
         return true
@@ -107,7 +143,6 @@ export const forgotPassword = async (email: string): Promise<boolean | undefined
 export const logOut = async (): Promise<boolean | undefined> => {
     try {
         await signOut(auth);
-        console.log('logged out')
         return true
     } catch (error) {
         console.error(error)
