@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 
 import {
     Box, Button, ButtonGroup, Container, Divider, Flex,
@@ -23,21 +23,17 @@ const Signup: FC = (): JSX.Element => {
     const [show, setShow] = useState<boolean>(true)
     const [showTwo, setShowTwo] = useState<boolean>(true)
     const [formState, setFormState] = useState<number>(1)
+    const [securityQuestion, setSecurityQuestion] = useState<string>('¿Cuál es tu color favorito?')
 
     const toast = useToast();
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
 
     const navigate = useNavigate();
 
-    const nextForm = () => {
-        if (formState <= 2) setFormState(prev => prev + 1)
-        else return
-    }
+    const nextForm = () => formState <= 3 && setFormState(prev => prev + 1)
+    const prevForm = () => formState >= 1 && setFormState(prev => prev - 1)
 
-    const prevForm = () => {
-        if (formState >= 1) setFormState(prev => prev - 1)
-        else return
-    }
+    const setQuestionValue = ({ target }: ChangeEvent<HTMLSelectElement>) => setSecurityQuestion(target.value)
 
     const validationSchema = yup.object().shape({
         email: yup
@@ -78,10 +74,14 @@ const Signup: FC = (): JSX.Element => {
             .required('Debes seleccionar un género')
             .oneOf(['Masculino', 'Femenino'], `El género debe ser "Masculino" o "Femenino"`),
         phoneNumber: yup
-            .number()
+            .string()
             .required('El número de teléfono no puede estar vacío')
             .min(10, 'El número de teléfono debe ser de 10 dígitos')
-            .max(10, 'El número de teléfono no puede tener más de 10 dígitos')
+            .max(10, 'El número de teléfono no puede tener más de 10 dígitos'),
+        securitySelect: yup
+            .string()
+            .required('La pregunta de seguridad es requerida')
+            .min(4, 'La respuesta es de mínimo 4 caracteres')
     });
 
     const {
@@ -95,11 +95,19 @@ const Signup: FC = (): JSX.Element => {
     } = useForm<RegisterInputs>({ resolver: yupResolver(validationSchema) });
 
     const onSubmit: SubmitHandler<RegisterInputs> = async (values: RegisterInputs) => {
-        const { birthday, fatherSurname, motherSurname, gender, name, phoneNumber } = values;
-        console.log(birthday);
+        const { birthday, fatherSurname, motherSurname, gender, name, phoneNumber, securitySelect } = values;
 
         try {
-            await signUpWithEmail(values.email, values.password, { birthday, fatherSurname, motherSurname, gender, name, phoneNumber })
+            await signUpWithEmail(values.email, values.password, {
+                birthday,
+                fatherSurname,
+                motherSurname,
+                gender,
+                name,
+                phoneNumber,
+                securitySelect,
+                securityQuestion
+            })
             toast({
                 status: 'success',
                 duration: 1500,
@@ -239,13 +247,14 @@ const Signup: FC = (): JSX.Element => {
                                                     />
                                                     <Input
                                                         autoComplete='false'
-                                                        type='tel'
+                                                        type='number'
                                                         id='phoneNumber'
                                                         bgColor={['white', 'transparent']}
                                                         borderColor='gray.200'
-                                                        w='40'
+                                                        size='md'
                                                         pattern="[0-9]*"
                                                         maxLength={10}
+                                                        max={10}
                                                         placeholder='3331112244'
                                                         {...register('phoneNumber')}
                                                     />
@@ -323,17 +332,46 @@ const Signup: FC = (): JSX.Element => {
                                         </Flex>
                                     </>
                                 }
+                                {
+                                    formState === 3
+                                    &&
+                                    <>
+                                        <FormControl>
+                                            <FormLabel htmlFor='securityQuestion'>Pregunta de seguridad</FormLabel>
+                                            <Select bgColor={['white', 'transparent']} defaultValue="¿Cuál es tu color favorito?" onChange={setQuestionValue}>
+                                                <option value="¿Cuál es tu color favorito?">¿Cuál es tu color favorito?</option>
+                                                <option value="¿Cuál es tu película favorita?">¿Cuál es tu película favorita?</option>
+                                                <option value="¿Cuál es tu equipo de fútbol favorito?">¿Cuál es tu equipo de fútbol favorito?</option>
+                                                <option value="¿Cuál es tu género de música favorito?">¿Cuál es tu género de música favorito?</option>
+                                                <option value="¿Cuál es el nombre de tu mascota?">¿Cuál es el nombre de tu mascota?</option>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl isInvalid={!!errors.securitySelect} mt={4}>
+                                            <FormLabel htmlFor='securitySelect'>Respuesta</FormLabel>
+                                            <Input
+                                                autoComplete='false'
+                                                type='text'
+                                                id='securitySelect'
+                                                bgColor={['white', 'transparent']}
+                                                borderColor='gray.200'
+                                                placeholder='Tu respuesta aquí...'
+                                                {...register('securitySelect')}
+                                            />
+                                            {errors.securitySelect && <FormErrorMessage>{errors.securitySelect.message}</FormErrorMessage>}
+                                        </FormControl>
+                                    </>
+                                }
                                 <ButtonGroup width='100%'>
                                     <Button mt={8} width='100%' colorScheme='red' type='button' onClick={prevForm} isDisabled={formState === 1}>
                                         Anterior
                                     </Button>
-                                    <Button mt={8} width='100%' colorScheme='blue' type='button' onClick={nextForm} isDisabled={formState === 2}>
+                                    <Button mt={8} width='100%' colorScheme='blue' type='button' onClick={nextForm} isDisabled={formState === 3}>
                                         Siguiente
                                     </Button>
                                 </ButtonGroup>
 
                                 {
-                                    formState === 2
+                                    formState === 3
                                     &&
                                     <Button mt={8} width='100%' colorScheme='green'
                                         type='submit' isLoading={isSubmitting}
@@ -352,9 +390,9 @@ const Signup: FC = (): JSX.Element => {
                             <ProviderButtons />
                         </Stack>
                     </Box>
-                </Stack>
-            </Container>
-        </Box>
+                </Stack >
+            </Container >
+        </Box >
     )
 }
 

@@ -19,31 +19,5 @@
   },
   "storage": {
     "rules": "storage.rules"
-  },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log"
-      ],
-      "headers": [
-        {
-          "source": "/contactForm",
-          "headers": [
-            {
-              "key": "Access-Control-Allow-Origin",
-              "value": "http://localhost:5173"
-            }
-          ]
-        }
-      ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ]
-    }
-  ]
+  }
 }

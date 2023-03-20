@@ -17,6 +17,8 @@ env:
   VITE_FIREBASE_MEASUREMENTID: ${{secrets.VITE_FIREBASE_MEASUREMENTID}}
   VITE_ADMIN_LOGIN_IMAGE: ${{secrets.VITE_ADMIN_LOGIN_IMAGE}}
   VITE_NOTFOUND_IMAGE: ${{secrets.VITE_NOTFOUND_IMAGE}}
+  VITE_WHATSAPP_NUMBER: ${{secrets.VITE_WHATSAPP_NUMBER}}
+  VITE_TO_EMAIL: ${{secrets.VITE_TO_EMAIL}}
 
 jobs:
   build_and_deploy:
@@ -24,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - run: npm i && npm run build
+      - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
