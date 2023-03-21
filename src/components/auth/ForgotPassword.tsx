@@ -1,6 +1,11 @@
 import { ChangeEvent, FC, useRef, useState } from 'react'
 
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, Flex, FormControl, FormErrorMessage, FormLabel, Input, Select, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react'
+import {
+    AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay,
+    Button, Flex,
+    FormControl, FormErrorMessage, FormLabel, Input, Select,
+    useDisclosure, useMediaQuery, useToast
+} from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -44,7 +49,14 @@ export const ForgotPassword: FC = (): JSX.Element => {
                 description: 'Correo enviado exitosamente'
             })
             reset()
-        })
+        }).catch(() => toast({
+            status: 'error',
+            duration: 1500,
+            isClosable: false,
+            title: 'Recuperación de contraseña',
+            position: isLargerThan800 ? 'top-right' : 'bottom',
+            description: 'Algo salió mal'
+        }))
     }
 
     return (

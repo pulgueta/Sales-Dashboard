@@ -116,25 +116,28 @@ export const signUpWithEmail = async (email: string, password: string,
 }
 
 
-export const forgotPassword = async ({ email, securityQuestion, securitySelect }: PasswordReset): Promise<boolean | undefined> => {
+export const forgotPassword = async ({ email, securityQuestion, securitySelect }: PasswordReset): Promise<void> => {
     try {
         const { docs } = await getDocs(collection(db, 'users'))
 
         const users = docs.map((doc) => doc.data())
 
-        users.forEach((user) => {
+        users.forEach(async (user) => {
             if (Object.keys(user).find((key) => user[key] === email)) {
                 if (user.securityQuestion === securityQuestion && user.securitySelect === securitySelect) {
                     console.log(user.email, email);
                     console.log(`securityQuestion -> ${user.securityQuestion}`);
                     console.log(`securitySelect -> ${user.securitySelect}`);
+                    await sendPasswordResetEmail(auth, email)
+                    return true
+                } else {
+                    return
                 }
+            } else {
+                return
             }
         })
 
-        await sendPasswordResetEmail(auth, email)
-
-        return true
     } catch (error) {
         console.error(error)
     }

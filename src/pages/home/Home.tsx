@@ -5,6 +5,7 @@ import ImageSlider from 'react-simple-image-slider';
 import { Helmet } from 'react-helmet-async';
 
 const Footer = lazy(() => import('@/components/Footer'))
+const PrivacyPolicyBanner = lazy(() => import('@/components/ui/PrivacyPolicyBanner'))
 
 const images = [
     {
@@ -26,20 +27,16 @@ const images = [
 
 const Home: FC = (): JSX.Element => {
 
+    // const [closeBanner, setCloseBanner] = useState<boolean>(true)
+
+    const closeBanner = true
+
     return (
         <Box overflowX='hidden'>
             <Helmet>
                 <title>Xochicalli Commerce</title>
             </Helmet>
-            <ImageSlider
-                width='100%'
-                autoPlay
-                height={592}
-                images={images}
-                slideDuration={1}
-                showBullets
-                showNavs
-            />
+            <ImageSlider width='100%' height={592} autoPlay images={images} slideDuration={1} showBullets showNavs />
             <HStack justifyContent='center' py={28} px={[8, 0]} bgGradient='linear(to-b, white, gray.100)'>
                 <Center>
                     <VStack>
@@ -53,6 +50,7 @@ const Home: FC = (): JSX.Element => {
                     </VStack>
                 </Center>
             </HStack>
+            <PrivacyPolicyBanner show={closeBanner} />
             <Footer />
         </Box>
     )

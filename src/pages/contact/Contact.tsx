@@ -1,6 +1,6 @@
 import { FC } from "react"
 
-import { Box, Button, Container, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Stack, Text, Textarea, VStack, useToast } from "@chakra-ui/react"
+import { Box, Button, Container, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Stack, Text, Textarea, VStack, useToast, Divider, HStack } from "@chakra-ui/react"
 import { Helmet } from "react-helmet-async"
 import { useForm } from "react-hook-form"
 import { SubmitHandler } from "react-hook-form/dist/types"
@@ -127,6 +127,11 @@ const Contact: FC = (): JSX.Element => {
                                     Enviar
                                 </Button>
                             </form>
+                            <HStack>
+                                <Divider />
+                                <Text whiteSpace='nowrap' fontWeight={600}>O nos puedes llamar al <a href="tel:573014492053">3014492053</a></Text>
+                                <Divider />
+                            </HStack>
                         </Stack>
                     </Box>
                 </Stack>
