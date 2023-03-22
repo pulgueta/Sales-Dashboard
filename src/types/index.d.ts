@@ -8,6 +8,6 @@ export type PrivateRouteProps = {
     children: ReactNode;
 }
 
-export type Query = {
-    querySelector: '==', '<=', '>='
+export type Providers = {
+    providers: 'Google' | 'Facebook' | 'Twitter';
 }
