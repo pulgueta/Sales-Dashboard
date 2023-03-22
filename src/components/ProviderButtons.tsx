@@ -1,7 +1,8 @@
 import { FC } from 'react'
 
-import { Button, ButtonGroup, createIcon } from '@chakra-ui/react'
+import { Button, ButtonGroup, createIcon, useMediaQuery, useToast } from '@chakra-ui/react'
 import { loginWithProvider } from '@/utils'
+import { useNavigate } from 'react-router-dom'
 
 const GoogleIcon = createIcon({
     displayName: 'GoogleIcon',
@@ -50,10 +51,35 @@ const TwitterIcon = createIcon({
 
 
 export const ProviderButtons: FC = (): JSX.Element => {
+    const navigate = useNavigate();
+
+    const toast = useToast();
+    const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
+
+    const onLoginWithProvider = async (provider: string) => {
+        try {
+            switch (provider) {
+                case 'Google':
+                    const googleUser = await loginWithProvider({ providers: 'Google' })
+                    toast({
+                        status: 'success',
+                        duration: 1500,
+                        isClosable: false,
+                        title: 'Inicio de sesión',
+                        position: isLargerThan800 ? 'top-right' : 'bottom',
+                        description: `¡Bienvenido, ${googleUser?.user.displayName}!`
+                    })
+                    navigate(-1)
+            }
+        } catch (err) {
+
+        }
+    }
+
     return (
         <ButtonGroup variant="outline" spacing="4" width="full">
             <Button
-                onClick={() => loginWithProvider('Google')}
+                onClick={() => onLoginWithProvider('Google')}
                 bgColor={['white', 'transparent']}
                 borderColor='gray.200'
                 w='full'
@@ -61,7 +87,7 @@ export const ProviderButtons: FC = (): JSX.Element => {
                 <GoogleIcon />
             </Button>
             <Button
-                onClick={() => loginWithProvider('Facebook')}
+                onClick={() => onLoginWithProvider('Facebook')}
                 bgColor={['white', 'transparent']}
                 borderColor='gray.200'
                 w='full'
@@ -69,7 +95,7 @@ export const ProviderButtons: FC = (): JSX.Element => {
                 <FacebookIcon />
             </Button>
             <Button
-                onClick={() => loginWithProvider('Twitter')}
+                onClick={() => onLoginWithProvider('Twitter')}
                 bgColor={['white', 'transparent']}
                 borderColor='gray.200'
                 w='full'

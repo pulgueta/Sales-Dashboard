@@ -1,22 +1,29 @@
 import { RefObject } from "react"
 
 import { FirebaseError } from "firebase/app"
-import { createUserWithEmailAndPassword, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, User } from "firebase/auth"
+import { createUserWithEmailAndPassword, FacebookAuthProvider, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, User, UserCredential } from "firebase/auth"
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { v4 } from 'uuid'
 
 import { auth, db, storage } from "@/firebase"
 import { ContactInputs, Inputs, PasswordReset, RegisterUserInfo } from "@/interfaces"
+import { Providers } from "@/types"
 
-export const loginWithProvider = async (provider: string): Promise<User | undefined> => {
+export const loginWithProvider = async (provider: Providers): Promise<UserCredential | undefined> => {
     try {
-        switch (provider) {
+        switch (provider.providers) {
             case 'Google':
-                const prov = new GoogleAuthProvider()
-                const { user } = await signInWithPopup(auth, prov)
+                const googleProvider = new GoogleAuthProvider()
+                const googleUser = await signInWithPopup(auth, googleProvider)
 
-                return user
+                return googleUser;
+
+            case 'Facebook':
+                const facebookProvider = new FacebookAuthProvider()
+                const facebookUser = await signInWithPopup(auth, facebookProvider)
+
+                return facebookUser;
         }
     } catch (error) {
         console.error(error)
