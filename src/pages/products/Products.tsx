@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { Button, ButtonGroup, Center, Grid, GridItem, Heading, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react'
+import { Button, ButtonGroup, Center, HStack, GridItem, Heading, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
@@ -34,7 +34,7 @@ const Products: FC = (): JSX.Element => {
                         products.length !== 0
                             ?
                             <VStack gap={6}>
-                                <Grid gap={6} templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}>
+                                <HStack wrap='wrap' gap={6} justifyContent='center'>
                                     {products.slice(more - 3, more).map(({ category, description, id, image, price, title }: ProductInformation) => {
                                         return (
                                             <GridItem key={id}>
@@ -49,7 +49,7 @@ const Products: FC = (): JSX.Element => {
                                             </GridItem>
                                         )
                                     })}
-                                </Grid>
+                                </HStack>
                                 {
                                     products.length >= 4 && (
                                         <ButtonGroup mt={8}>

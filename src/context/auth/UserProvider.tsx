@@ -22,5 +22,8 @@ export const UserProvider: FC<ContextProps> = ({ children }) => {
     return unsubscribe;
   });
 
-  return <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user }}>
+      {children}
+    </UserContext.Provider>);
 };

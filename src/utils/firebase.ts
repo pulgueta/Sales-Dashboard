@@ -77,9 +77,7 @@ export const signUpWithEmail = async (email: string, password: string,
                 const birthDate = new Date(birthday);
                 age = now.getFullYear() - birthDate.getFullYear();
                 const monthDiff = now.getMonth() - birthDate.getMonth();
-                if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
-                    age--;
-                }
+                if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) age--;
             } else {
                 throw new Error('Invalid date format');
             }
@@ -131,10 +129,10 @@ export const forgotPassword = async ({ email, securityQuestion, securitySelect }
                     await sendPasswordResetEmail(auth, email)
                     return true
                 } else {
-                    return
+                    throw Error("Bad answer")
                 }
             } else {
-                return
+                throw Error("Bad answer")
             }
         })
 
