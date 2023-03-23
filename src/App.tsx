@@ -10,6 +10,7 @@ import { PrivateRoute } from '@/components/auth'
 import { Navbar } from '@/components'
 import { Spinner } from '@/components/loading'
 
+// Public routes
 const Home = lazy(() => import('@/pages/home/Home'))
 const Products = lazy(() => import('@/pages/products/Products'))
 const Product = lazy(() => import('@/pages/products/Product'))
@@ -18,6 +19,12 @@ const PrivacyPolicy = lazy(() => import('@/pages/privacyPolicy/PrivacyPolicy'))
 const Login = lazy(() => import('@/pages/auth/Login'))
 const Signup = lazy(() => import('@/pages/auth/Signup'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
+
+// Normal user routes
+const UserProfile = lazy(() => import('@/pages/user/UserProfile'))
+
+
+// Admin routes
 const AdminProducts = lazy(() => import('@/pages/admin/products/Products'))
 const Users = lazy(() => import('@/pages/admin/users/Users'))
 const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
@@ -38,6 +45,18 @@ export const App: FC = (): JSX.Element => {
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
           <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
           <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/admin/products' replace />} />
+
+          <Route path='/user' element={
+            <PrivateRoute>
+              <Outlet />
+            </PrivateRoute>
+          }>
+            <Route path='profile/:uid' element={
+              <PrivateRoute>
+                <UserProfile />
+              </PrivateRoute>
+            } />
+          </Route>
 
           <Route path='/admin' element={
             <PrivateRoute>

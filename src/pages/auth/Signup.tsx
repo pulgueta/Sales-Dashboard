@@ -117,7 +117,7 @@ const Signup: FC = (): JSX.Element => {
                 description: `¡Hola, ${values.name}!`
             })
             reset()
-            navigate(-1)
+            navigate('/user/profile')
         } catch ({ message }) {
             toast({
                 status: 'error',

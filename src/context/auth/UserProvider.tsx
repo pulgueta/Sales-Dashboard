@@ -1,29 +1,38 @@
 import { useState, useEffect, FC } from 'react'
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 import { ContextProps } from '@/types';
-import { app } from '@/firebase';
+import { auth } from '@/firebase';
 import { UserContext } from "."
+import { queryUser } from '@/utils';
 
 export const UserProvider: FC<ContextProps> = ({ children }) => {
+  const [userRole, setUserRole] = useState<string>('')
   const [user, setUser] = useState<User | null>(null);
 
+  
   useEffect(() => {
-    const AUTH = getAuth(app);
-
-    const unsubscribe = onAuthStateChanged(AUTH, (activeUser) => {
-      if (activeUser) {
+    const getUserRole = async () => {
+      const userData = await queryUser(user?.uid)
+  
+      return setUserRole(userData?.role)
+    }
+    
+    const unsubscribe = onAuthStateChanged(auth, (activeUser) => {
+      if (activeUser && userRole) {
         setUser(activeUser);
       } else {
         setUser(null);
       }
     });
 
+    getUserRole()
+
     return unsubscribe;
   });
 
   return (
-    <UserContext.Provider value={{ user }}>
+    <UserContext.Provider value={{ user, userRole }}>
       {children}
     </UserContext.Provider>);
 };

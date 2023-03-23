@@ -101,6 +101,8 @@ export const signUpWithEmail = async (email: string, password: string,
             uid: user.uid,
             securitySelect,
             securityQuestion,
+            profilePicture: null,
+            address: null,
         })
 
         return user
@@ -147,6 +149,23 @@ export const logOut = async (): Promise<boolean | undefined> => {
         return true
     } catch (error) {
         console.error(error)
+    }
+}
+
+export const queryUser = async (uid: any): Promise<DocumentData | undefined> => {
+    try {
+        const queriedUser = await getDoc(doc(db, 'users', uid))
+
+        const user = queriedUser.data()
+        
+        return user
+        
+    } catch (error) {
+        if (error instanceof FirebaseError) {
+            throw new Error(error.message)
+        }
+
+        throw error
     }
 }
 
