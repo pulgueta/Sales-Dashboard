@@ -84,9 +84,7 @@ export const signUpWithEmail = async (email: string, password: string,
                 const birthDate = new Date(birthday);
                 age = now.getFullYear() - birthDate.getFullYear();
                 const monthDiff = now.getMonth() - birthDate.getMonth();
-                if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
-                    age--;
-                }
+                if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) age--;
             } else {
                 throw new Error('Invalid date format');
             }
@@ -110,6 +108,8 @@ export const signUpWithEmail = async (email: string, password: string,
             uid: user.uid,
             securitySelect,
             securityQuestion,
+            profilePicture: null,
+            address: null,
         })
 
         return user
@@ -138,10 +138,10 @@ export const forgotPassword = async ({ email, securityQuestion, securitySelect }
                     await sendPasswordResetEmail(auth, email)
                     return true
                 } else {
-                    return
+                    throw Error("Bad answer")
                 }
             } else {
-                return
+                throw Error("Bad answer")
             }
         })
 
@@ -156,6 +156,23 @@ export const logOut = async (): Promise<boolean | undefined> => {
         return true
     } catch (error) {
         console.error(error)
+    }
+}
+
+export const queryUser = async (uid: any): Promise<DocumentData | undefined> => {
+    try {
+        const queriedUser = await getDoc(doc(db, 'users', uid))
+
+        const user = queriedUser.data()
+        
+        return user
+        
+    } catch (error) {
+        if (error instanceof FirebaseError) {
+            throw new Error(error.message)
+        }
+
+        throw error
     }
 }
 

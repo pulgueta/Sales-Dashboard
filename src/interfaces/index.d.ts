@@ -63,6 +63,7 @@ export interface Inputs {
 
 export interface UserContextProps {
   user: User | null;
+  userRole: string | null;
 }
 
 export interface ProductInformation {

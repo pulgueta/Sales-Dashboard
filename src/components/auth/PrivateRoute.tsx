@@ -8,5 +8,13 @@ export const PrivateRoute: FC<PrivateRouteProps> = ({ children }) => {
 
     const { user } = useContext(UserContext)
 
-    return user ? <>{children}</> : <Navigate to='/login' replace />
+    
+
+    return (
+        user
+            ?
+            <>{children}</>
+            :
+            <Navigate to='/login' replace />
+    )
 }

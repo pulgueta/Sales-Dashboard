@@ -43,7 +43,7 @@ const Login: FC = (): JSX.Element => {
 
     const onSubmit: SubmitHandler<LoginInputs> = async (values: LoginInputs) => {
         try {
-            await loginWithEmail(values.email, values.password)
+            const { uid } = await loginWithEmail(values.email, values.password)
             toast({
                 status: 'success',
                 duration: 1500,
@@ -53,7 +53,7 @@ const Login: FC = (): JSX.Element => {
                 description: '¡Bienvenido de vuelta!'
             })
             reset()
-            navigate(-1)
+            navigate(`/user/profile/${uid}`)
         } catch ({ message }) {
             toast({
                 status: 'error',
