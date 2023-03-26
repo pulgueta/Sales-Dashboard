@@ -1,13 +1,15 @@
 import { RefObject } from "react"
 
 import { FirebaseError } from "firebase/app"
-import { createUserWithEmailAndPassword, FacebookAuthProvider, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, User, UserCredential } from "firebase/auth"
+
+import { createUserWithEmailAndPassword, FacebookAuthProvider, GoogleAuthProvider, multiFactor, PhoneAuthProvider, PhoneMultiFactorGenerator, sendPasswordResetEmail, signInWithEmailAndPassword, signInWi
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { v4 } from 'uuid'
 
 import { auth, db, storage } from "@/firebase"
-import { ContactInputs, Inputs, PasswordReset, RegisterUserInfo } from "@/interfaces"
+
+import { ContactInputs, Inputs, PasswordResetQuestion, PasswordResetEmail, RegisterUserInfo } from "@/interfaces"
 import { Providers } from "@/types"
 
 export const loginWithProvider = async (provider: Providers): Promise<UserCredential | undefined> => {
@@ -32,7 +34,7 @@ export const loginWithProvider = async (provider: Providers): Promise<UserCreden
 
 export const sendEmail = async ({ name, email, message }: ContactInputs): Promise<DocumentReference<DocumentData> | undefined> => {
     const emailContent = {
-        to: import.meta.env.VITE_TO_EMAIL,
+        to: import.meta.env.MODE === 'DEVELOPMENT' ? import.meta.env.VITE_TO_DEV_EMAIL : import.meta.env.VITE_TO_PROD_EMAIL,
         message: {
             subject: 'Nuevo mensaje de cliente - Xochicalli Commerce',
             text: message,
@@ -84,9 +86,7 @@ export const signUpWithEmail = async (email: string, password: string,
                 const birthDate = new Date(birthday);
                 age = now.getFullYear() - birthDate.getFullYear();
                 const monthDiff = now.getMonth() - birthDate.getMonth();
-                if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
-                    age--;
-                }
+                if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) age--;
             } else {
                 throw new Error('Invalid date format');
             }
@@ -105,12 +105,17 @@ export const signUpWithEmail = async (email: string, password: string,
             gender,
             motherSurname,
             name,
+            // phoneNumber: `+52${String(phoneNumber)}`,
             phoneNumber: String(phoneNumber),
             role: 'user',
             uid: user.uid,
             securitySelect,
             securityQuestion,
+            profilePicture: null,
+            address: null,
         })
+
+        // await sendEmailVerification(currentUser)
 
         return user
     } catch (error) {
@@ -122,31 +127,66 @@ export const signUpWithEmail = async (email: string, password: string,
     }
 }
 
+export const verifyUserEnrolled = (user: User): boolean => {
+    const enrolledFactors = multiFactor(user).enrolledFactors;
 
-export const forgotPassword = async ({ email, securityQuestion, securitySelect }: PasswordReset): Promise<void> => {
+    return enrolledFactors.length > 0;
+}
+
+export const send2FA = async (user: any, phoneNumber: string, verifier: any): Promise<string | undefined> => {
+    const session = await multiFactor(user).getSession();
+    const phoneOptions = {
+        phoneNumber,
+        session,
+    }
+
+    const phoneAuth = new PhoneAuthProvider(auth);
+
+    try {
+        return await phoneAuth.verifyPhoneNumber(phoneOptions, verifier)
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const enroll2FA = async (user: any, verificationCodeId: any, verificationCode: string): Promise<void | false> => {
+    const phoneAuthCred = PhoneAuthProvider.credential(verificationCodeId, verificationCode)
+    const mfaAssertion = PhoneMultiFactorGenerator.assertion(phoneAuthCred)
+
+    try {
+        return true && await multiFactor(user).enroll(mfaAssertion, 'Personal phnumber')
+    } catch (e) {
+        console.log(e);
+        return false
+    }
+
+}
+
+export const forgotPasswordWithQuestion = async ({ email, securityQuestion, securitySelect }: PasswordResetQuestion): Promise<void> => {
     try {
         const { docs } = await getDocs(collection(db, 'users'))
 
         const users = docs.map((doc) => doc.data())
 
-        users.forEach(async (user) => {
-            if (Object.keys(user).find((key) => user[key] === email)) {
-                if (user.securityQuestion === securityQuestion && user.securitySelect === securitySelect) {
-                    console.log(user.email, email);
-                    console.log(`securityQuestion -> ${user.securityQuestion}`);
-                    console.log(`securitySelect -> ${user.securitySelect}`);
-                    await sendPasswordResetEmail(auth, email)
-                    return true
-                } else {
-                    return
-                }
-            } else {
-                return
+        for (const user of users) {
+            if (user.email === email && user.securityQuestion === securityQuestion && user.securitySelect === securitySelect) {
+                await sendPasswordResetEmail(auth, email);
+                break;
             }
-        })
+        }
 
     } catch (error) {
-        console.error(error)
+        throw Error("Something went wrong");
+    }
+}
+
+export const forgotPasswordWithEmail = async ({ email }: PasswordResetEmail): Promise<boolean> => {
+    try {
+        await sendPasswordResetEmail(auth, email)
+
+        return true
+    } catch (error) {
+        return false
     }
 }
 
@@ -156,6 +196,23 @@ export const logOut = async (): Promise<boolean | undefined> => {
         return true
     } catch (error) {
         console.error(error)
+    }
+}
+
+export const queryUser = async (uid: any): Promise<DocumentData | undefined> => {
+    try {
+        const queriedUser = await getDoc(doc(db, 'users', uid))
+
+        const user = queriedUser.data()
+
+        return user
+
+    } catch (error) {
+        if (error instanceof FirebaseError) {
+            throw new Error(error.message)
+        }
+
+        throw error
     }
 }
 

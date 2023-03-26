@@ -3,7 +3,7 @@ import { ChangeEvent, FC, useState } from 'react'
 import {
     Box, Button, ButtonGroup, Container, Divider, Flex,
     FormControl, FormErrorMessage, FormLabel, Heading, HStack,
-    IconButton, Input, InputGroup, InputLeftElement, InputRightElement,
+    IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement,
     Select, Stack, Text, useMediaQuery, useToast,
 } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -11,7 +11,6 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { FiEye, FiEyeOff, FiPhone } from 'react-icons/fi'
 
 import { RegisterInputs } from '@/interfaces'
@@ -98,7 +97,7 @@ const Signup: FC = (): JSX.Element => {
         const { birthday, fatherSurname, motherSurname, gender, name, phoneNumber, securitySelect } = values;
 
         try {
-            await signUpWithEmail(values.email, values.password, {
+            const user = await signUpWithEmail(values.email, values.password, {
                 birthday,
                 fatherSurname,
                 motherSurname,
@@ -117,7 +116,7 @@ const Signup: FC = (): JSX.Element => {
                 description: `¡Hola, ${values.name}!`
             })
             reset()
-            navigate(-1)
+            navigate(`/user/profile/${user?.uid}`)
         } catch ({ message }) {
             toast({
                 status: 'error',
@@ -140,13 +139,16 @@ const Signup: FC = (): JSX.Element => {
                     <Stack spacing="6">
                         {
                             isLargerThan800 &&
-                            <HStack justifyContent='center'>
-                                <LazyLoadImage
-                                    src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
-                                    width='128px'
-                                    effect='blur'
-                                />
-                            </HStack>
+                            <Image
+                                src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
+                                alt='Top Image'
+                                objectFit='cover'
+                                fallbackSrc='https://via.placeholder.com/256'
+                                loading='lazy'
+                                width='128px'
+                                borderRadius='lg'
+                                mx='auto'
+                            />
                         }
                         <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
                             <Heading size={{ base: 'xl', md: 'lg' }}>Crear cuenta</Heading>

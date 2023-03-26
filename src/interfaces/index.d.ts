@@ -10,10 +10,14 @@ export interface NavbarItems {
   path: string;
 }
 
-export interface PasswordReset {
+export interface PasswordResetQuestion {
   email: string;
   securitySelect: string;
   securityQuestion: string;
+}
+
+export interface PasswordResetEmail {
+  email: string;
 }
 
 export interface LoginInputs {
@@ -63,6 +67,7 @@ export interface Inputs {
 
 export interface UserContextProps {
   user: User | null;
+  userRole: string | null;
 }
 
 export interface ProductInformation {

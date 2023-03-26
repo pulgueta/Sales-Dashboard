@@ -3,7 +3,7 @@ import { FC, useState } from 'react'
 import {
     Box, Button, ButtonGroup, Container, Divider,
     FormControl, FormErrorMessage, FormLabel, Heading, HStack,
-    IconButton, Input, InputGroup, InputRightElement, Stack,
+    IconButton, Image, Input, InputGroup, InputRightElement, Stack,
     Text, useMediaQuery, useToast,
 } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -11,7 +11,6 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 
 import { LoginInputs } from '@/interfaces'
@@ -43,7 +42,7 @@ const Login: FC = (): JSX.Element => {
 
     const onSubmit: SubmitHandler<LoginInputs> = async (values: LoginInputs) => {
         try {
-            await loginWithEmail(values.email, values.password)
+            const { uid } = await loginWithEmail(values.email, values.password)
             toast({
                 status: 'success',
                 duration: 1500,
@@ -53,7 +52,7 @@ const Login: FC = (): JSX.Element => {
                 description: '¡Bienvenido de vuelta!'
             })
             reset()
-            navigate(-1)
+            navigate(`/user/profile/${uid}`)
         } catch ({ message }) {
             toast({
                 status: 'error',
@@ -76,13 +75,16 @@ const Login: FC = (): JSX.Element => {
                     <Stack spacing="6">
                         {
                             isLargerThan800 &&
-                            <HStack justifyContent='center'>
-                                <LazyLoadImage
-                                    src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
-                                    width='128px'
-                                    effect='blur'
-                                />
-                            </HStack>
+                            <Image
+                                src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
+                                alt='Top Image'
+                                objectFit='cover'
+                                fallbackSrc='https://via.placeholder.com/256'
+                                loading='lazy'
+                                width='128px'
+                                borderRadius='lg'
+                                mx='auto'
+                            />
                         }
                         <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
                             <Heading size={{ base: 'xl', md: 'lg' }}>Iniciar sesión</Heading>
