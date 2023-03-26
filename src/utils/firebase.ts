@@ -1,12 +1,14 @@
 import { RefObject } from "react"
 
 import { FirebaseError } from "firebase/app"
-import { createUserWithEmailAndPassword, FacebookAuthProvider, GoogleAuthProvider, multiFactor, PhoneAuthProvider, PhoneMultiFactorGenerator, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, User, UserCredential } from "firebase/auth"
+
+import { createUserWithEmailAndPassword, FacebookAuthProvider, GoogleAuthProvider, multiFactor, PhoneAuthProvider, PhoneMultiFactorGenerator, sendPasswordResetEmail, signInWithEmailAndPassword, signInWi
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { v4 } from 'uuid'
 
 import { auth, db, storage } from "@/firebase"
+
 import { ContactInputs, Inputs, PasswordResetQuestion, PasswordResetEmail, RegisterUserInfo } from "@/interfaces"
 import { Providers } from "@/types"
 
