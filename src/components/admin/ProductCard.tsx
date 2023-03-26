@@ -1,9 +1,14 @@
 import { FC, useRef, useState } from 'react'
 
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, Card, CardBody, Divider, Heading, HStack, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react'
+import {
+    AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay,
+    Button, ButtonGroup,
+    Card, CardBody, Divider, Heading, HStack, Image, Stack, Tag, Text,
+    useDisclosure
+} from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
 import { FiTrash } from 'react-icons/fi';
-import { LazyLoadComponent, LazyLoadImage } from 'react-lazy-load-image-component';
+import { LazyLoadComponent } from 'react-lazy-load-image-component';
 
 import { deleteProduct } from '@/utils';
 import { usePrice } from '@/hooks';
@@ -34,10 +39,15 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
             <Card maxW={['xs', 'sm']} borderRadius='xl'>
                 <LazyLoadComponent>
                     <CardBody>
-                        <LazyLoadImage
+                        <Image
                             src={image}
-                            effect='blur'
-                            style={{ borderRadius: 12, width: 512, objectFit: 'cover', height: 256 }}
+                            alt={`${title}-${id}`}
+                            objectFit='cover'
+                            fallbackSrc='https://via.placeholder.com/256'
+                            loading='lazy'
+                            height={256}
+                            width={512}
+                            borderRadius='lg'
                         />
                         <Stack spacing='3' my='3'>
                             <Heading noOfLines={1} size={['lg', 'md', 'lg']}>{title}</Heading>

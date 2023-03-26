@@ -1,7 +1,6 @@
 import { FC } from 'react'
 
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Button, ButtonGroup, Card, CardBody, Divider, Heading, HStack, Stack, Tag, Text } from '@chakra-ui/react'
+import { Button, ButtonGroup, Card, CardBody, Divider, Heading, HStack, Image, Stack, Tag, Text } from '@chakra-ui/react'
 import { ProductInformation } from '@/interfaces';
 import { FiShoppingCart } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
@@ -17,10 +16,15 @@ const ProductCard: FC<ProductInformation> = ({ image, title, id, description, pr
     return (
         <Card maxW={['xs', 'sm']} h='490px' borderRadius='xl'>
             <CardBody>
-                <LazyLoadImage
+                <Image
                     src={image}
-                    effect='blur'
-                    style={{ borderRadius: 12, width: 512, objectFit: 'cover', height: 256 }}
+                    alt={`${title}-${id}`}
+                    objectFit='cover'
+                    fallbackSrc='https://via.placeholder.com/256'
+                    loading='lazy'
+                    height={256}
+                    width={512}
+                    borderRadius='lg'
                 />
                 <Stack spacing='3' my='3'>
                     <HStack alignItems='center' justifyContent='space-between'>

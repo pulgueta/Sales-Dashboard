@@ -10,10 +10,14 @@ export interface NavbarItems {
   path: string;
 }
 
-export interface PasswordReset {
+export interface PasswordResetQuestion {
   email: string;
   securitySelect: string;
   securityQuestion: string;
+}
+
+export interface PasswordResetEmail {
+  email: string;
 }
 
 export interface LoginInputs {

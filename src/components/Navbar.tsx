@@ -1,11 +1,8 @@
-import { FC, lazy } from "react";
+import { FC } from "react";
 
-import { Box, Button, CloseButton, Flex, Heading, HStack, IconButton, Link, useDisclosure, useMediaQuery, VStack } from "@chakra-ui/react";
+import { Box, Button, CloseButton, Flex, Heading, HStack, IconButton, Image, Link, useDisclosure, useMediaQuery, VStack } from "@chakra-ui/react";
 import { FiBox, FiMenu, FiShoppingCart, FiUser, FiMessageSquare, FiMail } from "react-icons/fi";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-
-const SearchDrawer = lazy(() => import("./SearchDrawer"));
 
 const links = [
     {
@@ -49,11 +46,16 @@ export const Navbar: FC = (): JSX.Element => {
                 <Heading bgColor='green.500' w="full" px={{ base: 2, sm: 4, }} py={1} shadow="md">
                     <Flex alignItems="center" justifyContent="space-between" mx="auto">
                         <Link to="/" title="Xochicalli Commerce - Inicio" as={RouterLink}>
-                            <LazyLoadImage
+                            <Image
                                 src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
-                                style={{ width: 86 }}
-                                effect='blur'
+                                alt='Navbar Image'
+                                objectFit='cover'
+                                fallbackSrc='https://via.placeholder.com/256'
+                                loading='lazy'
+                                width='86px'
+                                borderRadius='lg'
                             />
+
                         </Link>
                         <HStack display="flex" alignItems="center" spacing={1}>
                             <HStack spacing={[1, 1, 1, 2, 4]} mr={1} color="brand.500" display={["none", "none", "inline-flex"]}>
@@ -77,7 +79,6 @@ export const Navbar: FC = (): JSX.Element => {
                                     }
                                     )
                                 }
-                                <SearchDrawer />
                                 {
                                     !isLargerThan860
                                         ?

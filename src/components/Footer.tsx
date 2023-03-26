@@ -1,19 +1,23 @@
 import { FC } from 'react'
 
-import { ButtonGroup, Center, Divider, HStack, IconButton, Stack, Text, } from '@chakra-ui/react'
+import { ButtonGroup, Center, Divider, HStack, IconButton, Image, Stack, Text, } from '@chakra-ui/react'
 import { FaInstagram, FaFacebook, FaTwitter, } from 'react-icons/fa'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const Footer: FC = (): JSX.Element => (
     <Center as="footer" role="contentinfo" py={['4', '8']} width='100vw'>
         <Stack spacing={{ base: '4', md: '5' }}>
             <Stack justify="space-between" direction="row" align="center">
                 <HStack justifyContent='center'>
-                    <LazyLoadImage
+                    <Image
                         src={import.meta.env.VITE_ADMIN_LOGIN_IMAGE}
+                        alt='Footer Image'
+                        objectFit='cover'
+                        fallbackSrc='https://via.placeholder.com/256'
+                        loading='lazy'
                         width='128px'
-                        effect='blur'
+                        borderRadius='lg'
                     />
+
                 </HStack>
                 <Divider orientation='vertical' />
                 <ButtonGroup variant="ghost">

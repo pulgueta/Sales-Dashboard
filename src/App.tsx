@@ -43,8 +43,8 @@ export const App: FC = (): JSX.Element => {
           <Route path='/products/:id' element={<Product />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-          <Route path='/login' element={!user ? <Login /> : <Navigate to='/admin/products' replace />} />
-          <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/admin/products' replace />} />
+          <Route path='/login' element={!user ? <Login /> : <Navigate to={`/user/profile/${user?.uid}`} replace />} />
+          <Route path='/signup' element={!user ? <Signup /> : <Navigate to={`/user/profile/${user?.uid}`} replace />} />
 
           <Route path='/user' element={
             <PrivateRoute>

@@ -4,7 +4,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { ContextProps } from '@/types';
 import { auth } from '@/firebase';
 import { UserContext } from "."
-import { queryUser } from '@/utils';
+// import { queryUser } from '@/utils';
 
 export const UserProvider: FC<ContextProps> = ({ children }) => {
   const [userRole, setUserRole] = useState<string>('')
@@ -12,21 +12,21 @@ export const UserProvider: FC<ContextProps> = ({ children }) => {
 
   
   useEffect(() => {
-    const getUserRole = async () => {
-      const userData = await queryUser(user?.uid)
+    // const getUserRole = async () => {
+    //   const userData = await queryUser(user?.uid)
   
-      return setUserRole(userData?.role)
-    }
+    //   return setUserRole(userData?.role)
+    // }
     
     const unsubscribe = onAuthStateChanged(auth, (activeUser) => {
-      if (activeUser && userRole) {
+      if (activeUser) {
         setUser(activeUser);
       } else {
         setUser(null);
       }
     });
 
-    getUserRole()
+    // getUserRole()
 
     return unsubscribe;
   });

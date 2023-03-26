@@ -2,16 +2,14 @@ import { ChangeEvent, FC, useRef, useState } from 'react'
 
 import {
     AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay,
-    Button, Flex,
-    FormControl, FormErrorMessage, FormLabel, Input, Radio, Select,
-    Stack,
-    useDisclosure, useMediaQuery, useToast, RadioGroup
+    Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Radio, Select,
+    Stack, useDisclosure, useMediaQuery, useToast, RadioGroup
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { forgotPassword } from '@/utils';
-import { PasswordReset } from '@/interfaces';
+import { forgotPasswordWithEmail, forgotPasswordWithQuestion } from '@/utils';
+import { PasswordResetEmail, PasswordResetQuestion } from '@/interfaces';
 
 export const ForgotPassword: FC = (): JSX.Element => {
     const [formState, setFormState] = useState<number>(0)
@@ -29,7 +27,7 @@ export const ForgotPassword: FC = (): JSX.Element => {
     const onChangeRecoveryMethod = () => recoveryMethod === 'email' ? setRecoveryMethod('emailQuestion') : setRecoveryMethod('email')
     const setQuestionValue = ({ target }: ChangeEvent<HTMLSelectElement>) => setSecurityQ(target.value)
 
-    const validationSchema = yup.object().shape({
+    const validationSchemaQuestion = yup.object().shape({
         email: yup
             .string()
             .email('El email no es válido')
@@ -39,11 +37,20 @@ export const ForgotPassword: FC = (): JSX.Element => {
             .required('La pregunta de seguridad no puede estar vacía')
     })
 
-    const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<PasswordReset>({ resolver: yupResolver(validationSchema) });
+    const validationSchemaEmail = yup.object().shape({
+        email: yup
+            .string()
+            .email('El email no es válido')
+            .required('El correo es requerido')
+    })
 
-    const onSubmit: SubmitHandler<PasswordReset> = async ({ email, securityQuestion = securityQ, securitySelect }: PasswordReset) => {
-        try {
-            await forgotPassword({ email, securityQuestion, securitySelect })
+    const { handleSubmit, register, reset, formState: {
+        errors,
+        isSubmitting
+    }, } = useForm<PasswordResetQuestion>({ resolver: yupResolver(recoveryMethod === 'email' ? validationSchemaEmail : validationSchemaQuestion) });
+
+    const onSubmitQuestion: SubmitHandler<PasswordResetQuestion> = async ({ email, securityQuestion = securityQ, securitySelect }: PasswordResetQuestion) => {
+        await forgotPasswordWithQuestion({ email, securityQuestion, securitySelect }).then(() => {
             toast({
                 status: 'success',
                 duration: 1500,
@@ -54,7 +61,34 @@ export const ForgotPassword: FC = (): JSX.Element => {
             })
 
             reset()
-        } catch (err) {
+        }).catch(() => {
+
+            toast({
+                status: 'error',
+                duration: 1500,
+                isClosable: false,
+                title: 'Recuperación de contraseña',
+                position: isLargerThan800 ? 'top-right' : 'bottom',
+                description: 'Respuesta incorrecta'
+            })
+        })
+    }
+
+    const onSubmitEmail: SubmitHandler<PasswordResetEmail> = async (email: PasswordResetEmail) => {
+        try {
+            await forgotPasswordWithEmail(email)
+            toast({
+                status: 'success',
+                duration: 1500,
+                isClosable: false,
+                title: 'Recuperación de contraseña',
+                position: isLargerThan800 ? 'top-right' : 'bottom',
+                description: 'Correo enviado exitosamente'
+            })
+
+            reset()
+
+        } catch (error) {
             toast({
                 status: 'error',
                 duration: 1500,
@@ -65,6 +99,7 @@ export const ForgotPassword: FC = (): JSX.Element => {
             })
         }
     }
+
     return (
         <>
             <Button variant='link' colorScheme='blue' onClick={onOpen}>Olvidé mi contraseña</Button>
@@ -110,7 +145,7 @@ export const ForgotPassword: FC = (): JSX.Element => {
                             }
                             {
                                 recoveryMethod === 'emailQuestion' &&
-                                <form onSubmit={handleSubmit(onSubmit)}>
+                                <form onSubmit={handleSubmit(onSubmitQuestion)}>
                                     {
                                         formState === 1 &&
                                         <FormControl isInvalid={!!errors.email}>
@@ -180,7 +215,13 @@ export const ForgotPassword: FC = (): JSX.Element => {
                                         colorScheme='purple'
                                         width='100%'
                                         isLoading={isSubmitting}
-                                        onClick={handleSubmit(onSubmit)}
+                                        onClick={
+                                            recoveryMethod === 'email'
+                                                ?
+                                                handleSubmit(onSubmitEmail)
+                                                :
+                                                handleSubmit(onSubmitQuestion)
+                                        }
                                     >
                                         Enviar correo
                                     </Button>
