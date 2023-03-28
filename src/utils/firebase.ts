@@ -204,11 +204,8 @@ export const logOut = async (): Promise<boolean | undefined> => {
 export const queryUser = async (uid: any): Promise<DocumentData | undefined> => {
     try {
         const queriedUser = await getDoc(doc(db, 'users', uid))
-
-        const user = queriedUser.data()
-
-        return user
-
+        
+        return queriedUser.data()
     } catch (error) {
         if (error instanceof FirebaseError) {
             throw new Error(error.message)
