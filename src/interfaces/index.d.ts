@@ -19,6 +19,7 @@ export interface PasswordResetQuestion {
   email: string;
   securitySelect: string;
   securityQuestion: string;
+  newPassword: string;
 }
 
 export interface PasswordResetEmail {

@@ -13,7 +13,7 @@ const UserHeaderCard: FC<UserHeaderCardProps> = ({ createdAt, imageURL, name }) 
                 <Tooltip
                     hasArrow
                     label={
-                        imageURL !== null
+                        imageURL === null
                             ?
                             'Subir foto de perfil'
                             :
@@ -37,7 +37,7 @@ const UserHeaderCard: FC<UserHeaderCardProps> = ({ createdAt, imageURL, name }) 
                     <Text fontSize={[15, 13, 15, 16, 20]} fontWeight={500} noOfLines={1}>{name}</Text>
                 </HStack>
 
-                <Text fontSize={12}>Creado en: {createdAt}</Text>
+                <Text fontSize={12}>Miembro desde: {createdAt}</Text>
 
 
             </CardBody>

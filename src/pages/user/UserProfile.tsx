@@ -38,7 +38,7 @@ const UserProfile: FC = (): JSX.Element => {
     const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<PhoneNumber>({ resolver: yupResolver(validationSchema) });
 
     const onSubmit: SubmitHandler<PhoneNumber> = async (data) => {
-        const verificationId = await send2FA(user, `+57${data.phoneNumber}`, 'xdd')
+        const verificationId = await send2FA(user, `+57${data.phoneNumber}`, '')
 
         if (!verificationId) return
 
@@ -92,7 +92,6 @@ const UserProfile: FC = (): JSX.Element => {
                                         </FormControl>
                                         <Button
                                             type='submit'
-                                            // onClick={() => setOtpView(true)}
                                             mt={8}
                                             mb={2}
                                             id='mfa-button'
@@ -120,9 +119,6 @@ const UserProfile: FC = (): JSX.Element => {
                                             value={otpValue}
                                             onChange={({ target }) => setOtpValue(target.value)}
                                         />
-                                        {/* <Suspense fallback={<Spinner size='xl' />}>
-                                        <OTPInput length={6} onChange={() => setOtpValue} />
-                                    </Suspense> */}
                                         <Button onClick={validateOTP} colorScheme='green'>Validar código</Button>
                                     </VStack>
                                 </>
@@ -131,13 +127,7 @@ const UserProfile: FC = (): JSX.Element => {
                     :
                     <UserHeaderCard
                         createdAt={currentUserData?.createdAt}
-                        imageURL={
-                            currentUserData?.profilePicture === null
-                                ?
-                                'https://via.placeholder.com/350'
-                                :
-                                currentUserData?.profilePicture
-                        }
+                        imageURL={currentUserData?.profilePicture}
                         name={`${currentUserData?.name} ${currentUserData?.fatherSurname} ${currentUserData?.motherSurname}`}
                     />
             }

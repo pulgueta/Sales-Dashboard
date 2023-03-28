@@ -1,22 +1,20 @@
 import { RefObject } from "react"
 
 import { FirebaseError } from "firebase/app"
-
 import {
-    User, UserCredential, FacebookAuthProvider, GoogleAuthProvider, PhoneAuthProvider, PhoneMultiFactorGenerator, multiFactor, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut,
+    User, UserCredential, FacebookAuthProvider, GoogleAuthProvider, PhoneAuthProvider, PhoneMultiFactorGenerator, multiFactor, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword,
 } from 'firebase/auth'
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { v4 } from 'uuid'
 
 import { auth, db, storage } from "@/firebase"
-
-import { ContactInputs, Inputs, PasswordResetQuestion, PasswordResetEmail, RegisterUserInfo } from "@/interfaces"
+import { ContactInputs, Inputs, PasswordResetEmail, PasswordResetQuestion, RegisterUserInfo } from "@/interfaces"
 import { Providers } from "@/types"
 
-export const loginWithProvider = async (provider: Providers): Promise<UserCredential | undefined> => {
+export const loginWithProvider = async ({ providers }: Providers): Promise<UserCredential | undefined> => {
     try {
-        switch (provider.providers) {
+        switch (providers) {
             case 'Google':
                 const googleProvider = new GoogleAuthProvider()
                 const googleUser = await signInWithPopup(auth, googleProvider)
@@ -164,23 +162,29 @@ export const enroll2FA = async (user: any, verificationCodeId: any, verification
 
 }
 
-export const forgotPasswordWithQuestion = async ({ email, securityQuestion, securitySelect }: PasswordResetQuestion): Promise<void> => {
-    try {
-        const { docs } = await getDocs(collection(db, 'users'))
+export const forgotPasswordWithQuestion = async ({ email, securityQuestion, securitySelect, newPassword }: PasswordResetQuestion): Promise<boolean> => {
 
-        const users = docs.map((doc) => doc.data())
+    let flag = false
 
-        for (const user of users) {
-            if (user.email === email && user.securityQuestion === securityQuestion && user.securitySelect === securitySelect) {
-                await sendPasswordResetEmail(auth, email);
-                break;
-            }
+    const currentUser = auth.currentUser;
+    const { docs } = await getDocs(collection(db, 'users'))
+
+    const users = docs.map((doc) => doc.data())
+
+    for (const user of users) {
+        if (currentUser && user.email === email && user.securityQuestion === securityQuestion && user.securitySelect === securitySelect) {
+            flag = true
+            await updatePassword(currentUser, newPassword)
         }
+    }
 
-    } catch (error) {
-        throw Error("Something went wrong");
+    if (flag) {
+        return true
+    } else {
+        return true
     }
 }
+
 
 export const forgotPasswordWithEmail = async ({ email }: PasswordResetEmail): Promise<boolean> => {
     try {
@@ -204,7 +208,7 @@ export const logOut = async (): Promise<boolean | undefined> => {
 export const queryUser = async (uid: any): Promise<DocumentData | undefined> => {
     try {
         const queriedUser = await getDoc(doc(db, 'users', uid))
-        
+
         return queriedUser.data()
     } catch (error) {
         if (error instanceof FirebaseError) {
