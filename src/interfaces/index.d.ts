@@ -2,6 +2,11 @@
 import { StackProps } from "@chakra-ui/react";
 import { User } from "firebase/auth";
 
+export interface UserHeaderCardProps {
+  imageURL: string;
+  name: string;
+  createdAt: string;
+}
 
 
 export interface NavbarItems {
