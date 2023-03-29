@@ -8,8 +8,6 @@ export const PrivateRoute: FC<PrivateRouteProps> = ({ children }) => {
 
     const { user } = useContext(UserContext)
 
-    
-
     return (
         user
             ?

@@ -7,13 +7,13 @@ import { FiUpload } from "react-icons/fi"
 
 const UserHeaderCard: FC<UserHeaderCardProps> = ({ createdAt, imageURL, name }) => {
     return (
-        <Card direction={['column', 'row']} alignItems={['center']} width={['xs', 'md', 'lg', 'lg', 'xl']}>
+        <Card direction={['column', 'row']} alignItems={['center']} width={['xs', 'md', 'lg', 'lg', 'xl']} mb={[4, 6]}>
             <CardHeader>
                 <Avatar size='2xl' name={name} src={imageURL} />
                 <Tooltip
                     hasArrow
                     label={
-                        imageURL === null
+                        imageURL.length < 1
                             ?
                             'Subir foto de perfil'
                             :

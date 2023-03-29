@@ -5,16 +5,20 @@ import { ContextProps } from '@/types';
 import { auth } from '@/firebase';
 import { UserContext } from "."
 import { queryUser } from '@/utils';
+import { DocumentData } from 'firebase/firestore';
 
 export const UserProvider: FC<ContextProps> = ({ children }) => {
   const [userRole, setUserRole] = useState<string>('')
   const [user, setUser] = useState<User | null>(null);
-
+  const [userInformation, setUserInformation] = useState<DocumentData | undefined>({})
 
   useEffect(() => {
     const getUserRole = async () => {
       const userData = await queryUser(user?.uid)
-      userData && userData.role && setUserRole(userData.role)
+      if (userData && userData.role) {
+        setUserInformation(userData)
+        setUserRole(userData.role)
+      }
     }
 
     const unsubscribe = onAuthStateChanged(auth, (activeUser) => {
@@ -24,14 +28,14 @@ export const UserProvider: FC<ContextProps> = ({ children }) => {
         setUser(null);
       }
     });
-    
+
     getUserRole()
-    
+
     return unsubscribe;
   }, [user?.uid]);
 
   return (
-    <UserContext.Provider value={{ user, userRole }}>
+    <UserContext.Provider value={{ user, userRole, userInformation }}>
       {children}
     </UserContext.Provider>);
 };

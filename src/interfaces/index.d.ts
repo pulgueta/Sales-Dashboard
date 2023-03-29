@@ -74,6 +74,7 @@ export interface Inputs {
 export interface UserContextProps {
   user: User | null;
   userRole: string | null;
+  userInformation: DocumentData | undefined;
 }
 
 export interface ProductInformation {

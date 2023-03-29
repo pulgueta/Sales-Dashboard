@@ -22,7 +22,7 @@ const NotFound = lazy(() => import('@/pages/NotFound'))
 
 // Normal user routes
 const UserProfile = lazy(() => import('@/pages/user/UserProfile'))
-
+const UserInformation = lazy(() => import('@/pages/user/UserInformation'))
 
 // Admin routes
 const AdminProducts = lazy(() => import('@/pages/admin/products/Products'))
@@ -31,7 +31,7 @@ const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
 
 export const App: FC = (): JSX.Element => {
 
-  const { user } = useContext(UserContext)
+  const { user, userRole } = useContext(UserContext)
 
   return (
     <>
@@ -43,8 +43,36 @@ export const App: FC = (): JSX.Element => {
           <Route path='/products/:id' element={<Product />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-          <Route path='/login' element={!user ? <Login /> : <Navigate to={`/user/profile/${user?.uid}`} replace />} />
-          <Route path='/signup' element={!user ? <Signup /> : <Navigate to={`/user/profile/${user?.uid}`} replace />} />
+          <Route path='/login' element={
+            !user
+              ?
+              <Login />
+              :
+              userRole === 'user'
+                ?
+                <Navigate to={`/user/profile/${user?.uid}`} replace />
+                :
+                userRole === 'admin'
+                  ?
+                  <Navigate to='/admin/products' replace />
+                  :
+                  userRole === 'moderator' && <Navigate to='/moderator/' replace />
+          } />
+          <Route path='/signup' element={
+            !user
+              ?
+              <Signup />
+              :
+              userRole === 'user'
+                ?
+                <Navigate to={`/user/profile/${user?.uid}`} replace />
+                :
+                userRole === 'admin'
+                  ?
+                  <Navigate to='/admin/products' replace />
+                  :
+                  userRole === 'moderator' && <Navigate to='/moderator/' replace />
+          } />
 
           <Route path='/user' element={
             <PrivateRoute>
@@ -54,8 +82,10 @@ export const App: FC = (): JSX.Element => {
             <Route path='profile/:uid' element={
               <PrivateRoute>
                 <UserProfile />
+                <Outlet />
               </PrivateRoute>
             } />
+            <Route path='profile/:uid/information' element={<UserInformation />} />
           </Route>
 
           <Route path='/admin' element={
