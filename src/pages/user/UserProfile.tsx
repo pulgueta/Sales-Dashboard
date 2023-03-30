@@ -26,13 +26,17 @@ const UserProfile: FC = (): JSX.Element => {
 
     // const captcha = useCaptcha('mfa-button')
 
+    console.log(userInformation);
+
     const isCompletedInformation = (): boolean => {
         if (
             userInformation?.name.length <= 1 ||
             userInformation?.fatherSurname.length <= 1 ||
             userInformation?.motherSurname.length <= 1 ||
             userInformation?.birthday.length <= 1 ||
-            userInformation?.age.length <= 1
+            userInformation?.age.length <= 1 ||
+            userInformation?.cards.length < 1 ||
+            userInformation?.address.length <= 1
         ) {
             return false
         } else {
@@ -128,16 +132,18 @@ const UserProfile: FC = (): JSX.Element => {
                     </Box>
                     :
                     <>
-                    <Heading mt={4} mb={6}>Tu perfil</Heading>
-                        <UserHeaderCard
-                            createdAt={userInformation?.createdAt}
-                            imageURL={userInformation?.profilePicture}
-                            name={`${userInformation?.name} ${userInformation?.fatherSurname} ${userInformation?.motherSurname}`}
-                        />
-                        <UserInformationCards
-                            uid={user?.uid}
-                            hasCompletedInformation={isCompletedInformation}
-                        />
+                        <Heading mt={4} mb={6}>Tu perfil</Heading>
+                        <VStack gap={6}>
+                            <UserHeaderCard
+                                createdAt={userInformation?.createdAt}
+                                imageURL={userInformation?.profilePicture}
+                                name={`${userInformation?.name} ${userInformation?.fatherSurname} ${userInformation?.motherSurname}`}
+                            />
+                            <UserInformationCards
+                                uid={user?.uid}
+                                hasCompletedInformation={isCompletedInformation}
+                            />
+                        </VStack>
                     </>
             }
         </VStack>

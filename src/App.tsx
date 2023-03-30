@@ -1,6 +1,6 @@
 import { FC, lazy, Suspense, useContext } from 'react'
 
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import { Routes, Route, Outlet } from 'react-router-dom'
 
 import { Navbar as AdminNavbar } from '@/components/admin'
 import { AddProduct } from '@/pages/admin/addProduct'
@@ -10,14 +10,15 @@ import { PrivateRoute } from '@/components/auth'
 import { Navbar } from '@/components'
 import { Spinner } from '@/components/loading'
 
+// Lazy load components
+const LoggedUserRedirect = lazy(() => import('@/components/auth/LoggedUserRedirect'))
+
 // Public routes
 const Home = lazy(() => import('@/pages/home/Home'))
 const Products = lazy(() => import('@/pages/products/Products'))
 const Product = lazy(() => import('@/pages/products/Product'))
 const Contact = lazy(() => import('@/pages/contact/Contact'))
 const PrivacyPolicy = lazy(() => import('@/pages/privacyPolicy/PrivacyPolicy'))
-const Login = lazy(() => import('@/pages/auth/Login'))
-const Signup = lazy(() => import('@/pages/auth/Signup'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
 // Normal user routes
@@ -29,13 +30,25 @@ const AdminProducts = lazy(() => import('@/pages/admin/products/Products'))
 const Users = lazy(() => import('@/pages/admin/users/Users'))
 const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
 
+const NavbarRenderer: FC = (): JSX.Element => {
+  const { user, userRole } = useContext(UserContext)
+
+  if (user) {
+    if (userRole === 'admin') return <AdminNavbar isUser={user} />
+    // if (userRole === 'user') return <UserNavbar />
+    // if (userRole === 'moderator') return <ModNavbar />
+  }
+
+  return <Navbar />
+}
+
 export const App: FC = (): JSX.Element => {
 
   const { user, userRole } = useContext(UserContext)
 
   return (
     <>
-      {user ? <AdminNavbar isUser={user} /> : <Navbar />}
+      <NavbarRenderer />
       <Suspense fallback={<Spinner />}>
         <Routes>
           <Route index element={<Home />} />
@@ -43,44 +56,16 @@ export const App: FC = (): JSX.Element => {
           <Route path='/products/:id' element={<Product />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-          <Route path='/login' element={
-            !user
-              ?
-              <Login />
-              :
-              userRole === 'user'
-                ?
-                <Navigate to={`/user/profile/${user?.uid}`} replace />
-                :
-                userRole === 'admin'
-                  ?
-                  <Navigate to='/admin/products' replace />
-                  :
-                  userRole === 'moderator' && <Navigate to='/moderator/' replace />
-          } />
-          <Route path='/signup' element={
-            !user
-              ?
-              <Signup />
-              :
-              userRole === 'user'
-                ?
-                <Navigate to={`/user/profile/${user?.uid}`} replace />
-                :
-                userRole === 'admin'
-                  ?
-                  <Navigate to='/admin/products' replace />
-                  :
-                  userRole === 'moderator' && <Navigate to='/moderator/' replace />
-          } />
+          <Route path='/login' element={<LoggedUserRedirect />} />
+          <Route path='/signup' element={<LoggedUserRedirect />} />
 
           <Route path='/user' element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles='user'>
               <Outlet />
             </PrivateRoute>
           }>
             <Route path='profile/:uid' element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles='user'>
                 <UserProfile />
                 <Outlet />
               </PrivateRoute>
@@ -89,32 +74,32 @@ export const App: FC = (): JSX.Element => {
           </Route>
 
           <Route path='/admin' element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles='admin'>
               <Outlet />
             </PrivateRoute>
           }>
             <Route path='add' element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles='admin'>
                 <AddProduct />
               </PrivateRoute>
             } />
             <Route path='dashboard' element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles='admin'>
                 <Dashboard />
               </PrivateRoute>
             } />
             <Route path='products' element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles='admin'>
                 <AdminProducts />
               </PrivateRoute>
             } />
             <Route path='products/:id' element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles='admin'>
                 <AdminProducts />
               </PrivateRoute>
             } />
             <Route path='user' element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles='admin'>
                 <Users />
               </PrivateRoute>
             } />
@@ -125,7 +110,7 @@ export const App: FC = (): JSX.Element => {
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Suspense>
-      {!user && <WhatsAppButton />}
+      {(!user || (user && userRole === 'user')) && <WhatsAppButton />}
     </>
   )
 }

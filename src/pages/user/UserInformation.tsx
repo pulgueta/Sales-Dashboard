@@ -18,10 +18,11 @@ const UserInformation: FC = (): JSX.Element => {
             </Heading>
             <VStack>
                 <Avatar
-                    size='2xl'
+                    loading="lazy"
+                    style={{ width: '216px', height: '216px' }}
                     name={`${userInformation.name} ${userInformation.fatherSurname} ${userInformation.motherSurname}`}
                     src={userInformation.profilePicture}
-                    my={4}
+                    mt={4} mb={0}
                 />
                 <Tooltip
                     hasArrow
@@ -35,15 +36,22 @@ const UserInformation: FC = (): JSX.Element => {
                     placement="bottom"
                 >
                     <IconButton
+                        size='lg'
                         position='relative'
-                        top='-16'
+                        top='-12'
                         left='10'
                         rounded='full'
+                        colorScheme='blue'
                         aria-label="Subir foto de perfil"
                         icon={<FiUpload />}
                     />
                 </Tooltip>
-                <UserPersonalData />
+                <UserPersonalData
+                    name={userInformation.name}
+                    fatherSurname={userInformation.fatherSurname}
+                    motherSurname={userInformation.motherSurname}
+                    birthday={userInformation.birthday}
+                />
             </VStack>
         </VStack>
     )

@@ -8,6 +8,12 @@ export interface UserHeaderCardProps {
   createdAt: string;
 }
 
+export interface PersonalDataProps {
+  name: string;
+  fatherSurname: string;
+  motherSurname: string;
+  birthday: string;
+}
 
 export interface NavbarItems {
   id: number;
