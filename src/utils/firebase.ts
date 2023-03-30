@@ -4,12 +4,12 @@ import { FirebaseError } from "firebase/app"
 import {
     User, UserCredential, FacebookAuthProvider, GoogleAuthProvider, PhoneAuthProvider, PhoneMultiFactorGenerator, multiFactor, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword,
 } from 'firebase/auth'
-import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, where, WhereFilterOp } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { v4 } from 'uuid'
 
 import { auth, db, storage } from "@/firebase"
-import { ContactInputs, Inputs, PasswordResetEmail, PasswordResetQuestion, RegisterUserInfo } from "@/interfaces"
+import { ContactInputs, Inputs, PasswordResetEmail, PasswordResetQuestion, PersonalDataProps, RegisterUserInfo } from "@/interfaces"
 import { Providers } from "@/types"
 
 export const loginWithProvider = async ({ providers }: Providers): Promise<UserCredential | undefined> => {
@@ -49,6 +49,22 @@ export const sendEmail = async ({ name, email, message }: ContactInputs): Promis
         return await addDoc(collection(db, 'emails'), emailContent)
     } catch (error) {
         console.error(error);
+    }
+}
+
+export const updateInformation = async (values: PersonalDataProps, uid: string): Promise<void> => {
+    try {
+        const userRef = doc(db, `/users/${uid}`)
+
+        return await updateDoc(userRef, {
+            name: values.name,
+            fatherSurname: values.fatherSurname,
+            motherSurname: values.motherSurname,
+            birthday: values.birthday,
+        })
+
+    } catch (error) {
+        console.error(error)
     }
 }
 
