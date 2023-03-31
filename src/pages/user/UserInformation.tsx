@@ -22,7 +22,7 @@ const UserInformation: FC = (): JSX.Element => {
                     style={{ width: '216px', height: '216px' }}
                     name={`${userInformation.name} ${userInformation.fatherSurname} ${userInformation.motherSurname}`}
                     src={userInformation.profilePicture}
-                    mt={4} mb={0}
+                    mt={4}
                 />
                 <Tooltip
                     hasArrow

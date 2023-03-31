@@ -56,9 +56,7 @@ const UserPersonalData: FC<PersonalDataProps> = ({ birthday, fatherSurname, moth
           </FormControl>
         </GridItem>
       </Grid>
-
       <UserUpdateModal />
-
     </>
   )
 }

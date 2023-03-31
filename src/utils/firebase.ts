@@ -56,11 +56,26 @@ export const updateInformation = async (values: PersonalDataProps, uid: string):
     try {
         const userRef = doc(db, `/users/${uid}`)
 
+        let parsedDate: string = '';
+
+        if (values.birthday) {
+            const stringDate = new Date(values.birthday);
+            if (!isNaN(stringDate.getTime())) {
+                parsedDate = stringDate.toLocaleDateString('en-US', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    year: 'numeric'
+                });
+            } else {
+                throw new Error('Invalid date format');
+            }
+        }
+
         return await updateDoc(userRef, {
             name: values.name,
             fatherSurname: values.fatherSurname,
             motherSurname: values.motherSurname,
-            birthday: values.birthday,
+            birthday: parsedDate,
         })
 
     } catch (error) {

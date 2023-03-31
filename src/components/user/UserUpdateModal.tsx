@@ -1,9 +1,8 @@
-import { ChangeEvent, FC, useContext, useRef, useState } from 'react'
+import { FC, useContext, useRef } from 'react'
 
 import {
     AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay,
-    Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Radio, Select, Heading,
-    Stack, useDisclosure, useMediaQuery, useToast, RadioGroup, InputGroup, InputRightElement, IconButton, Box, Grid, GridItem
+    Button, FormControl, FormErrorMessage, FormLabel, Input, useDisclosure, useMediaQuery, useToast, Box, Grid, GridItem, Flex
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup'
@@ -12,18 +11,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { UserContext } from '@/context/auth';
 import { updateInformation } from '@/utils';
 import { PersonalDataProps } from '@/interfaces';
+import { useNavigate } from 'react-router-dom';
 
 const UserUpdateModal: FC = (): JSX.Element => {
+    const cancelRef = useRef<any>();
     const { userInformation } = useContext(UserContext)
 
-    const [loading, setLoading] = useState<boolean>(false)
-    const [newValue, setNewValue] = useState({
-        name: userInformation.name,
-        fatherSurname: userInformation.fatherSurname,
-        motherSurname: userInformation.motherSurname,
-        birthday: userInformation.birthday
-    })
-    const cancelRef = useRef<any>();
+    const navigate = useNavigate()
 
     const { isOpen, onClose, onOpen } = useDisclosure();
     const toast = useToast()
@@ -48,13 +42,11 @@ const UserUpdateModal: FC = (): JSX.Element => {
             .max(new Date(), 'La fecha de nacimiento debe ser antes de hoy'),
     })
 
-    const { handleSubmit, register, reset, formState: { errors, isSubmitting }, } = useForm<PersonalDataProps>({ resolver: yupResolver(validationSchema) });
+    const { handleSubmit, register, formState: { errors, isSubmitting }, } = useForm<PersonalDataProps>({ resolver: yupResolver(validationSchema) });
 
-    const onUpdateValues = async () => {
+    const onUpdateValues: SubmitHandler<PersonalDataProps> = async (values) => {
         try {
-            if (newValue.birthday < 1 || newValue.fatherSurname < 1 || newValue.motherSurname < 1 || newValue.name < 1)
-                setLoading(true)
-            await updateInformation(newValue, userInformation.uid)
+            await updateInformation(values, userInformation.uid)
             toast({
                 title: 'Actualización de datos',
                 description: 'Se han actualizado tus datos',
@@ -63,10 +55,8 @@ const UserUpdateModal: FC = (): JSX.Element => {
                 status: 'success',
                 position: isLargerThan800 ? 'top-right' : 'bottom',
             })
-            setLoading(false)
-            window.location.reload();
+            onClose()
         } catch (error) {
-            setLoading(true)
             toast({
                 title: 'Actualización de datos',
                 description: 'No se han podido actualizar los datos',
@@ -75,7 +65,6 @@ const UserUpdateModal: FC = (): JSX.Element => {
                 status: 'error',
                 position: isLargerThan800 ? 'top-right' : 'bottom',
             })
-            setLoading(false)
             console.log(error)
         }
     }
@@ -83,7 +72,10 @@ const UserUpdateModal: FC = (): JSX.Element => {
     return (
         <>
             <Box pt={4}>
-                <Button colorScheme='blue' onClick={onOpen}>Editar mis datos</Button>
+                <Flex direction='column' width='100%' gap={4}>
+                    <Button colorScheme='blue' onClick={onOpen}>Editar mis datos</Button>
+                    <Button colorScheme='blue' variant='link' onClick={() => navigate(-1)}>Volver</Button>
+                </Flex>
             </Box>
 
             <AlertDialog isOpen={isOpen} onClose={onClose}
@@ -104,7 +96,7 @@ const UserUpdateModal: FC = (): JSX.Element => {
                                 <GridItem>
                                     <FormControl isInvalid={!!errors.name}>
                                         <FormLabel htmlFor='name'>Nombre(s)</FormLabel>
-                                        <Input type='text' value={newValue.name} />
+                                        <Input type='text' {...register('name')} />
                                         {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>}
 
                                     </FormControl>
@@ -112,21 +104,21 @@ const UserUpdateModal: FC = (): JSX.Element => {
                                 <GridItem>
                                     <FormControl isInvalid={!!errors.fatherSurname}>
                                         <FormLabel htmlFor='fatherSurname'>Apellido paterno</FormLabel>
-                                        <Input type='text' value={newValue.fatherSurname} />
+                                        <Input type='text' {...register('fatherSurname')} />
                                         {errors.fatherSurname && <FormErrorMessage>{errors.fatherSurname.message}</FormErrorMessage>}
                                     </FormControl>
                                 </GridItem>
                                 <GridItem>
                                     <FormControl isInvalid={!!errors.motherSurname}>
                                         <FormLabel htmlFor='motherSurname'>Apellido materno</FormLabel>
-                                        <Input type='text' value={newValue.motherSurname} />
+                                        <Input type='text' {...register('motherSurname')} />
                                         {errors.motherSurname && <FormErrorMessage>{errors.motherSurname.message}</FormErrorMessage>}
                                     </FormControl>
                                 </GridItem>
                                 <GridItem>
                                     <FormControl isInvalid={!!errors.birthday}>
                                         <FormLabel htmlFor='birthday'>Fecha de nacimiento</FormLabel>
-                                        <Input type='date' value={newValue.birthday} />
+                                        <Input type='date' {...register('birthday')} />
                                         {errors.birthday && <FormErrorMessage>{errors.birthday.message}</FormErrorMessage>}
                                     </FormControl>
                                 </GridItem>
@@ -134,7 +126,7 @@ const UserUpdateModal: FC = (): JSX.Element => {
                         </AlertDialogBody>
                         <AlertDialogFooter>
                             <Button
-                                onClick={onUpdateValues}
+                                onClick={handleSubmit(onUpdateValues)}
                                 isLoading={isSubmitting}
                                 loadingText='Actualizando datos...'
                                 colorScheme='green'
