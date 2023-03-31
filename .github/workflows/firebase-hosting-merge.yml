@@ -19,6 +19,14 @@ env:
   VITE_NOTFOUND_IMAGE: ${{secrets.VITE_NOTFOUND_IMAGE}}
   VITE_WHATSAPP_NUMBER: ${{secrets.VITE_WHATSAPP_NUMBER}}
   VITE_TO_EMAIL: ${{secrets.VITE_TO_EMAIL}}
+  VITE_B1: ${{secrets.VITE_B1}}
+  VITE_B2: ${{secrets.VITE_B2}}
+  VITE_B3: ${{secrets.VITE_B3}}
+  VITE_B4: ${{secrets.VITE_B4}}
+  VITE_B5: ${{secrets.VITE_B5}}
+  VITE_B6: ${{secrets.VITE_B6}}
+  VITE_B7: ${{secrets.VITE_B7}}
+  VITE_B8: ${{secrets.VITE_B8}}
 
 jobs:
   build_and_deploy:
