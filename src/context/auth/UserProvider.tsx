@@ -1,4 +1,5 @@
 import { useState, useEffect, FC } from 'react'
+
 import { onAuthStateChanged, User } from 'firebase/auth';
 
 import { ContextProps } from '@/types';
@@ -10,7 +11,7 @@ import { DocumentData } from 'firebase/firestore';
 export const UserProvider: FC<ContextProps> = ({ children }) => {
   const [userRole, setUserRole] = useState<string>('')
   const [user, setUser] = useState<User | null>(null);
-  const [userInformation, setUserInformation] = useState<DocumentData | undefined>({})
+  const [userInformation, setUserInformation] = useState<DocumentData | undefined>()
 
   useEffect(() => {
     const getUserRole = async () => {
@@ -32,7 +33,7 @@ export const UserProvider: FC<ContextProps> = ({ children }) => {
     getUserRole()
 
     return unsubscribe;
-  }, [user?.uid]);
+  }, [user?.uid, userInformation]);
 
   return (
     <UserContext.Provider value={{ user, userRole, userInformation }}>

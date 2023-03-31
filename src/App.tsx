@@ -12,6 +12,7 @@ import { Spinner } from '@/components/loading'
 
 // Lazy load components
 const LoggedUserRedirect = lazy(() => import('@/components/auth/LoggedUserRedirect'))
+const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
 
 // Public routes
 const Home = lazy(() => import('@/pages/home/Home'))
@@ -28,7 +29,7 @@ const UserInformation = lazy(() => import('@/pages/user/UserInformation'))
 // Admin routes
 const AdminProducts = lazy(() => import('@/pages/admin/products/Products'))
 const Users = lazy(() => import('@/pages/admin/users/Users'))
-const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
+const Backups = lazy(() => import('@/pages/admin/backups/Backups'))
 
 const NavbarRenderer: FC = (): JSX.Element => {
   const { user, userRole } = useContext(UserContext)
@@ -78,6 +79,11 @@ export const App: FC = (): JSX.Element => {
               <Outlet />
             </PrivateRoute>
           }>
+            <Route path='backups' element={
+              <PrivateRoute allowedRoles='admin'>
+                <Backups />
+              </PrivateRoute>
+            } />
             <Route path='add' element={
               <PrivateRoute allowedRoles='admin'>
                 <AddProduct />

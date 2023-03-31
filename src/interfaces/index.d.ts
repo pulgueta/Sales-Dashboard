@@ -51,6 +51,26 @@ export interface RegisterInputs {
   securitySelect: string;
 }
 
+export interface UserInformation {
+  gender: string;
+  fatherSurname: string;
+  age: number;
+  securityQuestion: string;
+  birthday: string;
+  role: string;
+  createdAt: string;
+  securitySelect: string;
+  name: string;
+  address: null;
+  email: string;
+  profilePicture: string;
+  uid: string;
+  cards: { [key: string]: string };
+  phoneNumber: string;
+  motherSurname: string;
+}
+
+
 export interface RegisterUserInfo {
   gender: string;
   name: string;

@@ -127,11 +127,7 @@ export const signUpWithEmail = async (email: string, password: string,
     }
 }
 
-export const verifyUserEnrolled = (user: User): boolean => {
-    const enrolledFactors = multiFactor(user).enrolledFactors;
-
-    return enrolledFactors.length > 0;
-}
+export const verifyUserEnrolled = (user: User): boolean => multiFactor(user).enrolledFactors.length > 0
 
 export const send2FA = async (user: any, phoneNumber: string, verifier: any): Promise<string | undefined> => {
     const session = await multiFactor(user).getSession();
@@ -219,7 +215,7 @@ export const queryUser = async (uid: any): Promise<DocumentData | undefined> => 
     }
 }
 
-export const getProducts = async () => {
+export const getProducts = async (): Promise<{ id: string; }[] | undefined> => {
     try {
         const { docs } = await getDocs(collection(db, 'products'))
 
