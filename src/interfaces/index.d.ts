@@ -8,6 +8,12 @@ export interface UserHeaderCardProps {
   createdAt: string;
 }
 
+export interface PersonalDataProps {
+  name: string;
+  fatherSurname: string;
+  motherSurname: string;
+  birthday: string;
+}
 
 export interface NavbarItems {
   id: number;
@@ -19,6 +25,7 @@ export interface PasswordResetQuestion {
   email: string;
   securitySelect: string;
   securityQuestion: string;
+  newPassword: string;
 }
 
 export interface PasswordResetEmail {
@@ -43,6 +50,26 @@ export interface RegisterInputs {
   securityQuestion: string;
   securitySelect: string;
 }
+
+export interface UserInformation {
+  gender: string;
+  fatherSurname: string;
+  age: number;
+  securityQuestion: string;
+  birthday: string;
+  role: string;
+  createdAt: string;
+  securitySelect: string;
+  name: string;
+  address: null;
+  email: string;
+  profilePicture: string;
+  uid: string;
+  cards: { [key: string]: string };
+  phoneNumber: string;
+  motherSurname: string;
+}
+
 
 export interface RegisterUserInfo {
   gender: string;
@@ -73,6 +100,7 @@ export interface Inputs {
 export interface UserContextProps {
   user: User | null;
   userRole: string | null;
+  userInformation: DocumentData | undefined;
 }
 
 export interface ProductInformation {

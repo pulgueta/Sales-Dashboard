@@ -70,6 +70,33 @@ export const ProviderButtons: FC = (): JSX.Element => {
                         description: `¡Bienvenido, ${googleUser?.user.displayName}!`
                     })
                     navigate(-1)
+                    break;
+                case 'Facebook':
+                    const facebookUser = await loginWithProvider({ providers: 'Facebook' })
+
+                    toast({
+                        status: 'success',
+                        duration: 1500,
+                        isClosable: false,
+                        title: 'Inicio de sesión',
+                        position: isLargerThan800 ? 'top-right' : 'bottom',
+                        description: `¡Bienvenido, ${facebookUser?.user.displayName}!`
+                    })
+                    navigate(-1)
+                    break;
+                case 'Twitter':
+                    const twitterUser = await loginWithProvider({ providers: 'Twitter' })
+
+                    toast({
+                        status: 'success',
+                        duration: 1500,
+                        isClosable: false,
+                        title: 'Inicio de sesión',
+                        position: isLargerThan800 ? 'top-right' : 'bottom',
+                        description: `¡Bienvenido, ${twitterUser?.user.displayName}!`
+                    })
+                    navigate(-1)
+                    break;
             }
         } catch (err) {
 

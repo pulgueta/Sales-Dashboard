@@ -6,6 +6,7 @@ export type ContextProps = {
 
 export type PrivateRouteProps = {
     children: ReactNode;
+    allowedRoles: "user" | "admin" | "moderator";
 }
 
 export type Providers = {

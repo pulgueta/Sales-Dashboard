@@ -9,19 +9,28 @@ const PrivacyPolicyBanner = lazy(() => import('@/components/ui/PrivacyPolicyBann
 
 const images = [
     {
-        url: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg'
+        url: import.meta.env.VITE_B1
     },
     {
-        url: 'https://www.eatthis.com/wp-content/uploads/sites/4/2020/12/unhealthiest-foods-planet.jpg?quality=82&strip=1'
+        url: import.meta.env.VITE_B2
     },
     {
-        url: 'https://media-cldnry.s-nbcnews.com/image/upload/rockcms/2022-03/plant-based-food-mc-220323-02-273c7b.jpg'
+        url: import.meta.env.VITE_B3
     },
     {
-        url: 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/processed-food700-350-e6d0f0f.jpg'
+        url: import.meta.env.VITE_B4
     },
     {
-        url: 'https://media.socastsrm.com/wordpress/wp-content/blogs.dir/2897/files/2023/02/bad-food.jpg'
+        url: import.meta.env.VITE_B5
+    },
+    {
+        url: import.meta.env.VITE_B6
+    },
+    {
+        url: import.meta.env.VITE_B7
+    },
+    {
+        url: import.meta.env.VITE_B8
     },
 ]
 

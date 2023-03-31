@@ -1,18 +1,18 @@
-import { FC, lazy, useContext, useEffect, useState } from 'react'
+import { FC, lazy, useContext, useState } from 'react'
 
 import { VStack, Text, Box, InputGroup, InputLeftAddon, Input, Heading, Button, FormControl, FormErrorMessage } from '@chakra-ui/react'
-import { DocumentData } from 'firebase/firestore'
 import { FiPhone } from 'react-icons/fi'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-import { enroll2FA, queryUser, send2FA, verifyUserEnrolled } from '@/utils/firebase'
+import { enroll2FA, send2FA, verifyUserEnrolled } from '@/utils/firebase'
 import { UserContext } from '@/context/auth'
 // import { useCaptcha } from '@/hooks'
 
 
-const UserHeaderCard = lazy(() => import('@/components/user/UserHeaderCard'))
+const UserHeaderCard = lazy(() => import('@/components/user/UserHeaderCard'));
+const UserInformationCards = lazy(() => import('@/components/user/UserInformationCards'));
 
 interface PhoneNumber {
     phoneNumber: string;
@@ -22,10 +22,27 @@ const UserProfile: FC = (): JSX.Element => {
     const [otpCodeId, setOtpCodeId] = useState<string | undefined>()
     const [otpValue, setOtpValue] = useState('')
     const [otpView, setOtpView] = useState<boolean>(false)
-    const [currentUserData, setCurrentUserData] = useState<DocumentData | undefined>()
-    const { user } = useContext(UserContext)
+    const { user, userInformation } = useContext(UserContext)
 
     // const captcha = useCaptcha('mfa-button')
+
+    console.log(userInformation);
+
+    const isCompletedInformation = (): boolean => {
+        if (
+            userInformation?.name.length <= 1 ||
+            userInformation?.fatherSurname.length <= 1 ||
+            userInformation?.motherSurname.length <= 1 ||
+            userInformation?.birthday.length <= 1 ||
+            userInformation?.age.length <= 1 ||
+            userInformation?.cards.length < 1 ||
+            userInformation?.address.length <= 1
+        ) {
+            return false
+        } else {
+            return true
+        }
+    }
 
     const validationSchema = yup.object().shape({
         phoneNumber: yup
@@ -38,7 +55,7 @@ const UserProfile: FC = (): JSX.Element => {
     const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<PhoneNumber>({ resolver: yupResolver(validationSchema) });
 
     const onSubmit: SubmitHandler<PhoneNumber> = async (data) => {
-        const verificationId = await send2FA(user, `+57${data.phoneNumber}`, 'xdd')
+        const verificationId = await send2FA(user, `+57${data.phoneNumber}`, '')
 
         if (!verificationId) return
 
@@ -52,17 +69,6 @@ const UserProfile: FC = (): JSX.Element => {
 
         res ? setOtpView(false) : alert('error')
     }
-
-    useEffect(() => {
-        const getUserData = async () => {
-            const currentUser = await queryUser(user?.uid)
-            setCurrentUserData(currentUser)
-
-            console.log(currentUser);
-        }
-
-        getUserData()
-    }, [user?.uid])
 
     return (
         <VStack minH='calc(100vh - 64px)' bgColor='gray.100' p={4}>
@@ -92,7 +98,6 @@ const UserProfile: FC = (): JSX.Element => {
                                         </FormControl>
                                         <Button
                                             type='submit'
-                                            // onClick={() => setOtpView(true)}
                                             mt={8}
                                             mb={2}
                                             id='mfa-button'
@@ -120,26 +125,26 @@ const UserProfile: FC = (): JSX.Element => {
                                             value={otpValue}
                                             onChange={({ target }) => setOtpValue(target.value)}
                                         />
-                                        {/* <Suspense fallback={<Spinner size='xl' />}>
-                                        <OTPInput length={6} onChange={() => setOtpValue} />
-                                    </Suspense> */}
                                         <Button onClick={validateOTP} colorScheme='green'>Validar código</Button>
                                     </VStack>
                                 </>
                         }
                     </Box>
                     :
-                    <UserHeaderCard
-                        createdAt={currentUserData?.createdAt}
-                        imageURL={
-                            currentUserData?.profilePicture === null
-                                ?
-                                'https://via.placeholder.com/350'
-                                :
-                                currentUserData?.profilePicture
-                        }
-                        name={`${currentUserData?.name} ${currentUserData?.fatherSurname} ${currentUserData?.motherSurname}`}
-                    />
+                    <>
+                        <Heading mt={4} mb={6}>Tu perfil</Heading>
+                        <VStack gap={6}>
+                            <UserHeaderCard
+                                createdAt={userInformation?.createdAt}
+                                imageURL={userInformation?.profilePicture}
+                                name={`${userInformation?.name} ${userInformation?.fatherSurname} ${userInformation?.motherSurname}`}
+                            />
+                            <UserInformationCards
+                                uid={user?.uid}
+                                hasCompletedInformation={isCompletedInformation}
+                            />
+                        </VStack>
+                    </>
             }
         </VStack>
     )

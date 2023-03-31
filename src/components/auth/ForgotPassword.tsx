@@ -3,15 +3,17 @@ import { ChangeEvent, FC, useRef, useState } from 'react'
 import {
     AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay,
     Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Radio, Select,
-    Stack, useDisclosure, useMediaQuery, useToast, RadioGroup
+    Stack, useDisclosure, useMediaQuery, useToast, RadioGroup, InputGroup, InputRightElement, IconButton
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { forgotPasswordWithEmail, forgotPasswordWithQuestion } from '@/utils';
 import { PasswordResetEmail, PasswordResetQuestion } from '@/interfaces';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 export const ForgotPassword: FC = (): JSX.Element => {
+    const [show, setShow] = useState<boolean>(true)
     const [formState, setFormState] = useState<number>(0)
     const [securityQ, setSecurityQ] = useState<string>('¿Cuál es tu color favorito?')
     const [recoveryMethod, setRecoveryMethod] = useState<string>('email')
@@ -34,7 +36,16 @@ export const ForgotPassword: FC = (): JSX.Element => {
             .required('El correo es requerido'),
         securitySelect: yup
             .string()
-            .required('La pregunta de seguridad no puede estar vacía')
+            .required('La pregunta de seguridad no puede estar vacía'),
+        newPassword: yup
+            .string()
+            .required('Debes ingresar una nueva contraseña')
+            .matches(
+                // eslint-disable-next-line no-useless-escape
+                /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/,
+                'La contraseña debe contener al menos 1 letra minúscula, 1 letra mayúscula, 1 número y 1 caracter especial'
+            )
+            .min(6, 'La contraseña debe tener mínimo 6 caracteres'),
     })
 
     const validationSchemaEmail = yup.object().shape({
@@ -49,20 +60,18 @@ export const ForgotPassword: FC = (): JSX.Element => {
         isSubmitting
     }, } = useForm<PasswordResetQuestion>({ resolver: yupResolver(recoveryMethod === 'email' ? validationSchemaEmail : validationSchemaQuestion) });
 
-    const onSubmitQuestion: SubmitHandler<PasswordResetQuestion> = async ({ email, securityQuestion = securityQ, securitySelect }: PasswordResetQuestion) => {
-        await forgotPasswordWithQuestion({ email, securityQuestion, securitySelect }).then(() => {
+    const onSubmitQuestion: SubmitHandler<PasswordResetQuestion> = async ({ email, securityQuestion = securityQ, securitySelect, newPassword }: PasswordResetQuestion) => {
+        await forgotPasswordWithQuestion({ email, securityQuestion, securitySelect, newPassword }).then(() => {
             toast({
                 status: 'success',
                 duration: 1500,
                 isClosable: false,
                 title: 'Recuperación de contraseña',
                 position: isLargerThan800 ? 'top-right' : 'bottom',
-                description: 'Correo enviado exitosamente'
+                description: 'Hemos actualizado tu contrasñea'
             })
-
             reset()
         }).catch(() => {
-
             toast({
                 status: 'error',
                 duration: 1500,
@@ -87,7 +96,7 @@ export const ForgotPassword: FC = (): JSX.Element => {
             })
 
             reset()
-
+            onClose()
         } catch (error) {
             toast({
                 status: 'error',
@@ -103,11 +112,9 @@ export const ForgotPassword: FC = (): JSX.Element => {
     return (
         <>
             <Button variant='link' colorScheme='blue' onClick={onOpen}>Olvidé mi contraseña</Button>
-            <AlertDialog
-                isOpen={isOpen}
-                leastDestructiveRef={cancelRef}
-                onClose={onClose}
-                size={['xs', 'sm', 'md', 'lg', 'xl']}
+
+            <AlertDialog isOpen={isOpen} onClose={onClose}
+                leastDestructiveRef={cancelRef} size={['xs', 'sm', 'md', 'lg', 'xl']}
             >
                 <AlertDialogOverlay>
                     <AlertDialogContent>
@@ -134,13 +141,9 @@ export const ForgotPassword: FC = (): JSX.Element => {
                                         type='email'
                                         id='email'
                                         placeholder='correo@electronico.com'
-                                        {...register('email', {
-                                            required: true,
-                                            minLength: 4,
-                                            pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-                                        })}
+                                        {...register('email')}
                                     />
-                                    {errors.email && <FormErrorMessage>El correo es requerido</FormErrorMessage>}
+                                    {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
                                 </FormControl>
                             }
                             {
@@ -155,13 +158,9 @@ export const ForgotPassword: FC = (): JSX.Element => {
                                                 type='email'
                                                 id='email'
                                                 placeholder='correo@electronico.com'
-                                                {...register('email', {
-                                                    required: true,
-                                                    minLength: 4,
-                                                    pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-                                                })}
+                                                {...register('email')}
                                             />
-                                            {errors.email && <FormErrorMessage>El correo es requerido</FormErrorMessage>}
+                                            {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
                                         </FormControl>
                                     }
                                     {
@@ -192,10 +191,39 @@ export const ForgotPassword: FC = (): JSX.Element => {
                                             </FormControl>
                                         </>
                                     }
+                                    {
+                                        formState === 3 &&
+                                        <>
+
+                                            <FormControl isInvalid={!!errors.newPassword}>
+                                                <FormLabel htmlFor='newPassword'>Nueva contraseña</FormLabel>
+                                                <InputGroup>
+                                                    <InputRightElement>
+                                                        <IconButton
+                                                            variant='link'
+                                                            aria-label='Show password'
+                                                            icon={show ? <FiEye /> : <FiEyeOff />}
+                                                            onClick={() => setShow(!show)}
+                                                        />
+                                                    </InputRightElement>
+                                                    <Input
+                                                        autoComplete='false'
+                                                        type={show ? 'password' : 'text'}
+                                                        id='password'
+                                                        bgColor={['white', 'transparent']}
+                                                        placeholder='********'
+                                                        borderColor='gray.200'
+                                                        {...register('newPassword')}
+                                                    />
+                                                </InputGroup>
+                                                {errors.newPassword && <FormErrorMessage>{errors.newPassword.message}</FormErrorMessage>}
+                                            </FormControl>
+                                        </>
+                                    }
                                 </form>}
                         </AlertDialogBody>
                         <AlertDialogFooter>
-                            <Flex direction={['column', 'row']} width='100%' gap={2.5}>
+                            <Flex direction={['column', 'column', 'column', 'row']} width='100%' gap={1.5}>
                                 <Button width='100%' colorScheme='red' type='button' onClick={prevForm} isDisabled={formState === 0}>
                                     Anterior
                                 </Button>
@@ -204,12 +232,12 @@ export const ForgotPassword: FC = (): JSX.Element => {
                                     width='100%'
                                     colorScheme='blue'
                                     onClick={nextForm}
-                                    isDisabled={((formState === 2) || (recoveryMethod === 'email' && formState === 1))}
+                                    isDisabled={((formState === 3) || (recoveryMethod === 'email' && formState === 1))}
                                 >
                                     Siguiente
                                 </Button>
                                 {
-                                    ((formState === 2) || (recoveryMethod === 'email' && formState === 1)) &&
+                                    ((formState === 3) || (recoveryMethod === 'email' && formState === 1)) &&
                                     <Button
                                         marginInlineStart={0}
                                         colorScheme='purple'
@@ -223,7 +251,13 @@ export const ForgotPassword: FC = (): JSX.Element => {
                                                 handleSubmit(onSubmitQuestion)
                                         }
                                     >
-                                        Enviar correo
+                                        {
+                                            recoveryMethod === 'email'
+                                                ?
+                                                'Enviar correo'
+                                                :
+                                                'Actualizar contraseña'
+                                        }
                                     </Button>
                                 }
                             </Flex>

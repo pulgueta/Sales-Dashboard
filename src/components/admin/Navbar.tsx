@@ -30,6 +30,11 @@ const links: NavbarItems[] = [
         text: 'Ventas',
         path: '/admin/dashboard',
     },
+    {
+        id: 5,
+        text: 'Backup',
+        path: '/admin/backups',
+    },
 ]
 
 export const Navbar: FC<ActiveUser> = ({ isUser }): JSX.Element => {
