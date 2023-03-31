@@ -1,8 +1,10 @@
-import { FC } from 'react'
+import { FC, lazy } from 'react'
 
-import { Box, Button, FormControl, FormLabel, Grid, GridItem, Input } from '@chakra-ui/react'
+import { FormControl, FormLabel, Grid, GridItem, Input } from '@chakra-ui/react'
 
 import { PersonalDataProps } from '@/interfaces'
+
+const UserUpdateModal = lazy(() => import('./UserUpdateModal'));
 
 const UserPersonalData: FC<PersonalDataProps> = ({ birthday, fatherSurname, motherSurname, name }): JSX.Element => {
 
@@ -35,7 +37,7 @@ const UserPersonalData: FC<PersonalDataProps> = ({ birthday, fatherSurname, moth
         </GridItem>
         <GridItem>
           <FormControl>
-            <FormLabel htmlFor='motherSurname'>Apellido paterno</FormLabel>
+            <FormLabel htmlFor='motherSurname'>Apellido materno</FormLabel>
             <Input value={motherSurname}
               readOnly
               cursor='default'
@@ -55,9 +57,7 @@ const UserPersonalData: FC<PersonalDataProps> = ({ birthday, fatherSurname, moth
         </GridItem>
       </Grid>
 
-      <Box>
-        <Button mt={4} colorScheme='messenger'>Editar mis datos</Button>
-      </Box>
+      <UserUpdateModal />
 
     </>
   )
