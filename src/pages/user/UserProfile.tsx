@@ -1,6 +1,7 @@
 import { FC, lazy, useContext, useState } from 'react'
 
 import { VStack, Text, Box, InputGroup, InputLeftAddon, Input, Heading, Button, FormControl, FormErrorMessage } from '@chakra-ui/react'
+import { Helmet } from 'react-helmet-async'
 import { FiPhone } from 'react-icons/fi'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -25,8 +26,6 @@ const UserProfile: FC = (): JSX.Element => {
     const { user, userInformation } = useContext(UserContext)
 
     // const captcha = useCaptcha('mfa-button')
-
-    console.log(userInformation);
 
     const isCompletedInformation = (): boolean => {
         if (
@@ -72,6 +71,9 @@ const UserProfile: FC = (): JSX.Element => {
 
     return (
         <VStack minH='calc(100vh - 64px)' bgColor='gray.100' p={4}>
+            <Helmet>
+                <title>Perfil de usuario</title>
+            </Helmet>
             {
                 (user && user?.emailVerified && !verifyUserEnrolled(user))
                     ?

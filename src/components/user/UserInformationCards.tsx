@@ -12,9 +12,9 @@ interface UserInformationCardProps {
 const UserInformationCards: FC<UserInformationCardProps> = ({ uid, hasCompletedInformation }): JSX.Element => {
     return (
         <Card>
-            <CardBody width={['xs', 'sm', 'lg', 'xl']}>
+            <CardBody width={['xs', 'md', 'lg', 'xl']}>
                 <Box as={RouterLink} to={`/user/profile/${uid}/information`}>
-                    <HStack px={4} gap={4}>
+                    <HStack gap={4}>
                         <Icon as={FiUser} boxSize={8} />
                         <HStack justifyContent='space-between' width='100%'>
                             <VStack alignItems='flex-start'>
@@ -35,7 +35,7 @@ const UserInformationCards: FC<UserInformationCardProps> = ({ uid, hasCompletedI
                 </Box>
                 <Divider my={4} />
                 <Box as={RouterLink} to={`/user/profile/${uid}/security`}>
-                    <HStack px={4} gap={4}>
+                    <HStack gap={4}>
                         <Icon as={FiLock} boxSize={8} />
                         <HStack justifyContent='space-between' width='100%'>
                             <VStack alignItems='flex-start'>
@@ -56,7 +56,7 @@ const UserInformationCards: FC<UserInformationCardProps> = ({ uid, hasCompletedI
                 </Box>
                 <Divider my={4} />
                 <Box as={RouterLink} to={`/user/profile/${uid}/cards`}>
-                    <HStack px={4} gap={4}>
+                    <HStack gap={4}>
                         <Icon as={FiCreditCard} boxSize={8} />
                         <HStack justifyContent='space-between' width='100%'>
                             <VStack alignItems='flex-start'>
@@ -77,7 +77,7 @@ const UserInformationCards: FC<UserInformationCardProps> = ({ uid, hasCompletedI
                 </Box>
                 <Divider my={4} />
                 <Box as={RouterLink} to={`/user/profile/${uid}/address`}>
-                    <HStack px={4} gap={4}>
+                    <HStack gap={4}>
                         <Icon as={FiMapPin} boxSize={8} />
                         <HStack justifyContent='space-between' width='100%'>
                             <VStack alignItems='flex-start'>

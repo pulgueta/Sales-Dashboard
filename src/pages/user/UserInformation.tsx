@@ -1,9 +1,10 @@
 import { FC, lazy, useContext } from "react"
 
 import { Avatar, Heading, IconButton, Tooltip, VStack } from "@chakra-ui/react"
+import { Helmet } from "react-helmet-async";
+import { FiUpload } from "react-icons/fi"
 
 import { UserContext } from "@/context/auth"
-import { FiUpload } from "react-icons/fi"
 
 const UserPersonalData = lazy(() => import("@/components/user/UserPersonalData"));
 
@@ -13,6 +14,9 @@ const UserInformation: FC = (): JSX.Element => {
 
     return (
         <VStack minH='calc(100vh - 64px)' bgColor='gray.100' p={4}>
+            <Helmet>
+                <title>Datos personales</title>
+            </Helmet>
             <Heading>
                 Datos personales
             </Heading>
