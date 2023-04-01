@@ -13,6 +13,7 @@ import { Spinner } from '@/components/loading'
 // Lazy load components
 const LoggedUserRedirect = lazy(() => import('@/components/auth/LoggedUserRedirect'))
 const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
+const LoggedUserNavbar = lazy(() => import('./components/ui/LoggedUserNavbar'))
 
 // Public routes
 const Home = lazy(() => import('@/pages/home/Home'))
@@ -36,7 +37,7 @@ const NavbarRenderer: FC = (): JSX.Element => {
 
   if (user) {
     if (userRole === 'admin') return <AdminNavbar isUser={user} />
-    // if (userRole === 'user') return <UserNavbar />
+    if (userRole === 'user') return <LoggedUserNavbar />
     // if (userRole === 'moderator') return <ModNavbar />
   }
 
@@ -60,18 +61,22 @@ export const App: FC = (): JSX.Element => {
           <Route path='/login' element={<LoggedUserRedirect />} />
           <Route path='/signup' element={<LoggedUserRedirect />} />
 
-          <Route path='/user' element={
+          <Route path='/user/profile' element={
             <PrivateRoute allowedRoles='user'>
               <Outlet />
             </PrivateRoute>
           }>
-            <Route path='profile/:uid' element={
+            <Route path=':uid' element={
               <PrivateRoute allowedRoles='user'>
                 <UserProfile />
                 <Outlet />
               </PrivateRoute>
             } />
-            <Route path='profile/:uid/information' element={<UserInformation />} />
+            <Route path=':uid/purchases' element={<UserInformation />} />
+            <Route path=':uid/information' element={<UserInformation />} />
+            <Route path=':uid/security' element={<UserInformation />} />
+            <Route path=':uid/cards' element={<UserInformation />} />
+            <Route path=':uid/address' element={<UserInformation />} />
           </Route>
 
           <Route path='/admin' element={

@@ -13,9 +13,9 @@ const UserHeaderCard: FC<UserHeaderCardProps> = ({ createdAt, imageURL, name }) 
             <CardBody>
                 <HStack alignItems='center'>
                     <Text fontSize={[15, 13, 15, 16, 20]} fontWeight={700}>Nombre:</Text>
-                    <Text fontSize={[15, 13, 15, 16, 20]} fontWeight={500} noOfLines={1}>{name}</Text>
+                    <Text fontSize={[15, 13, 15, 16, 20]} fontWeight={500} noOfLines={1}>{name ? name : 'Loading...'}</Text>
                 </HStack>
-                <Text fontSize={12}>Miembro desde: {createdAt}</Text>
+                <Text fontSize={12}>Miembro desde: {createdAt ? createdAt : 'Loading...'}</Text>
             </CardBody>
         </Card>
     )

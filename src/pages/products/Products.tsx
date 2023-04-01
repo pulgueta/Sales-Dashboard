@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { Button, ButtonGroup, Center, HStack, GridItem, Heading, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
+import { Helmet } from 'react-helmet-async'
 
 import { ProductCard } from '@/components'
 import { ProductCardSkeleton } from '@/components/skeleton'
@@ -14,6 +15,9 @@ const Products: FC = (): JSX.Element => {
 
     return (
         <VStack minH='calc(100vh - 101px)' bgColor='gray.100' p={4}>
+            <Helmet>
+                <title>Productos</title>
+            </Helmet>
             <Heading mt={4}>
                 Products
             </Heading>

@@ -1,8 +1,16 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 
-import { Box, Button, CloseButton, Flex, HStack, IconButton, Image, Link, useDisclosure, useMediaQuery, VStack } from "@chakra-ui/react";
+import {
+    Accordion, AccordionButton, AccordionIcon, Icon, AccordionItem, AccordionPanel,
+    Avatar, Box, Button, CloseButton, Divider, Flex, HStack, IconButton, Image, Link,
+    Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger,
+    Text, useDisclosure, useMediaQuery, VStack
+} from "@chakra-ui/react";
 import { FiBox, FiMenu, FiShoppingCart, FiUser, FiMessageSquare, FiMail } from "react-icons/fi";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+
+import { UserContext } from "@/context/auth";
+import { logOut } from "@/utils";
 
 const links = [
     {
@@ -25,19 +33,23 @@ const links = [
     }
 ]
 
-export const Navbar: FC = (): JSX.Element => {
+const LoggedUserNavbar: FC = (): JSX.Element => {
     const isInLogin = window.location.pathname
 
-    const [isLargerThan860] = useMediaQuery('(min-width: 860px)')
+    const { userInformation } = useContext(UserContext)
 
+    const [isLargerThan860] = useMediaQuery('(min-width: 860px)')
     const mobileNav = useDisclosure();
 
     const navigate = useNavigate();
 
     const onRoute = (toRoute: string) => {
         mobileNav.onClose();
+        toRoute.includes('/user/profile') && navigate(`user/profile/${userInformation.uid}`)
         navigate(toRoute)
     }
+
+    const onLogout = async () => await logOut()
 
     return (
         <>
@@ -67,7 +79,7 @@ export const Navbar: FC = (): JSX.Element => {
 
                     </Link>
                     <HStack display="flex" alignItems="center" spacing={1}>
-                        <HStack spacing={[1, 1, 1, 2, 4]} mr={1} color="brand.500" display={["none", "none", "inline-flex"]}>
+                        <HStack spacing={[1, 2, 2, 4, 6]} mr={1} color="brand.500" display={["none", "none", "inline-flex"]}>
                             {
                                 links.map(({ id, text, route, icon }) => {
                                     return (
@@ -92,33 +104,49 @@ export const Navbar: FC = (): JSX.Element => {
                                 !isLargerThan860
                                     ?
                                     <>
-                                        <Button
-                                            color='white'
-                                            variant='ghost'
-                                            _hover={{ bg: 'gray.200', color: 'gray.800' }}
-                                            onClick={() => navigate('/login')}
-                                        >
-                                            Iniciar sesión
-                                        </Button>
-                                        <Button
+                                        <Avatar src={userInformation.profilePicture} name={`${userInformation.name} ${userInformation.fatherSurname}`} />
+
+                                        <IconButton
+                                            aria-label="Cart"
                                             color='white'
                                             variant='ghost'
                                             _hover={{ bg: 'gray.200', color: 'gray.800' }}
                                             onClick={() => navigate('/cart')}
-                                        >
-                                            Carrito
-                                        </Button>
+                                            icon={<FiShoppingCart />}
+                                        />
                                     </>
                                     :
                                     <>
-                                        <Button
-                                            leftIcon={<FiUser />} color='white'
-                                            variant='ghost'
-                                            _hover={{ bg: 'gray.200', color: 'gray.800' }}
-                                            onClick={() => navigate('/login')}
-                                        >
-                                            Iniciar sesión
-                                        </Button>
+                                        <Popover placement="bottom-end">
+                                            <PopoverTrigger>
+                                                <Avatar cursor='pointer' src={userInformation.profilePicture} name={`${userInformation.name} ${userInformation.fatherSurname}`} />
+                                            </PopoverTrigger>
+                                            <PopoverContent>
+                                                <PopoverArrow />
+                                                <PopoverCloseButton />
+                                                <PopoverBody width='xs'>
+                                                    <VStack alignItems='flex-start' p={2}>
+                                                        <Button
+                                                            variant='link'
+                                                            colorScheme='black'
+                                                            onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                        >Mi perfil</Button>
+                                                        <Divider my={2} />
+                                                        <Button
+                                                            variant='link'
+                                                            colorScheme='black'
+                                                            onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                        >Mis compras</Button>
+                                                        <Divider my={2} />
+                                                        <Button
+                                                            variant='link'
+                                                            colorScheme='red'
+                                                            onClick={onLogout}
+                                                        >Cerrar sesión</Button>
+                                                    </VStack>
+                                                </PopoverBody>
+                                            </PopoverContent>
+                                        </Popover>
                                         <Button
                                             leftIcon={<FiShoppingCart />} color='white'
                                             variant='ghost'
@@ -154,14 +182,40 @@ export const Navbar: FC = (): JSX.Element => {
                                         </Button>
                                     ))
                                 }
-                                <Button
-                                    leftIcon={<FiUser />}
-                                    w="full"
-                                    colorScheme='blue'
-                                    onClick={() => onRoute('/login')}
-                                >
-                                    Iniciar sesión
-                                </Button>
+                                <Accordion allowToggle width='100%' rounded='lg'>
+                                    <AccordionItem>
+                                        <AccordionButton rounded='lg' justifyContent='center'>
+                                            <HStack>
+                                                <Icon as={FiUser} />
+                                                <Text fontWeight={600}>
+                                                    Mi perfil
+                                                </Text>
+                                                <AccordionIcon />
+                                            </HStack>
+                                        </AccordionButton>
+                                        <AccordionPanel pb={4} width='inherit'>
+                                            <VStack alignItems='center' p={2}>
+                                                <Button
+                                                    variant='link'
+                                                    colorScheme='black'
+                                                    onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                >Mi perfil</Button>
+                                                <Divider my={2} />
+                                                <Button
+                                                    variant='link'
+                                                    colorScheme='black'
+                                                    onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                >Mis compras</Button>
+                                                <Divider my={2} />
+                                                <Button
+                                                    variant='link'
+                                                    colorScheme='red'
+                                                    onClick={onLogout}
+                                                >Cerrar sesión</Button>
+                                            </VStack>
+                                        </AccordionPanel>
+                                    </AccordionItem>
+                                </Accordion>
                                 <Button
                                     leftIcon={<FiShoppingCart />}
                                     w="full"
@@ -178,3 +232,5 @@ export const Navbar: FC = (): JSX.Element => {
         </>
     );
 };
+
+export default LoggedUserNavbar;
