@@ -34,7 +34,7 @@ export const loginWithProvider = async ({ providers }: Providers): Promise<UserC
 
 export const sendEmail = async ({ name, email, message }: ContactInputs): Promise<DocumentReference<DocumentData> | undefined> => {
     const emailContent = {
-        to: import.meta.env.MODE === 'DEVELOPMENT' ? import.meta.env.VITE_TO_DEV_EMAIL : import.meta.env.VITE_TO_PROD_EMAIL,
+        to: import.meta.env.DEV ? import.meta.env.VITE_TO_DEV_EMAIL :  import.meta.env.VITE_TO_PROD_EMAIL,
         message: {
             subject: 'Nuevo mensaje de cliente - Xochicalli Commerce',
             text: message,
