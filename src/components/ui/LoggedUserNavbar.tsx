@@ -4,9 +4,9 @@ import {
     Accordion, AccordionButton, AccordionIcon, Icon, AccordionItem, AccordionPanel,
     Avatar, Box, Button, CloseButton, Divider, Flex, HStack, IconButton, Image, Link,
     Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger,
-    Text, useDisclosure, useMediaQuery, VStack
+    Text, useDisclosure, useMediaQuery, VStack, PopoverHeader
 } from "@chakra-ui/react";
-import { FiBox, FiMenu, FiShoppingCart, FiUser, FiMessageSquare, FiMail } from "react-icons/fi";
+import { FiBox, FiMenu, FiShoppingCart, FiUser, FiMessageSquare, FiMail, FiLogOut } from "react-icons/fi";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 import { UserContext } from "@/context/auth";
@@ -104,8 +104,39 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
                                 !isLargerThan860
                                     ?
                                     <>
-                                        <Avatar src={userInformation.profilePicture} name={`${userInformation.name} ${userInformation.fatherSurname}`} />
-
+                                        <Popover placement="bottom-end">
+                                            <PopoverTrigger>
+                                                <Avatar cursor='pointer' src={userInformation.profilePicture} name={`${userInformation.name} ${userInformation.fatherSurname}`} />
+                                            </PopoverTrigger>
+                                            <PopoverContent>
+                                                <PopoverArrow />
+                                                <PopoverCloseButton />
+                                                <PopoverHeader noOfLines={1} fontWeight={700} fontSize={18}>
+                                                    {userInformation.name} {userInformation.fatherSurname} {userInformation.motherSurname}
+                                                </PopoverHeader>
+                                                <PopoverBody width='xs'>
+                                                    <VStack alignItems='flex-start' p={2}>
+                                                        <Button
+                                                            variant='link'
+                                                            colorScheme='black'
+                                                            onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                        >Mi perfil</Button>
+                                                        <Divider my={2} />
+                                                        <Button
+                                                            variant='link'
+                                                            colorScheme='black'
+                                                            onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                        >Mis compras</Button>
+                                                        <Divider my={2} />
+                                                        <Button
+                                                            leftIcon={<FiLogOut />}
+                                                            colorScheme='red'
+                                                            onClick={onLogout}
+                                                        >Cerrar sesión</Button>
+                                                    </VStack>
+                                                </PopoverBody>
+                                            </PopoverContent>
+                                        </Popover>
                                         <IconButton
                                             aria-label="Cart"
                                             color='white'
@@ -124,6 +155,9 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
                                             <PopoverContent>
                                                 <PopoverArrow />
                                                 <PopoverCloseButton />
+                                                <PopoverHeader noOfLines={1} fontWeight={700} fontSize={18}>
+                                                    {userInformation.name} {userInformation.fatherSurname} {userInformation.motherSurname}
+                                                </PopoverHeader>
                                                 <PopoverBody width='xs'>
                                                     <VStack alignItems='flex-start' p={2}>
                                                         <Button
@@ -139,7 +173,7 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
                                                         >Mis compras</Button>
                                                         <Divider my={2} />
                                                         <Button
-                                                            variant='link'
+                                                            leftIcon={<FiLogOut />}
                                                             colorScheme='red'
                                                             onClick={onLogout}
                                                         >Cerrar sesión</Button>
@@ -193,7 +227,7 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
                                                 <AccordionIcon />
                                             </HStack>
                                         </AccordionButton>
-                                        <AccordionPanel pb={4} width='inherit'>
+                                        <AccordionPanel pb={0} width='inherit'>
                                             <VStack alignItems='center' p={2}>
                                                 <Button
                                                     variant='link'
