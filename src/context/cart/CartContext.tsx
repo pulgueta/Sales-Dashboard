@@ -1,5 +1,10 @@
-export const CartContext = () => {
-  return (
-    <div>CartContext</div>
-  )
-}
+import { createContext } from 'react';
+
+import { CartContextType } from '@/types';
+
+export const CartContext = createContext<CartContextType>({
+  cart: [],
+  addToCart: () => { },
+  removeFromCart: () => { },
+  clearCart: () => { },
+})

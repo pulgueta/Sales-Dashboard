@@ -86,6 +86,7 @@ export const updateInformation = async (values: PersonalDataProps, uid: string):
 export const loginWithEmail = async (email: string, password: string): Promise<User> => {
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
+        localStorage.setItem('uid', user.uid)
         return user
     } catch (error) {
         if (error instanceof FirebaseError) {
@@ -100,6 +101,7 @@ export const signUpWithEmail = async (email: string, password: string,
     { birthday, fatherSurname, gender, motherSurname, name, phoneNumber, securitySelect, securityQuestion }: RegisterUserInfo): Promise<User | undefined> => {
     try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
+        localStorage.setItem('uid', user.uid)
 
         let parsedDate: string = '';
         let age: number | null = null;

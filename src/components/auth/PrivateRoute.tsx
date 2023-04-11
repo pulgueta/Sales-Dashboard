@@ -8,11 +8,10 @@ export const PrivateRoute: FC<PrivateRouteProps> = ({ children }) => {
 
     const { user } = useContext(UserContext)
 
-    return (
-        user
-            ?
-            <>{children}</>
-            :
-            <Navigate to='/login' replace />
-    )
+    const uid = localStorage.getItem('uid') || ''
+
+    if (!user && uid === '')
+        return <Navigate to='/login' />
+
+    return <>{children}</>
 }

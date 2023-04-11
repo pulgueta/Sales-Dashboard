@@ -1,7 +1,16 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
+
+import { ProductInformation } from '@/interfaces';
 
 export type ContextProps = {
     children: ReactNode;
+}
+
+export type CartContextType = {
+    cart: ProductInformation[];
+    addToCart: (item: ProductInformation) => void;
+    removeFromCart: (id: string) => void;
+    clearCart: () => void;
 }
 
 export type PrivateRouteProps = {
