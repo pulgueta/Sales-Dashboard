@@ -1,13 +1,16 @@
 import { FC, lazy, useContext } from "react"
 
 import { UserContext } from "@/context/auth"
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const Login = lazy(() => import('@/pages/auth/Login'))
+const Register = lazy(() => import('@/pages/auth/Signup'))
 
 const LoggedUserRedirect: FC = (): JSX.Element => {
 
     const { user, userRole } = useContext(UserContext)
+
+    const { pathname } = useLocation()
 
     if (user && userRole) {
         if (userRole === 'user') return <Navigate to={`/user/profile/${user?.uid}`} replace />
@@ -15,7 +18,8 @@ const LoggedUserRedirect: FC = (): JSX.Element => {
         if (userRole === 'moderator') return <Navigate to='/moderator/' replace />
     }
 
-    return <Login />
+    return pathname === '/signup' ? <Register /> : <Login />
+
 }
 
 export default LoggedUserRedirect

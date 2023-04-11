@@ -1,6 +1,9 @@
 import { FC, lazy, useContext, useState } from 'react'
 
-import { VStack, Text, Box, InputGroup, InputLeftAddon, Input, Heading, Button, FormControl, FormErrorMessage } from '@chakra-ui/react'
+import {
+    VStack, Text, Box, InputGroup, InputLeftAddon, Input, Heading, Button, FormControl, FormErrorMessage,
+    // HStack, PinInput, PinInputField
+} from '@chakra-ui/react'
 import { Helmet } from 'react-helmet-async'
 import { FiPhone } from 'react-icons/fi'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -116,6 +119,14 @@ const UserProfile: FC = (): JSX.Element => {
                                 <>
                                     <Heading textAlign='center'>Código SMS</Heading>
                                     <Text textAlign='center' my={4}>Ingresa el código que hemos enviado a tu celular</Text>
+                                    {/* <HStack>
+                                        <PinInput otp type='number' onChange={({ target }) => setOtpValue(target.value)}>
+                                            <PinInputField />
+                                            <PinInputField />
+                                            <PinInputField />
+                                            <PinInputField />
+                                        </PinInput>
+                                    </HStack> */}
                                     <VStack justifyContent='center' gap={6} my={4}>
                                         <Input
                                             type='number'

@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useContext } from 'react'
+import { FC, lazy, useContext } from 'react'
 
 import { Routes, Route, Outlet } from 'react-router-dom'
 
@@ -8,7 +8,6 @@ import { Dashboard } from '@/pages/admin/dashboard'
 import { UserContext } from '@/context/auth'
 import { PrivateRoute } from '@/components/auth'
 import { Navbar } from '@/components'
-import { Spinner } from '@/components/loading'
 
 // Lazy load components
 const LoggedUserRedirect = lazy(() => import('@/components/auth/LoggedUserRedirect'))
@@ -19,6 +18,7 @@ const LoggedUserNavbar = lazy(() => import('./components/ui/LoggedUserNavbar'))
 const Home = lazy(() => import('@/pages/home/Home'))
 const Products = lazy(() => import('@/pages/products/Products'))
 const Product = lazy(() => import('@/pages/products/Product'))
+const Cart = lazy(() => import('@/pages/cart/Cart'))
 const Contact = lazy(() => import('@/pages/contact/Contact'))
 const PrivacyPolicy = lazy(() => import('@/pages/privacyPolicy/PrivacyPolicy'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
@@ -51,76 +51,75 @@ export const App: FC = (): JSX.Element => {
   return (
     <>
       <NavbarRenderer />
-      <Suspense fallback={<Spinner />}>
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path='/products' element={<Products />} />
-          <Route path='/products/:id' element={<Product />} />
-          <Route path='/contact' element={<Contact />} />
-          <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-          <Route path='/login' element={<LoggedUserRedirect />} />
-          <Route path='/signup' element={<LoggedUserRedirect />} />
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path='/products' element={<Products />} />
+        <Route path='/products/:id' element={<Product />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/contact' element={<Contact />} />
+        <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+        <Route path='/login' element={<LoggedUserRedirect />} />
+        <Route path='/signup' element={<LoggedUserRedirect />} />
 
-          <Route path='/user/profile' element={
+        <Route path='/user/profile' element={
+          <PrivateRoute allowedRoles='user'>
+            <Outlet />
+          </PrivateRoute>
+        }>
+          <Route path=':uid' element={
             <PrivateRoute allowedRoles='user'>
+              <UserProfile />
               <Outlet />
             </PrivateRoute>
-          }>
-            <Route path=':uid' element={
-              <PrivateRoute allowedRoles='user'>
-                <UserProfile />
-                <Outlet />
-              </PrivateRoute>
-            } />
-            <Route path=':uid/purchases' element={<UserInformation />} />
-            <Route path=':uid/information' element={<UserInformation />} />
-            <Route path=':uid/security' element={<UserInformation />} />
-            <Route path=':uid/cards' element={<UserInformation />} />
-            <Route path=':uid/address' element={<UserInformation />} />
-          </Route>
+          } />
+          <Route path=':uid/purchases' element={<UserInformation />} />
+          <Route path=':uid/information' element={<UserInformation />} />
+          <Route path=':uid/security' element={<UserInformation />} />
+          <Route path=':uid/cards' element={<UserInformation />} />
+          <Route path=':uid/address' element={<UserInformation />} />
+        </Route>
 
-          <Route path='/admin' element={
+        <Route path='/admin' element={
+          <PrivateRoute allowedRoles='admin'>
+            <Outlet />
+          </PrivateRoute>
+        }>
+          <Route path='backups' element={
             <PrivateRoute allowedRoles='admin'>
-              <Outlet />
+              <Backups />
             </PrivateRoute>
-          }>
-            <Route path='backups' element={
-              <PrivateRoute allowedRoles='admin'>
-                <Backups />
-              </PrivateRoute>
-            } />
-            <Route path='add' element={
-              <PrivateRoute allowedRoles='admin'>
-                <AddProduct />
-              </PrivateRoute>
-            } />
-            <Route path='dashboard' element={
-              <PrivateRoute allowedRoles='admin'>
-                <Dashboard />
-              </PrivateRoute>
-            } />
-            <Route path='products' element={
-              <PrivateRoute allowedRoles='admin'>
-                <AdminProducts />
-              </PrivateRoute>
-            } />
-            <Route path='products/:id' element={
-              <PrivateRoute allowedRoles='admin'>
-                <AdminProducts />
-              </PrivateRoute>
-            } />
-            <Route path='user' element={
-              <PrivateRoute allowedRoles='admin'>
-                <Users />
-              </PrivateRoute>
-            } />
+          } />
+          <Route path='add' element={
+            <PrivateRoute allowedRoles='admin'>
+              <AddProduct />
+            </PrivateRoute>
+          } />
+          <Route path='dashboard' element={
+            <PrivateRoute allowedRoles='admin'>
+              <Dashboard />
+            </PrivateRoute>
+          } />
+          <Route path='products' element={
+            <PrivateRoute allowedRoles='admin'>
+              <AdminProducts />
+            </PrivateRoute>
+          } />
+          <Route path='products/:id' element={
+            <PrivateRoute allowedRoles='admin'>
+              <AdminProducts />
+            </PrivateRoute>
+          } />
+          <Route path='user' element={
+            <PrivateRoute allowedRoles='admin'>
+              <Users />
+            </PrivateRoute>
+          } />
 
-            <Route path='/admin/' element={<NotFound />} />
-          </Route>
+          <Route path='/admin/' element={<NotFound />} />
+        </Route>
 
-          <Route path='*' element={<NotFound />} />
-        </Routes>
-      </Suspense>
+        <Route path='*' element={<NotFound />} />
+      </Routes>
       {(!user || (user && userRole === 'user')) && <WhatsAppButton />}
     </>
   )
