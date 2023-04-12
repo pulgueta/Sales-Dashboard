@@ -3,5 +3,4 @@ import { ProductInformation } from "@/interfaces";
 
 export * from './ProviderButtons';
 export * from './Navbar';
-export * from './DrawerCard'
 export const ProductCard: LazyExoticComponent<FC<ProductInformation>> = lazy(() => import('./products/ProductCard'))
