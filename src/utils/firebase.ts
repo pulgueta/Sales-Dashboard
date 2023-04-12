@@ -225,10 +225,11 @@ export const forgotPasswordWithEmail = async ({ email }: PasswordResetEmail): Pr
     }
 }
 
-export const logOut = async (): Promise<boolean | undefined> => {
+export const logOut = async (): Promise<void> => {
     try {
         await signOut(auth);
-        return true
+        localStorage.removeItem('uid')
+        window.location.reload()
     } catch (error) {
         console.error(error)
     }

@@ -109,7 +109,7 @@ export interface ProductInformation {
   price: number;
   description?: string;
   image: string;
-  category?: string;
+  category: string;
   sold?: number;
 }
 

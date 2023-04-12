@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useRef, useState } from 'react'
 
-import { Button, ButtonGroup, Center, Spinner, Heading, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Input, InputGroup, InputLeftAddon, InputRightAddon, GridItem, Grid } from '@chakra-ui/react'
+import { Button, ButtonGroup, Center, Spinner, Heading, Text, VStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Input, InputGroup, InputLeftAddon, InputRightAddon, GridItem, Grid, CheckboxGroup, Checkbox, Flex } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { FiArrowLeft, FiArrowRight, FiSearch, FiX } from 'react-icons/fi'
 import { Helmet } from 'react-helmet-async'
@@ -14,8 +14,16 @@ const Products: FC = (): JSX.Element => {
 
     const [query, setQuery] = useState<string>('')
     const searchInput = useRef<HTMLInputElement>(null)
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
-    const filteredProducts = products.filter(({ title }: ProductInformation) => title?.toLowerCase().includes(query.toLowerCase()))
+    const filteredProducts = products.filter(({ title, category }: ProductInformation) => {
+        const matchesQuery = title?.toLowerCase().includes(query.toLowerCase())
+        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(category)
+
+        return matchesQuery && matchesCategory
+    })
+
+    const handleCategoryChange = (categories: string[]) => setSelectedCategories(categories)
 
     const onSearchInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         const { value } = target
@@ -54,11 +62,20 @@ const Products: FC = (): JSX.Element => {
                         products.length !== 0
                             ?
                             <VStack gap={6}>
-                                <InputGroup width='sm'>
+                                <InputGroup width={['xs', 'sm']}>
                                     <InputLeftAddon bgColor='gray.200' children={<FiSearch />} />
                                     <Input ref={searchInput} type='text' onChange={onSearchInputChange} bgColor='white' placeholder='Planta...' />
                                     <InputRightAddon cursor='pointer' bgColor='gray.200' onClick={onClearInput} children={<FiX />} />
                                 </InputGroup>
+                                <CheckboxGroup colorScheme='green' onChange={handleCategoryChange}>
+                                    <Flex pl={[8, 8, 0]} direction={['column', 'column', 'row']} gap={4} justifyContent={['flex-start', 'flex-start', 'center']} w='100%'>
+                                        <Checkbox value='Macetas'>Macetas</Checkbox>
+                                        <Checkbox value='Abonos'>Abonos</Checkbox>
+                                        <Checkbox value='Plantas'>Plantas</Checkbox>
+                                        <Checkbox value='Fertilizantes'>Fertilizantes</Checkbox>
+                                        <Checkbox value='Herramientas'>Herramientas</Checkbox>
+                                    </Flex>
+                                </CheckboxGroup>
                                 <Grid height='100%' templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} templateRows="repeat(4, 1fr)" gap={6}>
                                     {filteredProducts && filteredProducts.map(({ category, description, id, image, price, title }: ProductInformation) => {
                                         return (
