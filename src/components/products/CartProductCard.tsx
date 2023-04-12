@@ -6,7 +6,7 @@ import { ProductInformation } from "@/interfaces"
 import { usePrice } from "@/hooks"
 import { FiTrash } from "react-icons/fi"
 
-const CartProductCard: FC<ProductInformation> = ({ image, price, title }): JSX.Element => {
+const CartProductCard: FC<ProductInformation> = ({ image, price, title, category }): JSX.Element => {
     const { newPrice } = usePrice(price)
 
 
@@ -17,6 +17,7 @@ const CartProductCard: FC<ProductInformation> = ({ image, price, title }): JSX.E
                 <Text fontSize='lg' fontWeight={600}>
                     {title}
                 </Text>
+                <Text>{category}</Text>
                 <Text fontSize='md' fontWeight='medium'>{newPrice}</Text>
                 <HStack mt={4} w='100%' justifyContent='space-between'>
                     <HStack gap={[0, 1]}>
