@@ -12,8 +12,7 @@ import * as yup from 'yup'
 
 import { enroll2FA, send2FA, verifyUserEnrolled } from '@/utils/firebase'
 import { UserContext } from '@/context/auth'
-// import { useCaptcha } from '@/hooks'
-
+import { useCaptcha } from '@/hooks'
 
 const UserHeaderCard = lazy(() => import('@/components/user/UserHeaderCard'));
 const UserInformationCards = lazy(() => import('@/components/user/UserInformationCards'));
@@ -26,9 +25,10 @@ const UserProfile: FC = (): JSX.Element => {
     const [otpCodeId, setOtpCodeId] = useState<string | undefined>()
     const [otpValue, setOtpValue] = useState('')
     const [otpView, setOtpView] = useState<boolean>(false)
+
     const { user, userInformation } = useContext(UserContext)
 
-    // const captcha = useCaptcha('mfa-button')
+    const captcha = useCaptcha('mfa-button')
 
     const isCompletedInformation = (): boolean => {
         if (
@@ -57,7 +57,7 @@ const UserProfile: FC = (): JSX.Element => {
     const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<PhoneNumber>({ resolver: yupResolver(validationSchema) });
 
     const onSubmit: SubmitHandler<PhoneNumber> = async (data) => {
-        const verificationId = await send2FA(user, `+57${data.phoneNumber}`, '')
+        const verificationId = await send2FA(user, `+57${data.phoneNumber}`, captcha)
 
         if (!verificationId) return
 

@@ -89,8 +89,8 @@ export const loginWithEmail = async (email: string, password: string): Promise<U
         localStorage.setItem('uid', user.uid)
         return user
     } catch (error) {
-        if (error instanceof FirebaseError) {
-            throw new Error(error.message)
+        if (error instanceof FirebaseError && error.code === 'auth/multi-factor-auth-required') {
+            
         }
 
         throw error
