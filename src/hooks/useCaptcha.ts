@@ -21,5 +21,4 @@ export const useCaptcha = (compId: string) => {
     }, [compId])
 
     return captcha;
-
 }

@@ -93,7 +93,8 @@ const UserProfile: FC = (): JSX.Element => {
                                                 <InputGroup>
                                                     <InputLeftAddon bgColor='blue.400' children={<FiPhone color='white' />} />
                                                     <Input
-                                                        type='number'
+                                                        type='tel'
+                                                        inputMode='tel'
                                                         width='40'
                                                         {...register('phoneNumber')}
                                                     />
