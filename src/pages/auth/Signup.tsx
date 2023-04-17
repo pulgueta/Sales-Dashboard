@@ -113,7 +113,7 @@ const Signup: FC = (): JSX.Element => {
                 isClosable: false,
                 title: 'Registro',
                 position: isLargerThan800 ? 'top-right' : 'bottom',
-                description: `¡Hola, ${values.name}!`
+                description: `¡Hola, ${values.name}! Revisa tu email para verificar la cuenta.`
             })
             reset()
             navigate(`/user/profile/${user?.uid}`)
