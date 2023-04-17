@@ -1,5 +1,3 @@
-import { RefObject } from "react"
-
 import { FirebaseError } from "firebase/app"
 import {
     User, UserCredential, FacebookAuthProvider, GoogleAuthProvider, PhoneAuthProvider, PhoneMultiFactorGenerator,
