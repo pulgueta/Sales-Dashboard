@@ -2,7 +2,9 @@ import { RefObject } from "react"
 
 import { FirebaseError } from "firebase/app"
 import {
-    User, UserCredential, FacebookAuthProvider, GoogleAuthProvider, PhoneAuthProvider, PhoneMultiFactorGenerator, multiFactor, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword,
+    User, UserCredential, FacebookAuthProvider, GoogleAuthProvider, PhoneAuthProvider, PhoneMultiFactorGenerator,
+    multiFactor, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup,
+    signOut, updatePassword, MultiFactorError, ApplicationVerifier, getMultiFactorResolver, MultiFactorResolver, sendEmailVerification
 } from 'firebase/auth'
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where, WhereFilterOp } from "firebase/firestore"
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
@@ -34,7 +36,7 @@ export const loginWithProvider = async ({ providers }: Providers): Promise<UserC
 
 export const sendEmail = async ({ name, email, message }: ContactInputs): Promise<DocumentReference<DocumentData> | undefined> => {
     const emailContent = {
-        to: import.meta.env.DEV ? import.meta.env.VITE_TO_DEV_EMAIL :  import.meta.env.VITE_TO_PROD_EMAIL,
+        to: import.meta.env.DEV ? import.meta.env.VITE_TO_DEV_EMAIL : import.meta.env.VITE_TO_PROD_EMAIL,
         message: {
             subject: 'Nuevo mensaje de cliente - Xochicalli Commerce',
             text: message,
@@ -53,15 +55,17 @@ export const sendEmail = async ({ name, email, message }: ContactInputs): Promis
 }
 
 export const updateInformation = async (values: PersonalDataProps, uid: string): Promise<void> => {
+    const { name, fatherSurname, motherSurname } = values
+
     try {
         const userRef = doc(db, `/users/${uid}`)
 
-        let parsedDate: string = '';
+        let birthday: string = '';
 
         if (values.birthday) {
             const stringDate = new Date(values.birthday);
             if (!isNaN(stringDate.getTime())) {
-                parsedDate = stringDate.toLocaleDateString('en-US', {
+                birthday = stringDate.toLocaleDateString('en-US', {
                     month: '2-digit',
                     day: '2-digit',
                     year: 'numeric'
@@ -72,10 +76,10 @@ export const updateInformation = async (values: PersonalDataProps, uid: string):
         }
 
         return await updateDoc(userRef, {
-            name: values.name,
-            fatherSurname: values.fatherSurname,
-            motherSurname: values.motherSurname,
-            birthday: parsedDate,
+            name,
+            fatherSurname,
+            motherSurname,
+            birthday,
         })
 
     } catch (error) {
@@ -87,12 +91,9 @@ export const loginWithEmail = async (email: string, password: string): Promise<U
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
         localStorage.setItem('uid', user.uid)
+
         return user
     } catch (error) {
-        if (error instanceof FirebaseError) {
-            throw new Error(error.message)
-        }
-
         throw error
     }
 }
@@ -124,6 +125,8 @@ export const signUpWithEmail = async (email: string, password: string,
                 throw new Error('Invalid date format');
             }
         }
+
+        auth.currentUser && await sendEmailVerification(auth.currentUser)
 
         await setDoc(doc(db, 'users', user.uid), {
             age,
@@ -160,6 +163,45 @@ export const signUpWithEmail = async (email: string, password: string,
     }
 }
 
+export const updateProfilePicture = async (fileRef: File, uid: string): Promise<string | null | false> => {
+    try {
+        const imgRef = ref(storage, `profilePictures/${uid}`);
+        const imgUpload = uploadBytesResumable(imgRef, fileRef);
+
+        const url = await new Promise<string>((resolve, reject) => {
+            imgUpload.on("state_changed", ({ state }) => {
+                switch (state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                    default:
+                        break;
+                }
+            }, (err) => {
+                reject(err);
+            }, async () => {
+                try {
+                    const url = await getDownloadURL(imgUpload.snapshot.ref);
+
+                    await updateDoc(doc(db, 'users', uid), { profilePicture: url })
+
+                    resolve(url);
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        });
+
+        return url; // Return the URL
+    } catch (error) {
+        console.error(error);
+        return null; // Return null instead of throwing an error
+    }
+}
+
 export const verifyUserEnrolled = (user: User): boolean => multiFactor(user).enrolledFactors.length > 0
 
 export const send2FA = async (user: any, phoneNumber: string, verifier: any): Promise<string | undefined> => {
@@ -188,7 +230,35 @@ export const enroll2FA = async (user: any, verificationCodeId: any, verification
         console.log(e);
         return false
     }
+}
 
+export const verifyUserMFA = async (error: MultiFactorError, recaptchaVerifier: ApplicationVerifier, index: number): Promise<FirebaseError | {
+    verificationId: string;
+    resolver: MultiFactorResolver;
+} | undefined> => {
+    const resolver = getMultiFactorResolver(auth, error)
+
+    if (resolver.hints[index].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
+        const phoneOptions = {
+            multitactorHint: resolver.hints[index],
+            session: resolver.session
+        }
+
+        const phAuthProvider = new PhoneAuthProvider(auth);
+
+        try {
+            const verificationId = await phAuthProvider.verifyPhoneNumber(phoneOptions, recaptchaVerifier)
+
+            return {
+                verificationId,
+                resolver
+            }
+        } catch (e) {
+            if (e instanceof FirebaseError) {
+                return e
+            }
+        }
+    }
 }
 
 export const forgotPasswordWithQuestion = async ({ email, securityQuestion, securitySelect, newPassword }: PasswordResetQuestion): Promise<boolean> => {
@@ -201,16 +271,21 @@ export const forgotPasswordWithQuestion = async ({ email, securityQuestion, secu
     const users = docs.map((doc) => doc.data())
 
     for (const user of users) {
-        if (currentUser && user.email === email && user.securityQuestion === securityQuestion && user.securitySelect === securitySelect) {
-            flag = true
-            await updatePassword(currentUser, newPassword)
+        if (user.email === email && user.securityQuestion === securityQuestion && user.securitySelect.toLowerCase() === securitySelect.toLowerCase()) {
+            try {
+                currentUser && await updatePassword(currentUser, newPassword).then(() => console.log('worked')).catch((e) => console.log(e))
+                flag = true
+            } catch (error) {
+                console.error(error)
+                throw new Error('Failed to update password')
+            }
         }
     }
 
     if (flag) {
         return true
     } else {
-        return true
+        return false
     }
 }
 
@@ -278,7 +353,7 @@ export const getProduct = async (collectionName: string, id: string) => {
     }
 }
 
-export const uploadImage = async (fileRef: RefObject<HTMLInputElement>): Promise<string | null> => {
+export const uploadImage = async (fileRef: any): Promise<string | null> => {
     try {
         const file = fileRef.current?.files?.[0] ?? new Blob();
         const fileName = file?.name;
@@ -320,7 +395,6 @@ export const uploadImage = async (fileRef: RefObject<HTMLInputElement>): Promise
         return null; // Return null instead of throwing an error
     }
 }
-
 
 export const getProductsWithQuery = async (collectionName: string, operator: WhereFilterOp, desired: string, info: string) => {
     const q = query(collection(db, collectionName), where(desired, operator, info));

@@ -7,11 +7,17 @@ import { ProductInformation } from '@/interfaces';
 export const CartProvider: FC<ContextProps> = ({ children }) => {
   const [cart, setCart] = useState<ProductInformation[]>([]);
 
-  const addToCart = (product: ProductInformation) => setCart((prevCart) => [...prevCart, product]);
+  const addToCart = (product: ProductInformation) => {
+    setCart((prevCart) => [...prevCart, product]);
+    localStorage.setItem('cart', JSON.stringify(cart))
+  }
 
   const removeFromCart = (id: string) => setCart((prevCart) => prevCart.filter((item) => item.id !== id));
 
-  const clearCart = () => setCart([]);
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem('cart')
+  }
 
   return (
     <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>

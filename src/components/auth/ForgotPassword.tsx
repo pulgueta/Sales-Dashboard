@@ -62,6 +62,12 @@ export const ForgotPassword: FC = (): JSX.Element => {
 
     const onSubmitQuestion: SubmitHandler<PasswordResetQuestion> = async ({ email, securityQuestion = securityQ, securitySelect, newPassword }: PasswordResetQuestion) => {
         await forgotPasswordWithQuestion({ email, securityQuestion, securitySelect, newPassword }).then(() => {
+            console.log({
+                email,
+                securityQuestion,
+                securitySelect,
+                newPassword
+            })
             toast({
                 status: 'success',
                 duration: 1500,
