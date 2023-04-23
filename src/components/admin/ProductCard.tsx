@@ -8,7 +8,6 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
 import { FiTrash } from 'react-icons/fi';
-import { LazyLoadComponent } from 'react-lazy-load-image-component';
 
 import { deleteProduct } from '@/utils';
 import { usePrice } from '@/hooks';
@@ -37,7 +36,6 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
     return (
         <>
             <Card maxW={['xs', 'sm']} borderRadius='xl'>
-                <LazyLoadComponent>
                     <CardBody>
                         <Image
                             src={image}
@@ -64,7 +62,6 @@ const ProductCard: FC<ProductInformation> = ({ image, title, description, price,
                             <Text fontSize='xl' fontWeight='medium'>{newPrice}</Text>
                         </HStack>
                     </CardBody>
-                </LazyLoadComponent>
             </Card>
             <AlertDialog
                 isOpen={isOpen}
