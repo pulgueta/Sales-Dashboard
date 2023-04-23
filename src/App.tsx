@@ -2,14 +2,12 @@ import { FC, lazy, useContext } from 'react'
 
 import { Routes, Route, Outlet } from 'react-router-dom'
 
-import { Navbar as AdminNavbar } from '@/components/admin'
-import { AddProduct } from '@/pages/admin/addProduct'
-import { Dashboard } from '@/pages/admin/dashboard'
 import { UserContext } from '@/context/auth'
 import { PrivateRoute } from '@/components/auth'
 import { Navbar } from '@/components'
 
 // Lazy load components
+const AdminNavbar = lazy(() => import('@/components/admin/Navbar'))
 const LoggedUserRedirect = lazy(() => import('@/components/auth/LoggedUserRedirect'))
 const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
 const LoggedUserNavbar = lazy(() => import('./components/ui/LoggedUserNavbar'))
@@ -28,6 +26,8 @@ const UserProfile = lazy(() => import('@/pages/user/UserProfile'))
 const UserInformation = lazy(() => import('@/pages/user/UserInformation'))
 
 // Admin routes
+const AddProduct = lazy(() => import('@/pages/admin/addProduct/AddProduct'))
+const Dashboard = lazy(() => import('@/pages/admin/dashboard/Dashboard'))
 const AdminProducts = lazy(() => import('@/pages/admin/products/Products'))
 const Users = lazy(() => import('@/pages/admin/users/Users'))
 const Backups = lazy(() => import('@/pages/admin/backups/Backups'))
