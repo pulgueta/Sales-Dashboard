@@ -5,7 +5,7 @@ import { CartesianGrid, XAxis, YAxis, LineChart, Tooltip, ResponsiveContainer, L
 
 const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 100, pv: 1400, amt: 1400 }];
 
-export const Dashboard: FC = (): JSX.Element => {
+const Dashboard: FC = (): JSX.Element => {
 
   return (
     <Stack minHeight='calc(100vh - 115px)' bgColor='gray.200'>
@@ -24,3 +24,5 @@ export const Dashboard: FC = (): JSX.Element => {
     </Stack>
   )
 }
+
+export default Dashboard;
