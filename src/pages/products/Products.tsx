@@ -78,14 +78,14 @@ const Products: FC = (): JSX.Element => {
     }
 
     return (
-        <VStack minH='calc(100vh - 101px)' bgColor='gray.100' p={4}>
+        <VStack minH='calc(100vh - 64px)' bgColor='gray.100' p={4}>
             <Helmet>
                 <title>Productos</title>
             </Helmet>
             <Heading mt={4}>
                 Products
             </Heading>
-            <Breadcrumb py={2} pb={4}>
+            <Breadcrumb pt={2} pb={4}>
                 <BreadcrumbItem>
                     <BreadcrumbLink as={Link} to='/'>Inicio</BreadcrumbLink>
                 </BreadcrumbItem>
@@ -93,13 +93,10 @@ const Products: FC = (): JSX.Element => {
                     <BreadcrumbLink as={Link} to='/products' isCurrentPage>Productos</BreadcrumbLink>
                 </BreadcrumbItem>
             </Breadcrumb>
-            <Center>
+            <Center py={8}>
                 {
-                    loading
-                        ?
-                        <Spinner size='xl' mt={4} />
-                        :
-                        products.length !== 0
+                    loading ? <Spinner size='xl' mt={4} />
+                        : products.length !== 0
                             ?
                             <VStack gap={6}>
                                 <VStack width={['xs', 'md']} gap={2}>
@@ -149,8 +146,7 @@ const Products: FC = (): JSX.Element => {
                                     )
                                 } */}
                             </VStack >
-                            :
-                            <Text fontWeight='medium'>No hay productos 😓</Text>
+                            : <Text fontWeight='medium'>No hay productos 😓</Text>
                 }
             </Center>
         </VStack>
