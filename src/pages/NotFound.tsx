@@ -10,7 +10,7 @@ const NotFound: FC = (): JSX.Element => {
     const handleGoBack = () => navigate('/')
 
     return (
-        <VStack minH='calc(100vh - 101px)' bgColor='gray.200' justifyContent='center' gap={4}>
+        <VStack minH='calc(100vh - 72px)' bgColor='gray.200' justifyContent='center' gap={4}>
             <Helmet>
                 <title>404</title>
             </Helmet>
