@@ -1,11 +1,10 @@
-import { FC, lazy } from 'react'
+import { FC, useState } from 'react'
 
-import { Box, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
-import ImageSlider from 'react-simple-image-slider';
+import { Box, Center, CloseButton, Heading, HStack, Link, Stack, Text, VStack } from '@chakra-ui/react'
+import { Link as RLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-
-const Footer = lazy(() => import('@/components/Footer'))
-const PrivacyPolicyBanner = lazy(() => import('@/components/ui/PrivacyPolicyBanner'))
+import ImageSlider from 'react-simple-image-slider';
+import { motion } from 'framer-motion';
 
 const images = [
     {
@@ -36,9 +35,7 @@ const images = [
 
 const Home: FC = (): JSX.Element => {
 
-    // const [closeBanner, setCloseBanner] = useState<boolean>(true)
-
-    const closeBanner = true
+    const [closeBanner, setCloseBanner] = useState<boolean>(true)
 
     return (
         <Box overflowX='hidden'>
@@ -59,8 +56,41 @@ const Home: FC = (): JSX.Element => {
                     </VStack>
                 </Center>
             </HStack>
-            <PrivacyPolicyBanner show={closeBanner} />
-            <Footer />
+            {
+                closeBanner &&
+                <Box bg="green.500" color="white" as={motion.div}
+                    initial={{
+                        y: 100,
+                        opacity: 0
+                    }}
+                    animate={{
+                        transition: {
+                            duration: 1.05,
+                            ease: 'easeInOut',
+                        },
+                        y: 0,
+                        opacity: 1,
+                        filter: 'blur'
+                    }}
+                    p={{ base: '4', md: '3' }} py={{ base: '3', md: '5' }}
+                    position="fixed" bottom={2} left={['5%', '12.5%']}
+                    width={['90vw', '75vw']} borderRadius="xl" zIndex={999}
+                >
+                    <Stack
+                        direction={{ base: 'column', md: 'row' }}
+                        justify="center"
+                        spacing={{ base: '0.5', md: '1.5' }}
+                        pe={{ base: '4', sm: '0' }}
+                        textAlign='center'
+                    >
+                        <Text fontWeight="medium">Al usar nuestra tienda, estás aceptando nuestras políticas de privacidad.</Text>
+                        <Text color="on-accent-muted">
+                            <Link as={RLink} to='/privacy-policy'>Ir a nuestras políticas de privacidad</Link>
+                        </Text>
+                    </Stack>
+                    <CloseButton onClick={() => setCloseBanner(!closeBanner)} position="absolute" right="2" top={{ base: '2', md: '4' }} />
+                </Box>
+            }
         </Box>
     )
 }

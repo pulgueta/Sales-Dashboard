@@ -11,6 +11,7 @@ const AdminNavbar = lazy(() => import('@/components/admin/Navbar'))
 const LoggedUserRedirect = lazy(() => import('@/components/auth/LoggedUserRedirect'))
 const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
 const LoggedUserNavbar = lazy(() => import('./components/ui/LoggedUserNavbar'))
+const Footer = lazy(() => import('@/components/Footer'))
 
 // Public routes
 const Home = lazy(() => import('@/pages/home/Home'))
@@ -121,6 +122,7 @@ export const App: FC = (): JSX.Element => {
         <Route path='*' element={<NotFound />} />
       </Routes>
       {(!user || (user && userRole === 'user')) && <WhatsAppButton />}
+      {(!user || (user && userRole === 'user')) && <Footer />}
     </>
   )
 }
