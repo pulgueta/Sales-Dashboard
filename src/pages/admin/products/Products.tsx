@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async'
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
 import { ProductCardSkeleton } from '@/components/skeleton'
-import { ProductInformation } from '@/interfaces'
+import { Product } from '@/interfaces'
 import { useProducts } from '@/hooks'
 
 const ProductCard = lazy(() => import('@/components/admin/ProductCard'))
@@ -31,7 +31,7 @@ const Products: FC = (): JSX.Element => {
                             ?
                             <VStack gap={6}>
                                 <HStack wrap='wrap' gap={6} justifyContent='center'>
-                                    {products.slice(more - 3, more).map(({ category, description, id, image, price, title }: ProductInformation) => {
+                                    {products.slice(more - 3, more).map(({ category, description, id, image, price, title }: Product) => {
                                         return (
                                             <GridItem key={id}>
                                                 <ProductCard
@@ -41,6 +41,7 @@ const Products: FC = (): JSX.Element => {
                                                     image={image}
                                                     price={price}
                                                     title={title}
+                                                    quantity={1}
                                                 />
                                             </GridItem>
                                         )

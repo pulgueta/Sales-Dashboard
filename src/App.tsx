@@ -1,6 +1,6 @@
 import { FC, lazy, useContext } from 'react'
 
-import { Routes, Route, Outlet } from 'react-router-dom'
+import { Routes, Route, Outlet, useLocation } from 'react-router-dom'
 
 import { UserContext } from '@/context/auth'
 import { PrivateRoute } from '@/components/auth'
@@ -46,8 +46,9 @@ const NavbarRenderer: FC = (): JSX.Element => {
 }
 
 export const App: FC = (): JSX.Element => {
-
   const { user, userRole } = useContext(UserContext)
+
+  const { pathname } = useLocation()
 
   return (
     <>
@@ -122,7 +123,7 @@ export const App: FC = (): JSX.Element => {
         <Route path='*' element={<NotFound />} />
       </Routes>
       {(!user || (user && userRole === 'user')) && <WhatsAppButton />}
-      {(!user || (user && userRole === 'user')) && <Footer />}
+      {((pathname !== '/login' && pathname !== '/signup')) && <Footer />}
     </>
   )
 }

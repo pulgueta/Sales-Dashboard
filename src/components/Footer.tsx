@@ -46,7 +46,7 @@ const Footer: FC = (): JSX.Element => (
                     </ButtonGroup>
                 </HStack>
             </Stack>
-            <HStack justifyContent='center' alignItems='center' gap={2}>
+            <Stack direction={['column', 'row']} justifyContent='center' alignItems='center' gap={2}>
                 <Text fontSize="sm" color="subtle" textAlign='center'>
                     &copy; {new Date().getFullYear()} Xochicalli Tienda. Todos los derechos reservados.
                 </Text>
@@ -55,7 +55,7 @@ const Footer: FC = (): JSX.Element => (
                     <SiMastercard fontSize='24' />
                     <SiAmericanexpress fontSize='24' />
                 </Center>
-            </HStack>
+            </Stack>
         </Stack>
     </Stack>
 )

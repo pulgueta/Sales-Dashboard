@@ -8,7 +8,7 @@ import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, ge
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { v4 } from 'uuid'
 
-import { auth, db, storage } from "@/firebase"
+import { auth, db, storage, currentUser } from "@/firebase"
 import { ContactInputs, Inputs, PasswordResetEmail, PasswordResetQuestion, PersonalDataProps, RegisterUserInfo } from "@/interfaces"
 import { Providers } from "@/types"
 
@@ -124,7 +124,7 @@ export const signUpWithEmail = async (email: string, password: string,
             }
         }
 
-        auth.currentUser && await sendEmailVerification(auth.currentUser)
+        currentUser && await sendEmailVerification(currentUser)
 
         await setDoc(doc(db, 'users', user.uid), {
             age,
@@ -202,7 +202,7 @@ export const updateProfilePicture = async (fileRef: File, uid: string): Promise<
 
 export const verifyUserEnrolled = (user: User): boolean => multiFactor(user).enrolledFactors.length > 0
 
-export const send2FA = async (user: any, phoneNumber: string, verifier: any): Promise<string | undefined> => {
+export const send2FA = async (user: User, phoneNumber: string, verifier: any): Promise<string | undefined> => {
     const session = await multiFactor(user).getSession();
     const phoneOptions = {
         phoneNumber,
@@ -218,7 +218,7 @@ export const send2FA = async (user: any, phoneNumber: string, verifier: any): Pr
     }
 }
 
-export const enroll2FA = async (user: any, verificationCodeId: any, verificationCode: string): Promise<void | false> => {
+export const enroll2FA = async (user: User, verificationCodeId: any, verificationCode: string): Promise<void | false> => {
     const phoneAuthCred = PhoneAuthProvider.credential(verificationCodeId, verificationCode)
     const mfaAssertion = PhoneMultiFactorGenerator.assertion(phoneAuthCred)
 
@@ -263,7 +263,6 @@ export const forgotPasswordWithQuestion = async ({ email, securityQuestion, secu
 
     let flag = false
 
-    const currentUser = auth.currentUser;
     const { docs } = await getDocs(collection(db, 'users'))
 
     const users = docs.map((doc) => doc.data())
@@ -312,13 +311,11 @@ export const queryUser = async (uid: any): Promise<DocumentData | undefined> => 
     try {
         const queriedUser = await getDoc(doc(db, 'users', uid))
 
-        return queriedUser.data()
+        return queriedUser && queriedUser.data()
     } catch (error) {
         if (error instanceof FirebaseError) {
             throw new Error(error.message)
         }
-
-        throw error
     }
 }
 
@@ -333,25 +330,26 @@ export const getProducts = async (): Promise<{ id: string; }[] | undefined> => {
 
         return products
     } catch (error) {
-        console.error(error)
+        if (error instanceof FirebaseError) {
+            throw new Error(error.message)
+        }
     }
 }
 
-export const getProduct = async (collectionName: string, id: string) => {
+export const getProduct = async (collectionName: string, id: string): Promise<false | DocumentData | undefined> => {
     try {
         const docRef = doc(db, collectionName, id);
         const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            console.log(docSnap.data());
-            return docSnap.data()
-        }
+        return docSnap.exists() && { ...docSnap.data(), id: docSnap.id }
     } catch (error) {
-        console.error(error)
+        if (error instanceof FirebaseError) {
+            throw new Error(error.message)
+        }
     }
 }
 
-export const uploadImage = async (fileRef: any): Promise<string | null> => {
+export const uploadImage = async (fileRef: any): Promise<string | undefined | null> => {
     try {
         const file = fileRef.current?.files?.[0] ?? new Blob();
         const fileName = file?.name;
@@ -389,8 +387,9 @@ export const uploadImage = async (fileRef: any): Promise<string | null> => {
 
         return url; // Return the URL
     } catch (error) {
-        console.error(error);
-        return null; // Return null instead of throwing an error
+        if (error instanceof FirebaseError) {
+            throw new Error(error.message)
+        }
     }
 }
 
@@ -415,9 +414,9 @@ export const getProductsWithQuery = async (collectionName: string, operator: Whe
 
 
 
-export const addProduct = async ({ title, description, price, category, stock }: Inputs, image: string | null): Promise<DocumentReference<DocumentData> | undefined> => {
+export const addProduct = async ({ title, description, price, category, stock }: Inputs, image: string | null): Promise<void | undefined> => {
     try {
-        const product = await addDoc(collection(db, 'products'), {
+        const prevProduct = await addDoc(collection(db, 'products'), {
             category,
             description,
             image,
@@ -426,6 +425,8 @@ export const addProduct = async ({ title, description, price, category, stock }:
             stock: Number(stock),
             title,
         })
+
+        const product = await setDoc(doc(db, 'products', prevProduct.id), { id: prevProduct.id }, { merge: true })
 
         return product
     } catch (error) {

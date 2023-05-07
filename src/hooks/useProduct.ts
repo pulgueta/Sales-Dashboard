@@ -1,24 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-import { getProduct } from "@/utils";
+import { getProduct } from '@/utils';
+import { Product } from '@/interfaces';
 
-export const useProduct = (id: any) => {
+export const useProduct = (id: string) => {
     const [loading, setLoading] = useState<boolean>(true)
-    const [product, setProduct] = useState<any>([{
-        id: '',
-        title: '',
-        price: 0,
-        description: '',
-        image: '',
-        category: '',
-    }])
+    const [product, setProductData] = useState<Product>()
 
     useEffect(() => {
         const fetchProduct = async () => {
             setLoading(true)
-            const data = await getProduct('red', id)
-            console.log(data);
-            setProduct(data)
+            const data = await getProduct('products', id)
+            setProductData(data as Product)
             setLoading(false)
         }
 

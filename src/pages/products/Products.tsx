@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useRef, useState } from 'react'
+import { FC, lazy, Suspense } from 'react'
 
 import {
     Center, Spinner, Heading, Text, VStack, Breadcrumb, BreadcrumbItem,
@@ -9,73 +9,15 @@ import { Link } from 'react-router-dom'
 import { FiSearch, FiX } from 'react-icons/fi'
 import { Helmet } from 'react-helmet-async'
 
-import { ProductCard } from '@/components'
-import { ProductInformation } from '@/interfaces'
-import { useProducts } from '@/hooks'
+import { useFilter, useProducts } from '@/hooks'
+import { Spinner as LazySpinner } from '@/components/loading'
+
+const ProductCard = lazy(() => import('@/components/products/ProductCard'))
 
 const Products: FC = (): JSX.Element => {
     const { loading, products } = useProducts();
 
-    const [query, setQuery] = useState<string>('')
-    const searchInput = useRef<HTMLInputElement>(null)
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-    const [sortOption, setSortOption] = useState<string>('');
-
-    const filteredProducts = products.filter(({ title, category }: ProductInformation) => {
-        const matchesQuery = title?.toLowerCase().includes(query.toLowerCase());
-        const matchesCategory =
-            selectedCategories.length === 0 ||
-            selectedCategories.includes(category);
-
-        return matchesQuery && matchesCategory;
-    });
-
-    const handleSortChange = ({ target }: ChangeEvent<HTMLSelectElement>) => setSortOption(target.value);
-
-    let sortedProducts = filteredProducts;
-
-    switch (sortOption) {
-        case 'asc':
-            sortedProducts = filteredProducts.sort((a: any, b: any) => a.price - b.price);
-
-            break;
-
-        case 'desc':
-            sortedProducts = filteredProducts.sort((a: any, b: any) => b.price - a.price);
-
-            break;
-
-        case 'title':
-            sortedProducts = filteredProducts.sort((a: any, b: any) =>
-                a.title.localeCompare(b.title)
-            );
-
-            break;
-
-        case 'category':
-            sortedProducts = filteredProducts.sort((a: any, b: any) =>
-                a.category.localeCompare(b.category)
-            );
-
-            break;
-
-        default:
-            break;
-    }
-
-    const handleCategoryChange = (categories: string[]) => setSelectedCategories(categories)
-
-    const onSearchInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        const { value } = target
-        setQuery(value);
-    };
-
-    const onClearInput = () => {
-        if (searchInput.current) {
-            searchInput.current.value = ''
-            setQuery('')
-        }
-    }
+    const { searchInput, sortedProducts, handleCategoryChange, onClearInput, onSearchInputChange, handleSortChange } = useFilter();
 
     return (
         <VStack minH='calc(100vh - 64px)' bgColor='gray.100' p={4}>
@@ -83,9 +25,9 @@ const Products: FC = (): JSX.Element => {
                 <title>Productos</title>
             </Helmet>
             <Heading mt={4}>
-                Products
+                Productos
             </Heading>
-            <Breadcrumb pt={2} pb={4}>
+            <Breadcrumb py={2}>
                 <BreadcrumbItem>
                     <BreadcrumbLink as={Link} to='/'>Inicio</BreadcrumbLink>
                 </BreadcrumbItem>
@@ -93,7 +35,7 @@ const Products: FC = (): JSX.Element => {
                     <BreadcrumbLink as={Link} to='/products' isCurrentPage>Productos</BreadcrumbLink>
                 </BreadcrumbItem>
             </Breadcrumb>
-            <Center py={8}>
+            <Center pt={4} pb={8}>
                 {
                     loading ? <Spinner size='xl' mt={4} />
                         : products.length !== 0
@@ -122,29 +64,24 @@ const Products: FC = (): JSX.Element => {
                                     </Select>
                                 </VStack>
                                 <Grid height='100%' templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} templateRows="repeat(4, 1fr)" gap={6}>
-                                    {sortedProducts && sortedProducts.map(({ category, description, id, image, price, title }: ProductInformation) => {
+                                    {sortedProducts && sortedProducts.map(({ category, description, id, image, price, title, stock }) => {
                                         return (
-                                            <GridItem key={id}>
-                                                <ProductCard
-                                                    id={id}
-                                                    category={category}
-                                                    description={description}
-                                                    image={image}
-                                                    price={price}
-                                                    title={title}
-                                                />
-                                            </GridItem>
-                                        );
+                                            <Suspense key={id} fallback={<LazySpinner />}>
+                                                <GridItem>
+                                                    <ProductCard
+                                                        id={id}
+                                                        category={category}
+                                                        description={description}
+                                                        image={image}
+                                                        price={price}
+                                                        title={title}
+                                                        stock={stock}
+                                                    />
+                                                </GridItem>
+                                            </Suspense>
+                                        )
                                     })}
                                 </Grid>
-                                {/* {
-                                    products.length >= 6 && (
-                                        <ButtonGroup mt={8}>
-                                            <Button onClick={handlePrevProd} colorScheme='blue' leftIcon={<FiArrowLeft size='0.75em' />}>Anterior</Button>
-                                            <Button onClick={handleNextProd} colorScheme='green' rightIcon={<FiArrowRight size='0.75em' />}>Siguiente</Button>
-                                        </ButtonGroup>
-                                    )
-                                } */}
                             </VStack >
                             : <Text fontWeight='medium'>No hay productos 😓</Text>
                 }

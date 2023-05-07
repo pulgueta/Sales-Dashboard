@@ -1,3 +1,2 @@
-import { FC, lazy, LazyExoticComponent } from "react";
-
-export const ProductCardSkeleton: LazyExoticComponent<FC> = lazy(() => import('./ProductCardSkeleton'))
+export { default as ProductCardSkeleton } from './ProductCardSkeleton';
+export { default as ProductSkeleton } from './ProductSkeleton';

@@ -11,9 +11,9 @@ import { FiTrash } from 'react-icons/fi';
 
 import { deleteProduct } from '@/utils';
 import { usePrice } from '@/hooks';
-import { ProductInformation } from '@/interfaces';
+import { Product } from '@/interfaces';
 
-const ProductCard: FC<ProductInformation> = ({ image, title, description, price, category, id }): JSX.Element => {
+const ProductCard: FC<Product> = ({ image, title, description, price, category, id }): JSX.Element => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const cancelRef = useRef<any>()

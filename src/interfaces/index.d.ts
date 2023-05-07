@@ -103,14 +103,24 @@ export interface UserContextProps {
   userInformation: DocumentData | undefined;
 }
 
-export interface ProductInformation {
-  id: string;
-  title?: string;
-  price: number;
+export interface Product {
   description?: string;
   image: string;
   category: string;
+  title: string;
+  price: number;
   sold?: number;
+  stock?: number;
+  id: string;
+}
+
+export interface CartProduct {
+  image: string;
+  category: string;
+  title: string;
+  price: number;
+  id: string;
+  quantity: number;
 }
 
 export interface RatingProps {
