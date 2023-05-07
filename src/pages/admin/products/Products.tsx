@@ -41,7 +41,6 @@ const Products: FC = (): JSX.Element => {
                                                     image={image}
                                                     price={price}
                                                     title={title}
-                                                    quantity={1}
                                                 />
                                             </GridItem>
                                         )
