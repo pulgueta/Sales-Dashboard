@@ -8,4 +8,3 @@ Proyecto realizado con las siguientes principales tecnologías:
 * Firebase (BaaS - PaaS - DB)
 * Vite (TypeScript + SWC)
 * Github Actions (Firebase Hosting)
-* Vitest (TDD)

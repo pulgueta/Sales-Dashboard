@@ -43,8 +43,6 @@ const Backups: FC = (): JSX.Element => {
     }, []);
 
     useEffect(() => {
-
-
         backupsUpdate()
     }, [clicked, backupsUpdate])
 

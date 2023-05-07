@@ -119,14 +119,15 @@ export const Navbar: FC = (): JSX.Element => {
                                         >
                                             Iniciar sesión
                                         </Button>
-                                        <Button
-                                            leftIcon={<FiShoppingCart />} color='white'
+                                        <IconButton
+                                            aria-label='cart'
+                                            icon={<FiShoppingCart />} color='white'
                                             variant='ghost'
                                             _hover={{ bg: 'gray.200', color: 'gray.800' }}
                                             onClick={() => navigate('/cart')}
                                         >
                                             Carrito
-                                        </Button>
+                                        </IconButton>
                                     </>
                             }
                         </HStack>

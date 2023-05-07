@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 export const usePrice = (price: number) => {
     const newPrice: string = useMemo(() => {

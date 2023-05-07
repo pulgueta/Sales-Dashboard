@@ -58,7 +58,7 @@ const Contact: FC = (): JSX.Element => {
     }
 
     return (
-        <VStack minH='calc(100vh - 101px)' bgColor='gray.100' p={4}>
+        <VStack minH='calc(100vh - 72px)' bgColor='gray.100' p={4}>
             <Helmet>
                 <title>Contacto</title>
             </Helmet>
