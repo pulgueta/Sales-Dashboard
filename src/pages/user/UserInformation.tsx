@@ -1,13 +1,13 @@
-import { FC, lazy, useContext, useRef, RefObject, ChangeEvent } from "react"
+import { FC, lazy, useContext, useRef, RefObject, ChangeEvent } from 'react'
 
-import { Avatar, Heading, IconButton, Tooltip, VStack, useToast, useMediaQuery } from "@chakra-ui/react"
-import { Helmet } from "react-helmet-async";
-import { FiUpload } from "react-icons/fi"
+import { Avatar, Heading, IconButton, Tooltip, VStack, useToast, useMediaQuery } from '@chakra-ui/react'
+import { Helmet } from 'react-helmet-async';
+import { FiUpload } from 'react-icons/fi'
 
-import { UserContext } from "@/context/auth"
-import { updateProfilePicture } from "@/utils";
+import { UserContext } from '@/context'
+import { updateProfilePicture } from '@/utils';
 
-const UserPersonalData = lazy(() => import("@/components/user/UserPersonalData"));
+const UserPersonalData = lazy(() => import('@/components/user/UserPersonalData'));
 
 const UserInformation: FC = (): JSX.Element => {
 
