@@ -1,11 +1,10 @@
-import { FC, useContext } from 'react'
+import { FC, useContext, useEffect } from 'react'
 
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Center, Box, Image, VStack, Heading, Stack, Text, Button, Tag, useToast, useMediaQuery } from '@chakra-ui/react';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Center, Box, Image, VStack, Heading, Stack, Text, Button, Tag, useToast, useMediaQuery, IconButton } from '@chakra-ui/react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiArrowLeft, FiShoppingCart } from 'react-icons/fi';
 
-import { CartContext } from '@/context/cart';
-import { UserContext } from '@/context/auth';
+import { CartContext, UserContext } from '@/context';
 import { usePrice, useProduct } from '@/hooks';
 import { ProductSkeleton } from '@/components/skeleton';
 import { Helmet } from 'react-helmet-async';
@@ -24,7 +23,6 @@ const Product: FC = (): JSX.Element => {
 
     const { product, loading } = useProduct(id as string);
     const { newPrice } = usePrice(product?.price as number)
-
 
     const addItemToCart = () => {
         if (!user || uid === '') {
@@ -50,12 +48,19 @@ const Product: FC = (): JSX.Element => {
         }
     }
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
     return (
         <Box minH='calc(100vh - 72px)' bgColor='gray.100' p={4}>
             <Helmet>
-                <title>{product && product.title}</title>
+                <title>{`Producto: ${product?.title === undefined ? 'Cargando...' : product.title}`}</title>
             </Helmet>
-            <Breadcrumb pt={2} pb={6} ml={[0, 0, 16, 32]}>
+            <Breadcrumb pt={2} pb={6} ml={[0, 0, 16, 24]}>
+                <BreadcrumbItem>
+                    <IconButton aria-label='back' icon={<FiArrowLeft />} onClick={() => navigate(-1)} />
+                </BreadcrumbItem>
                 <BreadcrumbItem>
                     <BreadcrumbLink as={Link} to='/'>Inicio</BreadcrumbLink>
                 </BreadcrumbItem>
@@ -69,9 +74,10 @@ const Product: FC = (): JSX.Element => {
             <Center>
                 <Box bgColor='white' p={4} borderRadius='lg'>
                     {
-                        loading ? <ProductSkeleton />
+                        loading
+                            ? <ProductSkeleton />
                             : <Stack direction={['column', 'column', 'row']} gap={[4, 4, 8, 16]} width={[350, 'md', '2xl', '4xl', '6xl']} height='100%'>
-                                <Box mx='auto' width={[350, 'full', 1600, 1366]} height={500} bgColor='white' borderRadius='lg' objectFit='cover' boxShadow='base'>
+                                <Box mx='auto' width={[350, 'full', 1600, 1366]} height='full' bgColor='white' borderRadius='lg' objectFit='cover' boxShadow='base'>
                                     <Image
                                         src={product?.image} alt={product?.title}
                                         width={[350, 'full', 1600, 1366]}
@@ -80,7 +86,7 @@ const Product: FC = (): JSX.Element => {
                                         borderRadius='lg' loading='lazy'
                                     />
                                 </Box>
-                                <VStack height='100%' justifyContent='space-between' boxShadow='base' py={2} px={6} borderRadius='lg'>
+                                <VStack justifyContent='space-between' boxShadow='base' py={2} px={6} borderRadius='lg' minHeight='full'>
                                     <Box>
                                         <Heading textShadow='base' textAlign='center' py={4}>{product?.title}</Heading>
                                         <Tag mb={4}>Categoría: {product?.category}</Tag>
@@ -99,7 +105,7 @@ const Product: FC = (): JSX.Element => {
                                             onClick={addItemToCart}
                                             leftIcon={<FiShoppingCart />}
                                             colorScheme='purple'
-                                            isDisabled={Boolean(product?.stock && product.stock < 1)}
+                                            isDisabled={!product?.stock}
                                             variant={product?.stock && product.stock > 1 ? 'solid' : 'outline'}
                                             size={['md', 'md', 'lg']}
                                         >Añadir al carrito</Button>

@@ -2,7 +2,7 @@ import { FC, lazy, useContext } from 'react'
 
 import { Routes, Route, Outlet, useLocation } from 'react-router-dom'
 
-import { UserContext } from '@/context/auth'
+import { UserContext } from '@/context'
 import { PrivateRoute } from '@/components/auth'
 import { Navbar } from '@/components'
 

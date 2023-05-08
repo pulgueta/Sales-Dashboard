@@ -1,6 +1,6 @@
 import { FC, lazy, useContext } from "react"
 
-import { UserContext } from "@/context/auth"
+import { UserContext } from "@/context"
 import { Navigate, useLocation } from "react-router-dom";
 
 const Login = lazy(() => import('@/pages/auth/Login'))

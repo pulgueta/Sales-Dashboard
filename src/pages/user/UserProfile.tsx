@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet-async'
 // import * as yup from 'yup'
 
 // import { enroll2FA, verifyUserEnrolled } from '@/utils/firebase'
-import { UserContext } from '@/context/auth'
+import { UserContext } from '@/context'
 // import { useCaptcha } from '@/hooks'
 
 const UserHeaderCard = lazy(() => import('@/components/user/UserHeaderCard'));
