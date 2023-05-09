@@ -6,36 +6,32 @@ import { auth, currentUser, db } from "@/firebase";
 import { Providers } from "@/types";
 import { PasswordResetEmail, PasswordResetQuestion, RegisterUserInfo } from "@/interfaces";
 
-export const loginWithProvider = async ({ providers }: Providers): Promise<UserCredential | FirebaseError> => {
+export const loginWithProvider = async ({ providers }: Providers): Promise<UserCredential | undefined> => {
     try {
         switch (providers) {
             case 'Google':
                 const googleProvider = new GoogleAuthProvider()
-                const googleUser = await signInWithPopup(auth, googleProvider)
 
-                return googleUser;
+                return await signInWithPopup(auth, googleProvider)
 
             case 'Facebook':
                 const facebookProvider = new FacebookAuthProvider()
-                const facebookUser = await signInWithPopup(auth, facebookProvider)
 
-                return facebookUser;
+                return await signInWithPopup(auth, facebookProvider)
         }
-
-        return {} as UserCredential
     } catch (error) {
-        return error as FirebaseError
+        if (error instanceof FirebaseError) throw Error
     }
 }
 
-export const loginWithEmail = async (email: string, password: string): Promise<User | FirebaseError> => {
+export const loginWithEmail = async (email: string, password: string): Promise<User | undefined> => {
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
         localStorage.setItem('uid', user.uid)
 
         return user
     } catch (error) {
-        return error as FirebaseError;
+        if (error instanceof FirebaseError) throw Error
     }
 }
 
@@ -91,7 +87,7 @@ export const signUpWithEmail = async (email: string, password: string,
         })
 
         await sendEmailVerification(auth.currentUser as User)
-        
+
         localStorage.setItem('uid', user.uid)
         return user
     } catch (error) {

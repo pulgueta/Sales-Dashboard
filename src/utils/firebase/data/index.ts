@@ -76,13 +76,13 @@ export const updateProfilePicture = async (fileRef: File, uid: string): Promise<
     }
 }
 
-export const queryUser = async (uid: string): Promise<DocumentData | undefined | FirebaseError> => {
+export const queryUser = async (uid: string): Promise<DocumentData | undefined> => {
     try {
         const queriedUser = await getDoc(doc(db, 'users', uid))
 
         return queriedUser && queriedUser.data()
     } catch (error) {
-        return error as FirebaseError
+        if (error instanceof FirebaseError) throw error
     }
 }
 

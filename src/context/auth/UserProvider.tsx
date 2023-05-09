@@ -32,7 +32,7 @@ export const UserProvider: FC<ContextProps> = ({ children }) => {
 
   useEffect(() => {
     const getUserRole = async () => {
-      const userData = await queryUser(user?.uid)
+      const userData = await queryUser(user?.uid as string)
       if (userData && userData.role) {
         setUserInformation(userData as UserInformation)
         setUserRole(userData.role)
