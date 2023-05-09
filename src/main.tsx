@@ -11,6 +11,8 @@ import { CartProvider } from '@/context/cart'
 import { ErrorBoundaryComponent, ErrorBoundary } from '@/components/errors'
 import { Spinner } from '@/components/loading'
 
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <ChakraProvider>

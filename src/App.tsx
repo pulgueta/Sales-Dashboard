@@ -10,7 +10,8 @@ import { Navbar } from '@/components'
 const AdminNavbar = lazy(() => import('@/components/admin/Navbar'))
 const LoggedUserRedirect = lazy(() => import('@/components/auth/LoggedUserRedirect'))
 const WhatsAppButton = lazy(() => import('@/components/WhatsAppButton'))
-const LoggedUserNavbar = lazy(() => import('./components/ui/LoggedUserNavbar'))
+const LoggedUserNavbar = lazy(() => import('@/components/ui/LoggedUserNavbar'))
+const ModNavbar = lazy(() => import('@/components/ui/ModNavbar'))
 const Footer = lazy(() => import('@/components/Footer'))
 
 // Public routes
@@ -39,7 +40,7 @@ const NavbarRenderer: FC = (): JSX.Element => {
   if (user) {
     if (userRole === 'admin') return <AdminNavbar isUser={user} />
     if (userRole === 'user') return <LoggedUserNavbar />
-    // if (userRole === 'moderator') return <ModNavbar />
+    if (userRole === 'moderator') return <ModNavbar />
   }
 
   return <Navbar />

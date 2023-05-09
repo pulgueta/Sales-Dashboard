@@ -86,7 +86,6 @@ export const ProviderButtons: FC = (): JSX.Element => {
                     break;
                 case 'Twitter':
                     const twitterUser = await loginWithProvider({ providers: 'Twitter' })
-
                     toast({
                         status: 'success',
                         duration: 1500,

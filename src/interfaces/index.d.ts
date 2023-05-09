@@ -61,7 +61,7 @@ export interface UserInformation {
   createdAt: string;
   securitySelect: string;
   name: string;
-  address: null;
+  address: string | null;
   email: string;
   profilePicture: string;
   uid: string;
@@ -70,6 +70,15 @@ export interface UserInformation {
   motherSurname: string;
 }
 
+export interface CommentInfo {
+  name:  string;
+  fatherSurname: string;
+  avatar: string;
+  comment: string;
+  rating?: number;
+  createdAt: string;
+  id: string;
+}
 
 export interface RegisterUserInfo {
   gender: string;

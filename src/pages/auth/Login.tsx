@@ -41,7 +41,6 @@ const Login: FC = (): JSX.Element => {
     const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<LoginInputs>({ resolver: yupResolver(validationSchema) });
 
     const onSubmit: SubmitHandler<LoginInputs> = async (values: LoginInputs) => {
-
         try {
             await loginWithEmail(values.email, values.password)
             toast({

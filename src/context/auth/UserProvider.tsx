@@ -6,18 +6,35 @@ import { ContextProps } from '@/types';
 import { auth } from '@/firebase';
 import { UserContext } from "."
 import { queryUser } from '@/utils';
-import { DocumentData } from 'firebase/firestore';
+import { UserInformation } from '@/interfaces';
 
 export const UserProvider: FC<ContextProps> = ({ children }) => {
   const [userRole, setUserRole] = useState<string>('')
   const [user, setUser] = useState<User | null>(null);
-  const [userInformation, setUserInformation] = useState<DocumentData | undefined>()
+  const [userInformation, setUserInformation] = useState<UserInformation>({
+    gender: '',
+    fatherSurname: '',
+    age: 0,
+    securityQuestion: '',
+    birthday: '',
+    role: '',
+    createdAt: '',
+    securitySelect: '',
+    name: '',
+    address: null,
+    email: '',
+    profilePicture: '',
+    uid: '',
+    cards: {},
+    phoneNumber: '',
+    motherSurname: '',
+  })
 
   useEffect(() => {
     const getUserRole = async () => {
-      const userData = await queryUser(user?.uid)
+      const userData = await queryUser(user?.uid as string)
       if (userData && userData.role) {
-        setUserInformation(userData)
+        setUserInformation(userData as UserInformation)
         setUserRole(userData.role)
       }
     }
