@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react'
 
-import { Button, ButtonGroup, Card, CardBody, Divider, Heading, HStack, Image, Stack, Tag, Text, useMediaQuery, useToast } from '@chakra-ui/react'
+import { Button, ButtonGroup, Card, CardBody, Divider, Heading, HStack, Stack, Tag, Text, useMediaQuery, useToast } from '@chakra-ui/react'
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useNavigate } from 'react-router-dom';
 import { FiShoppingCart } from 'react-icons/fi';
 
@@ -48,16 +49,18 @@ const ProductCard: FC<Product> = (product): JSX.Element => {
     }
 
     return (
-        <Card maxW={['xs', 'sm']} h='485px' borderRadius='xl'>
+        <Card maxW={['xs', 'sm']} h='490px' borderRadius='xl'>
             <CardBody>
-                <Image
+                <LazyLoadImage
                     src={product.image}
                     alt={`${product.title}-${product.id}`}
-                    objectFit='cover'
-                    loading='lazy'
-                    height={256}
-                    width={512}
-                    borderRadius='lg'
+                    effect='blur'
+                    style={{
+                        borderRadius: '8px',
+                        objectFit: 'cover',
+                        height: '256px',
+                        width: '512px',
+                    }}
                 />
                 <Stack spacing='3' my='3'>
                     <HStack alignItems='center' justifyContent='space-between'>

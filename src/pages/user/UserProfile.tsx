@@ -78,87 +78,86 @@ const UserProfile: FC = (): JSX.Element => {
                 <title>Perfil de usuario</title>
             </Helmet>
             {
-                (user && user?.emailVerified)
-                &&
-                // <Box bgColor='white' borderRadius='lg' py={4} px={6} id='mfa'>
-                //     {
-                //         !otpView
-                //             ?
-                //             <>
-                //                 <Heading textAlign='center'>Activar 2FA</Heading>
-                //                 <Text my={4}>Ingresa tu número de teléfono para activar la autenticación por 2 factores (SMS)</Text>
-                //                 {/* <form onSubmit={handleSubmit(onSubmit)}>
-                //                     <FormControl isInvalid={!!errors.phoneNumber} display='flex' flexDir='column' alignItems='center'>
-                //                         <Box width='max-content' mx='auto'>
-                //                             <InputGroup>
-                //                                 <InputLeftAddon bgColor='blue.400' children={<FiPhone color='white' />} />
-                //                                 <Input
-                //                                     type='tel'
-                //                                     inputMode='tel'
-                //                                     width='40'
-                //                                     {...register('phoneNumber')}
-                //                                 />
-                //                             </InputGroup>
-                //                         </Box>
-                //                         {errors.phoneNumber && <FormErrorMessage textAlign='center'>{errors.phoneNumber.message}</FormErrorMessage>}
-                //                     </FormControl>
-                //                     <Button
-                //                         type='submit'
-                //                         mt={8}
-                //                         mb={2}
-                //                         id='mfa-button'
-                //                         width='100%'
-                //                         colorScheme='blue'
-                //                         isLoading={isSubmitting}
-                //                         loadingText='Enviando mensaje...'
-                //                     >
-                //                         Enviar SMS
-                //                     </Button>
-                //                 </form> */}
-                //             </>
-                //             :
-                //             <>
-                //                 <Heading textAlign='center'>Código SMS</Heading>
-                //                 <Text textAlign='center' my={4}>Ingresa el código que hemos enviado a tu celular</Text>
-                //                 {/* <HStack>
-                //                     <PinInput otp type='number' onChange={({ target }) => setOtpValue(target.value)}>
-                //                         <PinInputField />
-                //                         <PinInputField />
-                //                         <PinInputField />
-                //                         <PinInputField />
-                //                     </PinInput>
-                //                 </HStack> */}
-                //                 {/* <VStack justifyContent='center' gap={6} my={4}>
-                //                     <Input
-                //                         type='number'
-                //                         inputMode='numeric'
-                //                         maxLength={6}
-                //                         w={24}
-                //                         textAlign='center'
-                //                         fontWeight={600}
-                //                         value={otpValue}
-                //                         onChange={({ target }) => setOtpValue(target.value)}
-                //                     />
-                //                     <Button onClick={validateOTP} colorScheme='green'>Validar código</Button>
-                //                 </VStack> */}
-                //             </>
-                //     }
-                // </Box>
-
-                <>
-                    <Heading mt={4} mb={6}>Tu perfil</Heading>
-                    <VStack gap={6}>
-                        <UserHeaderCard
-                            createdAt={userInformation?.createdAt}
-                            imageURL={userInformation?.profilePicture}
-                            name={`${userInformation?.name} ${userInformation?.fatherSurname} ${userInformation?.motherSurname}`}
-                        />
-                        <UserInformationCards
-                            uid={user?.uid}
-                            hasCompletedInformation={isCompletedInformation}
-                        />
-                    </VStack>
-                </>
+                !user?.emailVerified
+                    ? <Heading>Revisa tu correo electrónico para activar tu cuenta</Heading>
+                    // <Box bgColor='white' borderRadius='lg' py={4} px={6} id='mfa'>
+                    //     {
+                    //         !otpView
+                    //             ?
+                    //             <>
+                    //                 <Heading textAlign='center'>Activar 2FA</Heading>
+                    //                 <Text my={4}>Ingresa tu número de teléfono para activar la autenticación por 2 factores (SMS)</Text>
+                    //                 {/* <form onSubmit={handleSubmit(onSubmit)}>
+                    //                     <FormControl isInvalid={!!errors.phoneNumber} display='flex' flexDir='column' alignItems='center'>
+                    //                         <Box width='max-content' mx='auto'>
+                    //                             <InputGroup>
+                    //                                 <InputLeftAddon bgColor='blue.400' children={<FiPhone color='white' />} />
+                    //                                 <Input
+                    //                                     type='tel'
+                    //                                     inputMode='tel'
+                    //                                     width='40'
+                    //                                     {...register('phoneNumber')}
+                    //                                 />
+                    //                             </InputGroup>
+                    //                         </Box>
+                    //                         {errors.phoneNumber && <FormErrorMessage textAlign='center'>{errors.phoneNumber.message}</FormErrorMessage>}
+                    //                     </FormControl>
+                    //                     <Button
+                    //                         type='submit'
+                    //                         mt={8}
+                    //                         mb={2}
+                    //                         id='mfa-button'
+                    //                         width='100%'
+                    //                         colorScheme='blue'
+                    //                         isLoading={isSubmitting}
+                    //                         loadingText='Enviando mensaje...'
+                    //                     >
+                    //                         Enviar SMS
+                    //                     </Button>
+                    //                 </form> */}
+                    //             </>
+                    //             :
+                    //             <>
+                    //                 <Heading textAlign='center'>Código SMS</Heading>
+                    //                 <Text textAlign='center' my={4}>Ingresa el código que hemos enviado a tu celular</Text>
+                    //                 {/* <HStack>
+                    //                     <PinInput otp type='number' onChange={({ target }) => setOtpValue(target.value)}>
+                    //                         <PinInputField />
+                    //                         <PinInputField />
+                    //                         <PinInputField />
+                    //                         <PinInputField />
+                    //                     </PinInput>
+                    //                 </HStack> */}
+                    //                 {/* <VStack justifyContent='center' gap={6} my={4}>
+                    //                     <Input
+                    //                         type='number'
+                    //                         inputMode='numeric'
+                    //                         maxLength={6}
+                    //                         w={24}
+                    //                         textAlign='center'
+                    //                         fontWeight={600}
+                    //                         value={otpValue}
+                    //                         onChange={({ target }) => setOtpValue(target.value)}
+                    //                     />
+                    //                     <Button onClick={validateOTP} colorScheme='green'>Validar código</Button>
+                    //                 </VStack> */}
+                    //             </>
+                    //     }
+                    // </Box>
+                    : <>
+                        <Heading mt={4} mb={6}>Tu perfil</Heading>
+                        <VStack gap={6}>
+                            <UserHeaderCard
+                                createdAt={userInformation?.createdAt}
+                                imageURL={userInformation?.profilePicture}
+                                name={`${userInformation?.name} ${userInformation?.fatherSurname} ${userInformation?.motherSurname}`}
+                            />
+                            <UserInformationCards
+                                uid={user?.uid}
+                                hasCompletedInformation={isCompletedInformation}
+                            />
+                        </VStack>
+                    </>
             }
         </VStack>
     )
