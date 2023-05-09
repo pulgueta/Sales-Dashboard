@@ -37,7 +37,7 @@ export const loginWithEmail = async (email: string, password: string): Promise<U
 
 export const signUpWithEmail = async (email: string, password: string,
     { birthday, fatherSurname, gender, motherSurname, name, phoneNumber, securitySelect, securityQuestion }: RegisterUserInfo
-): Promise<User | FirebaseError> => {
+): Promise<User | undefined> => {
     try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -91,7 +91,7 @@ export const signUpWithEmail = async (email: string, password: string,
         localStorage.setItem('uid', user.uid)
         return user
     } catch (error) {
-        return error as FirebaseError
+        if (error instanceof FirebaseError) throw Error
     }
 }
 
