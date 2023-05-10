@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useEffect } from 'react'
+import { FC, lazy, Suspense, useContext, useEffect } from 'react'
 
 import {
     Breadcrumb, BreadcrumbItem, BreadcrumbLink, Center, Box, VStack, Heading, Stack,
@@ -16,6 +16,7 @@ import { Comment } from '@/components/ui';
 import { useComments, useProduct } from '@/hooks';
 import { CommentInfo } from '@/interfaces';
 import { addComment } from '@/utils';
+import { UserContext } from '@/context';
 
 const ProductView = lazy(() => import('@/components/products/ProductView'));
 
@@ -26,11 +27,12 @@ const Product: FC = (): JSX.Element => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const { user, userInformation } = useContext(UserContext);
     const { product, loading } = useProduct(id as string);
 
     const { comments, loading: loadingComments } = useComments(product?.title as string);
 
-    const validationSchema = yup.object().shape({
+    const guestSchema = yup.object().shape({
         name: yup
             .string()
             .required('El nombre es requerido')
@@ -45,7 +47,16 @@ const Product: FC = (): JSX.Element => {
             .min(6, 'El comentario debe tener mínimo 6 caracteres'),
     });
 
-    const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<CommentInfo>({ resolver: yupResolver(validationSchema) });
+    const userSchema = yup.object().shape({
+        comment: yup
+            .string()
+            .required('El comentario es requerido')
+            .min(6, 'El comentario debe tener mínimo 6 caracteres'),
+    });
+
+    const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<CommentInfo>({
+        resolver: yupResolver(user ? userSchema : guestSchema)
+    });
 
     const onSubmit: SubmitHandler<CommentInfo> = async (values) => {
         try {
@@ -58,7 +69,9 @@ const Product: FC = (): JSX.Element => {
                 description: 'Se ha añadido tu comentario'
             })
             reset()
-            await addComment(values, product?.title as string)
+            user
+                ? await addComment(values, product?.title as string)
+                : await addComment(values, product?.title as string)
         } catch ({ message }) {
             toast({
                 status: 'error',
@@ -138,28 +151,33 @@ const Product: FC = (): JSX.Element => {
                                                 width='75%' mx='auto'
                                             >
                                                 <Stack direction={['column', 'column', 'row']} width='full' justifyContent='space-between' gap={4}>
-                                                    <FormControl isInvalid={!!errors.name}>
-                                                        <FormLabel htmlFor='Nombre'>Nombre(s)</FormLabel>
-                                                        <Input
-                                                            placeholder='Nombre'
-                                                            id='name'
-                                                            type='text'
-                                                            maxLength={35}
-                                                            {...register('name')}
-                                                        />
-                                                        {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>}
-                                                    </FormControl>
-                                                    <FormControl isInvalid={!!errors.fatherSurname}>
-                                                        <FormLabel htmlFor='Apellido'>Apellido(s)</FormLabel>
-                                                        <Input
-                                                            placeholder='Apellido'
-                                                            id='fatherSurname'
-                                                            type='text'
-                                                            max={50}
-                                                            {...register('fatherSurname')}
-                                                        />
-                                                        {errors.fatherSurname && <FormErrorMessage>{errors.fatherSurname.message}</FormErrorMessage>}
-                                                    </FormControl>
+                                                    {
+                                                        (user === null || user === undefined) &&
+                                                        <>
+                                                            <FormControl isInvalid={!!errors.name}>
+                                                                <FormLabel htmlFor='Nombre'>Nombre(s)</FormLabel>
+                                                                <Input
+                                                                    placeholder='Nombre'
+                                                                    id='name'
+                                                                    type='text'
+                                                                    maxLength={35}
+                                                                    {...register('name')}
+                                                                />
+                                                                {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>}
+                                                            </FormControl>
+                                                            <FormControl isInvalid={!!errors.fatherSurname}>
+                                                                <FormLabel htmlFor='Apellido'>Apellido(s)</FormLabel>
+                                                                <Input
+                                                                    placeholder='Apellido'
+                                                                    id='fatherSurname'
+                                                                    type='text'
+                                                                    max={50}
+                                                                    {...register('fatherSurname')}
+                                                                />
+                                                                {errors.fatherSurname && <FormErrorMessage>{errors.fatherSurname.message}</FormErrorMessage>}
+                                                            </FormControl>
+                                                        </>
+                                                    }
                                                 </Stack>
                                                 <FormControl isInvalid={!!errors.comment}>
                                                     <FormLabel htmlFor='Comentario'>Comentario</FormLabel>
