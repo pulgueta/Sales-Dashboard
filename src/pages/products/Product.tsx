@@ -71,7 +71,7 @@ const Product: FC = (): JSX.Element => {
             reset()
             user
                 ? await addComment(values, product?.title as string)
-                : await addComment(values.comment, product?.title as string)
+                : await addComment(values, product?.title as string)
         } catch ({ message }) {
             toast({
                 status: 'error',
