@@ -112,12 +112,12 @@ export const getProduct = async (collectionName: string, id: string): Promise<fa
     }
 }
 
-export const addComment = async ({ comment, fatherSurname, name }: CommentInfo, product: string): Promise<void | FirebaseError> => {
+export const addComment = async (values: CommentInfo, product: string): Promise<void | FirebaseError> => {
     try {
         const prevComment = await addDoc(collection(db, 'comments'), {
-            comment,
-            fatherSurname,
-            name,
+            comment: values.comment,
+            fatherSurname: values.fatherSurname,
+            name: values.name,
             createdAt: new Date().toLocaleDateString('es-ES'),
             product,
         })
