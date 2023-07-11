@@ -147,3 +147,25 @@ export interface DeleteItems {
 export interface ActiveUser {
   isUser: User
 }
+
+export interface PaymentInformation {
+  name: string,
+  cardNumber: string,
+  expDate: string,
+  cvv: string,
+}
+
+export interface MXZip {
+  "post code":            string;
+  country:                string;
+  "country abbreviation": string;
+  places:                 Place[];
+}
+
+export interface Place {
+  "place name":         string;
+  longitude:            string;
+  state:                string;
+  "state abbreviation": string;
+  latitude:             string;
+}

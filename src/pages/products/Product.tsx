@@ -27,7 +27,7 @@ const Product: FC = (): JSX.Element => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const { user, userInformation } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const { product, loading } = useProduct(id as string);
 
     const { comments, loading: loadingComments } = useComments(product?.title as string);

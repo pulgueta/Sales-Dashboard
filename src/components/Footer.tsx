@@ -1,8 +1,7 @@
 import { FC } from 'react'
 
 import { ButtonGroup, Center, HStack, IconButton, Image, Stack, Text, } from '@chakra-ui/react'
-import { FaInstagram, FaFacebook, FaTwitter, } from 'react-icons/fa'
-import { SiMastercard, SiVisa, SiAmericanexpress } from 'react-icons/si'
+import { FacebookIcon, InstagramIcon, MasterCardLogo, TwitterIcon, VisaLogo } from './checkout'
 
 const Footer: FC = (): JSX.Element => (
     <Stack as="footer" role="contentinfo" py='4' minWidth='100%' bgColor='green.400'>
@@ -27,21 +26,21 @@ const Footer: FC = (): JSX.Element => (
                             target='_blank'
                             href="https://facebook.com/"
                             aria-label="Facebook"
-                            icon={<FaFacebook fontSize='18' />}
+                            icon={<FacebookIcon />}
                         />
                         <IconButton
                             as="a"
                             href="https://instagram.com/"
                             target='_blank'
                             aria-label="Instagram"
-                            icon={<FaInstagram fontSize='18' />}
+                            icon={<InstagramIcon />}
                         />
                         <IconButton
                             as="a"
                             href="https://twitter.com/"
                             target='_blank'
                             aria-label="Twitter"
-                            icon={<FaTwitter fontSize='18' />}
+                            icon={<TwitterIcon />}
                         />
                     </ButtonGroup>
                 </HStack>
@@ -51,9 +50,8 @@ const Footer: FC = (): JSX.Element => (
                     &copy; {new Date().getFullYear()} Xochicalli Tienda. Todos los derechos reservados.
                 </Text>
                 <Center gap={4}>
-                    <SiVisa fontSize='24' />
-                    <SiMastercard fontSize='24' />
-                    <SiAmericanexpress fontSize='24' />
+                    <VisaLogo />
+                    <MasterCardLogo />
                 </Center>
             </Stack>
         </Stack>
