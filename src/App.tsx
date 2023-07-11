@@ -1,8 +1,8 @@
 import { FC, lazy, useContext } from 'react'
 
-import { Routes, Route, Outlet, useLocation } from 'react-router-dom'
+import { Routes, Route, Outlet, useLocation, Navigate } from 'react-router-dom'
 
-import { UserContext } from '@/context'
+import { CartContext, UserContext } from '@/context'
 import { PrivateRoute } from '@/components/auth'
 import { Navbar } from '@/components'
 
@@ -22,6 +22,7 @@ const Cart = lazy(() => import('@/pages/cart/Cart'))
 const Contact = lazy(() => import('@/pages/contact/Contact'))
 const PrivacyPolicy = lazy(() => import('@/pages/privacyPolicy/PrivacyPolicy'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
+const Checkout = lazy(() => import('@/pages/checkout/Checkout'))
 
 // Normal user routes
 const UserProfile = lazy(() => import('@/pages/user/UserProfile'))
@@ -47,7 +48,7 @@ const NavbarRenderer: FC = (): JSX.Element => {
 }
 
 export const App: FC = (): JSX.Element => {
-  const { user, userRole } = useContext(UserContext)
+  const { cart } = useContext(CartContext)
 
   const { pathname } = useLocation()
 
@@ -59,6 +60,7 @@ export const App: FC = (): JSX.Element => {
         <Route path='/products' element={<Products />} />
         <Route path='/products/:id' element={<Product />} />
         <Route path='/cart' element={<Cart />} />
+        <Route path='/checkout' element={cart.length < 1 ? <Navigate to='/cart' /> : <Checkout />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />
         <Route path='/login' element={<LoggedUserRedirect />} />
@@ -123,8 +125,8 @@ export const App: FC = (): JSX.Element => {
 
         <Route path='*' element={<NotFound />} />
       </Routes>
-      {(!user || (user && userRole === 'user')) && <WhatsAppButton />}
-      {((pathname !== '/login' && pathname !== '/signup')) && <Footer />}
+      {(pathname !== '/checkout') && <WhatsAppButton />}
+      {((pathname !== '/login' && pathname !== '/signup' && pathname !== '/checkout')) && <Footer />}
     </>
   )
 }

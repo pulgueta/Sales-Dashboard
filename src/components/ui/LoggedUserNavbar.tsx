@@ -57,7 +57,7 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
     return (
         <>
             {
-                (isInLogin !== '/login' && isInLogin !== '/signup') &&
+                (isInLogin !== '/login' && isInLogin !== '/signup' && isInLogin !== '/checkout') &&
                 <Flex
                     as='nav'
                     alignItems="center"

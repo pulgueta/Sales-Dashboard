@@ -186,6 +186,7 @@ export const logOut = async (): Promise<void> => {
     try {
         await signOut(auth);
         localStorage.removeItem('uid')
+        localStorage.removeItem('cart')
         window.location.reload()
     } catch (error) {
         console.error(error)

@@ -124,7 +124,7 @@ const Signup: FC = (): JSX.Element => {
                 isClosable: false,
                 title: 'Error de registro',
                 position: isLargerThan800 ? 'bottom' : 'top-right',
-                description: message as string // Cast error to string
+                description: message as string
             })
         }
     }
