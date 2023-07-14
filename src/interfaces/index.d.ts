@@ -169,3 +169,8 @@ export interface Place {
   "state abbreviation": string;
   latitude:             string;
 }
+
+export interface BannerImages {
+  images: string[];
+  id:     string;
+}

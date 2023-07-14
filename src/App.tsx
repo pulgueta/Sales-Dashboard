@@ -27,6 +27,7 @@ const Checkout = lazy(() => import('@/pages/checkout/Checkout'))
 // Normal user routes
 const UserProfile = lazy(() => import('@/pages/user/UserProfile'))
 const UserInformation = lazy(() => import('@/pages/user/UserInformation'))
+const Security = lazy(() => import('@/pages/user/security/Security'))
 
 // Admin routes
 const AddProduct = lazy(() => import('@/pages/admin/addProduct/AddProduct'))
@@ -77,9 +78,9 @@ export const App: FC = (): JSX.Element => {
               <Outlet />
             </PrivateRoute>
           } />
-          <Route path=':uid/purchases' element={<UserInformation />} />
           <Route path=':uid/information' element={<UserInformation />} />
-          <Route path=':uid/security' element={<UserInformation />} />
+          <Route path=':uid/security' element={<Security />} />
+          <Route path=':uid/purchases' element={<UserInformation />} />
           <Route path=':uid/cards' element={<UserInformation />} />
           <Route path=':uid/address' element={<UserInformation />} />
         </Route>
