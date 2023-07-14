@@ -128,6 +128,19 @@ export const addComment = async (values: CommentInfo, product: string): Promise<
     }
 }
 
+export const queryData = async (col: string): Promise<any | FirebaseError> => {
+    try {
+        const { docs } = await getDocs(collection(db, col))
+
+        return docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id
+        }))
+    } catch (error) {
+        return error as FirebaseError
+    }
+}
+
 // export const getComments = async (product: string): Promise<CommentInfo[] | undefined> => {
 //     try {
 //         const commentsRef = collection(db, 'comments')

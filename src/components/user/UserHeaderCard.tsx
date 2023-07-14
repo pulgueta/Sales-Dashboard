@@ -6,7 +6,7 @@ import { UserHeaderCardProps } from "@/interfaces"
 
 const UserHeaderCard: FC<UserHeaderCardProps> = ({ createdAt, imageURL, name }) => {
     return (
-        <Card direction={['column', 'row']} alignItems={['center']} width={['xs', 'md', 'lg', 'lg', 'xl']}>
+        <Card direction={['column', 'row']} alignItems={['center']} width={['xs', 'md', 'lg', 'lg', '2xl']}>
             <CardHeader>
                 <Avatar size='2xl' name={name} src={imageURL} />
             </CardHeader>

@@ -12,7 +12,7 @@ interface UserInformationCardProps {
 const UserInformationCards: FC<UserInformationCardProps> = ({ uid, hasCompletedInformation }): JSX.Element => {
     return (
         <Card>
-            <CardBody width={['xs', 'md', 'lg', 'xl']}>
+            <CardBody width={['xs', 'md', 'lg', '2xl']}>
                 <Box as={RouterLink} to={`/user/profile/${uid}/information`}>
                     <HStack gap={4}>
                         <Icon as={FiUser} boxSize={8} />
