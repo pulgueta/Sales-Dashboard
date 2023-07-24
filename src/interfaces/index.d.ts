@@ -71,7 +71,7 @@ export interface UserInformation {
   createdAt: string;
   securitySelect: string;
   name: string;
-  address: {};
+  address: Shipping[] | null;
   email: string;
   profilePicture: string;
   uid: string;
@@ -138,7 +138,7 @@ export interface FirebaseUser {
 export interface UserContextProps {
   user: User | null;
   userRole: string | null;
-  userInformation: FirebaseUser;
+  userInformation: FirebaseUser | null;
 }
 
 
