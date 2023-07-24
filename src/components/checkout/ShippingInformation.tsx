@@ -22,7 +22,7 @@ const ShippingInformation: FC = (): JSX.Element => {
             </Stack>
             <Stack spacing={{ base: '6', md: '6' }}>
                 {
-                    userInformation.address === null
+                    userInformation!.address === null
                         ? <Button onClick={() => navigate(`/user/profile/${uid}/addresses`)} colorScheme='blue' variant='link'>Agrega una dirección primero</Button>
                         : <>
                             < FormControl id="name">
@@ -32,7 +32,7 @@ const ShippingInformation: FC = (): JSX.Element => {
                                     name="name"
                                     placeholder="Callie Nun"
                                     focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
-                                    value={userInformation && userInformation.address[0].names}
+                                    value={userInformation!.address[0].names}
                                 />
                             </FormControl>
                             <FormControl id="street">
@@ -42,7 +42,7 @@ const ShippingInformation: FC = (): JSX.Element => {
                                     name="name"
                                     placeholder="123 Ejemplo St"
                                     focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
-                                    value={userInformation && userInformation.address[0].address}
+                                    value={userInformation!.address[0].address}
                                 />
                             </FormControl>
                             <SimpleGrid columns={2} spacing="6">
@@ -53,7 +53,7 @@ const ShippingInformation: FC = (): JSX.Element => {
                                         name="zip"
                                         placeholder="03100"
                                         focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
-                                        value={userInformation && userInformation.address[0].zip}
+                                        value={userInformation!.address[0].zip}
                                     />
                                 </FormControl>
                                 <FormControl id="state">
@@ -61,7 +61,7 @@ const ShippingInformation: FC = (): JSX.Element => {
                                     <Input
                                         readOnly
                                         name="state"
-                                        value={userInformation && userInformation.address[0].state}
+                                        value={userInformation!.address[0].state}
                                         placeholder="Tamaulipas"
                                         focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
                                     />
@@ -71,7 +71,7 @@ const ShippingInformation: FC = (): JSX.Element => {
                                     <Input
                                         readOnly
                                         name="city"
-                                        value={userInformation && userInformation.address[0].city}
+                                        value={userInformation!.address[0].city}
                                         placeholder="Victoria"
                                         focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
                                     />
@@ -81,7 +81,7 @@ const ShippingInformation: FC = (): JSX.Element => {
                                     <Input
                                         readOnly
                                         name="colony"
-                                        value={userInformation && userInformation.address[0].colony}
+                                        value={userInformation!.address[0].colony}
                                         placeholder="Puebla"
                                         focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
                                     />
@@ -94,7 +94,7 @@ const ShippingInformation: FC = (): JSX.Element => {
                                     name="email"
                                     placeholder="you@exmaple.com"
                                     focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
-                                    value={userInformation && userInformation.email}
+                                    value={userInformation!.email}
                                 />
                             </FormControl>
                         </>

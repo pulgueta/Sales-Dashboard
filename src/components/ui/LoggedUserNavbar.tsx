@@ -48,7 +48,7 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
     const onRoute = (toRoute: string) => {
         mobileNav.onClose();
         popover.onClose();
-        toRoute.includes('/user/profile') && navigate(`user/profile/${userInformation.uid}`)
+        toRoute.includes('/user/profile') && navigate(`user/profile/${userInformation!.uid}`)
         navigate(toRoute)
     }
 
@@ -109,26 +109,26 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
                                     <>
                                         <Popover placement="bottom-end" isLazy>
                                             <PopoverTrigger>
-                                                <Avatar cursor='pointer' src={userInformation.profilePicture} name={`${userInformation.name} ${userInformation.fatherSurname}`} />
+                                                <Avatar cursor='pointer' src={userInformation!.profilePicture} name={`${userInformation!.name} ${userInformation!.fatherSurname}`} />
                                             </PopoverTrigger>
                                             <PopoverContent>
                                                 <PopoverArrow />
                                                 <PopoverCloseButton />
                                                 <PopoverHeader noOfLines={1} fontWeight={700} fontSize={18}>
-                                                    {userInformation.name} {userInformation.fatherSurname} {userInformation.motherSurname}
+                                                    {userInformation!.name} {userInformation!.fatherSurname} {userInformation!.motherSurname}
                                                 </PopoverHeader>
                                                 <PopoverBody width='xs'>
                                                     <VStack alignItems='flex-start' p={2}>
                                                         <Button
                                                             variant='link'
                                                             colorScheme='black'
-                                                            onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                            onClick={() => onRoute(`/user/profile/${userInformation!.uid}`)}
                                                         >Mi perfil</Button>
                                                         <Divider my={2} />
                                                         <Button
                                                             variant='link'
                                                             colorScheme='black'
-                                                            onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                            onClick={() => onRoute(`/user/profile/${userInformation!.uid}`)}
                                                         >Mis compras</Button>
                                                         <Divider my={2} />
                                                         <Button
@@ -170,26 +170,26 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
                                     <>
                                         <Popover placement="bottom-end" isLazy>
                                             <PopoverTrigger>
-                                                <Avatar cursor='pointer' src={userInformation.profilePicture} name={`${userInformation.name} ${userInformation.fatherSurname}`} />
+                                                <Avatar cursor='pointer' src={userInformation!.profilePicture} name={`${userInformation!.name} ${userInformation!.fatherSurname}`} />
                                             </PopoverTrigger>
                                             <PopoverContent>
                                                 <PopoverArrow />
                                                 <PopoverCloseButton />
                                                 <PopoverHeader noOfLines={1} fontWeight={700} fontSize={18}>
-                                                    {userInformation.name} {userInformation.fatherSurname} {userInformation.motherSurname}
+                                                    {userInformation!.name} {userInformation!.fatherSurname} {userInformation!.motherSurname}
                                                 </PopoverHeader>
                                                 <PopoverBody width='xs'>
                                                     <VStack alignItems='flex-start' p={2}>
                                                         <Button
                                                             variant='link'
                                                             colorScheme='black'
-                                                            onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                            onClick={() => onRoute(`/user/profile/${userInformation!.uid}`)}
                                                         >Mi perfil</Button>
                                                         <Divider my={2} />
                                                         <Button
                                                             variant='link'
                                                             colorScheme='black'
-                                                            onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                            onClick={() => onRoute(`/user/profile/${userInformation!.uid}`)}
                                                         >Mis compras</Button>
                                                         <Divider my={2} />
                                                         <Button
@@ -267,13 +267,13 @@ const LoggedUserNavbar: FC = (): JSX.Element => {
                                                 <Button
                                                     variant='link'
                                                     colorScheme='black'
-                                                    onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                    onClick={() => onRoute(`/user/profile/${userInformation!.uid}`)}
                                                 >Mi perfil</Button>
                                                 <Divider my={2} />
                                                 <Button
                                                     variant='link'
                                                     colorScheme='black'
-                                                    onClick={() => onRoute(`/user/profile/${userInformation.uid}`)}
+                                                    onClick={() => onRoute(`/user/profile/${userInformation!.uid}`)}
                                                 >Mis compras</Button>
                                                 <Divider my={2} />
                                                 <Button

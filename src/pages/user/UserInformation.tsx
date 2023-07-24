@@ -57,11 +57,11 @@ const UserInformation: FC = (): JSX.Element => {
                 <Avatar
                     loading="lazy"
                     style={{ width: '216px', height: '216px' }}
-                    name={`${userInformation.name} ${userInformation.fatherSurname} ${userInformation.motherSurname}`}
+                    name={`${userInformation!.name} ${userInformation!.fatherSurname} ${userInformation!.motherSurname}`}
                     src={
-                        userInformation.profilePicture
+                        userInformation!.profilePicture
                             ?
-                            userInformation.profilePicture
+                            userInformation!.profilePicture
                             :
                             'https://via.placeholder.com/500x500.png?text=Image+Placeholder'
                     }
@@ -70,7 +70,7 @@ const UserInformation: FC = (): JSX.Element => {
                 <Tooltip
                     hasArrow
                     label={
-                        userInformation.profilePicture === null
+                        userInformation!.profilePicture === null
                             ?
                             'Subir foto de perfil'
                             :
@@ -100,10 +100,10 @@ const UserInformation: FC = (): JSX.Element => {
                     </>
                 </Tooltip>
                 <UserPersonalData
-                    name={userInformation.name}
-                    fatherSurname={userInformation.fatherSurname}
-                    motherSurname={userInformation.motherSurname}
-                    birthday={userInformation.birthday}
+                    name={userInformation!.name}
+                    fatherSurname={userInformation!.fatherSurname}
+                    motherSurname={userInformation!.motherSurname}
+                    birthday={userInformation!.birthday}
                 />
             </VStack>
         </VStack>
