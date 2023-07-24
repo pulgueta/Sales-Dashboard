@@ -1,5 +1,5 @@
 import { FirebaseError } from "firebase/app";
-import { ApplicationVerifier, createUserWithEmailAndPassword, FacebookAuthProvider, getMultiFactorResolver, GoogleAuthProvider, multiFactor, MultiFactorError, MultiFactorResolver, PhoneAuthProvider, PhoneMultiFactorGenerator, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, User, UserCredential } from "firebase/auth";
+import { ApplicationVerifier, createUserWithEmailAndPassword, FacebookAuthProvider, getMultiFactorResolver, GoogleAuthProvider, multiFactor, MultiFactorError, MultiFactorResolver, PhoneAuthProvider, PhoneMultiFactorGenerator, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updatePassword, User, UserCredential } from "firebase/auth";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 
 import { auth, currentUser, db } from "@/firebase";
@@ -90,6 +90,24 @@ export const signUpWithEmail = async (email: string, password: string,
 
         localStorage.setItem('uid', user.uid)
         return user
+    } catch (error) {
+        if (error instanceof FirebaseError) throw Error
+    }
+}
+
+export const updateEmailAddress = async (email: string): Promise<boolean | void> => {
+    try {
+        if (!currentUser || !currentUser.uid) {
+            throw new Error('User not authenticated');
+        }
+
+        await updateEmail(currentUser, email)
+
+        await setDoc(doc(db, 'users', currentUser.uid), {
+            email
+        }, { merge: true })
+
+        return true
     } catch (error) {
         if (error instanceof FirebaseError) throw Error
     }

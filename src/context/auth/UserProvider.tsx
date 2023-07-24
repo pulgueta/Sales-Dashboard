@@ -21,7 +21,7 @@ export const UserProvider: FC<ContextProps> = ({ children }) => {
     createdAt: '',
     securitySelect: '',
     name: '',
-    address: null,
+    address: {},
     email: '',
     profilePicture: '',
     uid: '',

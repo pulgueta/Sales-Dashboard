@@ -8,6 +8,16 @@ export interface UserHeaderCardProps {
   createdAt: string;
 }
 
+export interface Shipping {
+  names: string,
+  address: string,
+  zip: string,
+  state: string,
+  city: string,
+  colony: string[] | string,
+  email: string,
+}
+
 export interface PersonalDataProps {
   name: string;
   fatherSurname: string;
@@ -61,7 +71,7 @@ export interface UserInformation {
   createdAt: string;
   securitySelect: string;
   name: string;
-  address: string | null;
+  address: {};
   email: string;
   profilePicture: string;
   uid: string;
@@ -71,7 +81,7 @@ export interface UserInformation {
 }
 
 export interface CommentInfo {
-  name:  string;
+  name: string;
   fatherSurname: string;
   avatar: string;
   comment: string;
@@ -106,11 +116,31 @@ export interface Inputs {
   image: any;
 }
 
+export interface FirebaseUser {
+  birthday: string;
+  role: string;
+  createdAt: string;
+  phoneNumber: string;
+  gender: string;
+  securitySelect: string;
+  age: number;
+  securityQuestion: string;
+  fatherSurname: string;
+  email: string;
+  uid: string;
+  motherSurname: string;
+  name: string;
+  profilePicture: string;
+  address: null | [];
+}
+
+
 export interface UserContextProps {
   user: User | null;
   userRole: string | null;
-  userInformation: DocumentData | undefined;
+  userInformation: FirebaseUser;
 }
+
 
 export interface Product {
   description?: string;
@@ -149,28 +179,68 @@ export interface ActiveUser {
 }
 
 export interface PaymentInformation {
-  name: string,
-  cardNumber: string,
-  expDate: string,
-  cvv: string,
+  name: string;
+  cardNumber: string;
+  expDate: {
+    month: string;
+    year: string;
+  };
+  cvv: string;
 }
+
 
 export interface MXZip {
-  "post code":            string;
-  country:                string;
-  "country abbreviation": string;
-  places:                 Place[];
+  state: State;
+  municipality: string;
+  neighborhoods: string[];
+  [key: string]: State | string | string[]; // Add the index signature here
 }
 
+export enum State {
+  Aguascalientes = "Aguascalientes",
+  BajaCalifornia = "Baja California",
+  BajaCaliforniaSur = "Baja California Sur",
+  Campeche = "Campeche",
+  Chiapas = "Chiapas",
+  Chihuahua = "Chihuahua",
+  CoahuilaDeZaragoza = "Coahuila de Zaragoza",
+  Colima = "Colima",
+  DistritoFederal = "Distrito Federal",
+  Durango = "Durango",
+  Guanajuato = "Guanajuato",
+  Guerrero = "Guerrero",
+  Hidalgo = "Hidalgo",
+  Jalisco = "Jalisco",
+  MichoacánDeOcampo = "Michoacán de Ocampo",
+  Morelos = "Morelos",
+  México = "México",
+  Nayarit = "Nayarit",
+  NuevoLeón = "Nuevo León",
+  Oaxaca = "Oaxaca",
+  Puebla = "Puebla",
+  Querétaro = "Querétaro",
+  QuintanaRoo = "Quintana Roo",
+  SANLuisPotosí = "San Luis Potosí",
+  Sinaloa = "Sinaloa",
+  Sonora = "Sonora",
+  Tabasco = "Tabasco",
+  Tamaulipas = "Tamaulipas",
+  Tlaxcala = "Tlaxcala",
+  VeracruzDeIgnacioDeLaLlave = "Veracruz de Ignacio de la Llave",
+  Yucatán = "Yucatán",
+  Zacatecas = "Zacatecas",
+}
+
+
 export interface Place {
-  "place name":         string;
-  longitude:            string;
-  state:                string;
+  "place name": string;
+  longitude: string;
+  state: string;
   "state abbreviation": string;
-  latitude:             string;
+  latitude: string;
 }
 
 export interface BannerImages {
   images: string[];
-  id:     string;
+  id: string;
 }

@@ -76,7 +76,7 @@ const UserInformationCards: FC<UserInformationCardProps> = ({ uid, hasCompletedI
                     </HStack>
                 </Box>
                 <Divider my={4} />
-                <Box as={RouterLink} to={`/user/profile/${uid}/address`}>
+                <Box as={RouterLink} to={`/user/profile/${uid}/addresses`}>
                     <HStack gap={4}>
                         <Icon as={FiMapPin} boxSize={8} />
                         <HStack justifyContent='space-between' width='100%'>

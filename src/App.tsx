@@ -28,6 +28,7 @@ const Checkout = lazy(() => import('@/pages/checkout/Checkout'))
 const UserProfile = lazy(() => import('@/pages/user/UserProfile'))
 const UserInformation = lazy(() => import('@/pages/user/UserInformation'))
 const Security = lazy(() => import('@/pages/user/security/Security'))
+const Addresses = lazy(() => import('@/pages/user/address/Addresses'))
 
 // Admin routes
 const AddProduct = lazy(() => import('@/pages/admin/addProduct/AddProduct'))
@@ -81,8 +82,8 @@ export const App: FC = (): JSX.Element => {
           <Route path=':uid/information' element={<UserInformation />} />
           <Route path=':uid/security' element={<Security />} />
           <Route path=':uid/purchases' element={<UserInformation />} />
-          <Route path=':uid/cards' element={<UserInformation />} />
-          <Route path=':uid/address' element={<UserInformation />} />
+          <Route path=':uid/payments' element={<UserInformation />} />
+          <Route path=':uid/addresses' element={<Addresses />} />
         </Route>
 
         <Route path='/admin' element={
