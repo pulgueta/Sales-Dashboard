@@ -46,7 +46,7 @@ const UserUpdateModal: FC = (): JSX.Element => {
 
     const onUpdateValues: SubmitHandler<PersonalDataProps> = async (values) => {
         try {
-            await updateInformation(values, userInformation.uid)
+            await updateInformation(values, userInformation!.uid)
             toast({
                 title: 'Actualización de datos',
                 description: 'Se han actualizado tus datos',

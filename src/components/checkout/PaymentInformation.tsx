@@ -36,7 +36,7 @@ const PaymentInformation: FC = (): JSX.Element => {
         console.log('Form data:', formData);
         if (formData.cardNumber.length >= 16 && formData.name.length >= 6 && formData.cvv.length >= 3) {
             try {
-                await addOrder(cart, total, formData.cardNumber, userInformation.uid)
+                await addOrder(cart, total, formData.cardNumber, userInformation!.uid)
                 navigate('/success')
             } catch (e) {
                 throw e
