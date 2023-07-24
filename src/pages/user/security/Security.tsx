@@ -17,7 +17,7 @@ const Security: FC = (): JSX.Element => {
                     <Stack spacing={4} w='full'>
                         <FormControl>
                             <FormLabel>Correo electrónico</FormLabel>
-                            <Input value={userInformation.email} readOnly />
+                            <Input value={userInformation!.email} readOnly />
                         </FormControl>
                         <FormControl>
                             <FormLabel>Contraseña</FormLabel>

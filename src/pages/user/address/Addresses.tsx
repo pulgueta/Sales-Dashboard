@@ -20,10 +20,10 @@ const Addresses: FC = (): JSX.Element => {
                     <AddAddressModal />
 
                     {
-                        userInformation.address === null
+                        userInformation!.address === null
                             ? <Text>No tienes direcciones actualmente</Text>
                             : <Stack spacing={6}>
-                                {userInformation.address!.map((address: Shipping) => (
+                                {userInformation!.address!.map((address: Shipping) => (
                                     <AddressCard {...address} />
                                 ))}
                             </Stack>

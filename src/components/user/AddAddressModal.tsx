@@ -23,7 +23,7 @@ const AddAddressModal: FC = (): JSX.Element => {
     state: '',
     city: '',
     colony: '',
-    email: userInformation.email,
+    email: userInformation!.email,
   });
 
 
@@ -105,7 +105,7 @@ const AddAddressModal: FC = (): JSX.Element => {
   const onSubmit: SubmitHandler<Shipping> = async (values) => {
     try {
       console.log(values);
-      await addAddress(values, userInformation.uid)
+      await addAddress(values, userInformation!.uid)
   
       toast({
         status: 'success',
