@@ -3,7 +3,7 @@ import { addDoc, arrayUnion, collection, deleteDoc, doc, DocumentData, getDoc, g
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { v4 } from 'uuid'
 
-import { currentUser, db, storage } from "@/firebase"
+import { db, storage } from "@/firebase"
 import { CommentInfo, Inputs, PersonalDataProps, Shipping } from "@/interfaces"
 
 export const updateInformation = async (values: PersonalDataProps, uid: string): Promise<void | FirebaseError> => {

@@ -131,7 +131,7 @@ export interface FirebaseUser {
   motherSurname: string;
   name: string;
   profilePicture: string;
-  address: null | [];
+  address: null | Shipping[];
 }
 
 
