@@ -32,18 +32,18 @@ const UserProfile: FC = (): JSX.Element => {
 
     const isCompletedInformation = (): boolean => {
         if (
-            userInformation?.name.length <= 1 ||
-            userInformation?.fatherSurname.length <= 1 ||
-            userInformation?.motherSurname.length <= 1 ||
-            userInformation?.birthday.length <= 1 ||
-            userInformation?.age.length <= 1 ||
-            userInformation?.cards.length < 1 ||
-            userInformation?.address.length <= 1
+            userInformation!.name.length <= 1 ||
+            userInformation!.fatherSurname.length <= 1 ||
+            userInformation!.motherSurname.length <= 1 ||
+            userInformation!.birthday.length <= 1 ||
+            userInformation!.age <= 1 ||
+            userInformation!.address!.length <= 1
         ) {
             return false
         } else {
             return true
         }
+
     }
 
     // const validationSchema = yup.object().shape({
@@ -148,8 +148,8 @@ const UserProfile: FC = (): JSX.Element => {
                         <Heading mt={4} mb={6}>Tu perfil</Heading>
                         <VStack gap={6}>
                             <UserHeaderCard
-                                createdAt={userInformation?.createdAt}
-                                imageURL={userInformation?.profilePicture}
+                                createdAt={userInformation!.createdAt}
+                                imageURL={userInformation!.profilePicture}
                                 name={`${userInformation?.name} ${userInformation?.fatherSurname} ${userInformation?.motherSurname}`}
                             />
                             <UserInformationCards
