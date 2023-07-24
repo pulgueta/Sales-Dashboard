@@ -5,6 +5,7 @@ import { Link as RLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import ImageSlider from 'react-simple-image-slider';
 import { motion } from 'framer-motion';
+import { FiExternalLink } from 'react-icons/fi';
 
 const images = [
     {
@@ -30,7 +31,16 @@ const Home: FC = (): JSX.Element => {
             <Helmet>
                 <title>Xochicalli Commerce</title>
             </Helmet>
-            <ImageSlider width='100%' height={592} style={{ backgroundPosition: 'center' }} autoPlay images={images} slideDuration={1} showBullets showNavs />
+            <ImageSlider
+                width='100%'
+                height={512}
+                style={{ backgroundPosition: 'center' }}
+                autoPlay
+                images={images}
+                slideDuration={1}
+                showBullets
+                showNavs
+            />
             <HStack justifyContent='center' py={28} px={[8, 0]} bgGradient='linear(to-b, white, gray.100)'>
                 <Center>
                     <VStack>
@@ -73,7 +83,7 @@ const Home: FC = (): JSX.Element => {
                     >
                         <Text fontWeight="medium">Al usar nuestra tienda, estás aceptando nuestras políticas de privacidad.</Text>
                         <Text color="on-accent-muted">
-                            <Link as={RLink} to='/privacy-policy'>Ir a nuestras políticas de privacidad</Link>
+                            <Link display='flex' alignItems='center' gap={1} as={RLink} to='/privacy-policy'>Ir a nuestras políticas de privacidad <FiExternalLink /></Link>
                         </Text>
                     </Stack>
                     <CloseButton onClick={() => setCloseBanner(!closeBanner)} position="absolute" right="2" top={{ base: '2', md: '4' }} />

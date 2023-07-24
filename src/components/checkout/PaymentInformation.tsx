@@ -1,111 +1,130 @@
-import { FC } from 'react';
+import { FC, useContext, useState } from 'react';
 
-import { Button, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Select, Stack, useColorModeValue } from '@chakra-ui/react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, FormControl, FormLabel, Heading, HStack, Input, Select, Stack, useColorModeValue, } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
-import { PaymentInformation as PaymentInterface } from '@/interfaces';
+import { PaymentInformation as IPay } from '@/interfaces';
+import { addOrder } from '@/utils';
+import { CartContext, UserContext } from '@/context';
 
 const PaymentInformation: FC = (): JSX.Element => {
-    const onlyNumbersRegex = new RegExp('^[0-9]');
-
-    const validationSchema = yup.object().shape({
-        names: yup.string().required('Debes ingresar nombres y apellidos').min(6, 'Debes ingresar al menos 6 caracteres'),
-        cardNumber: yup
-            .string()
-            .required('Debes ingresar los numeros de tu tarjeta')
-            .min(16, 'La tarjeta debe tener todos los 16 numeros'),
-        name: yup.string().required('El nombre no puede estar vacío').min(4, 'El nombre debe tener mínimo 4 caracteres'),
-        cvv: yup
-            .string()
-            .required('El CVV no puede estar vacio')
-            .min(3, 'El CVV debe ser de 3 digitos')
-            .max(3, 'El CVV no puede ser de mas de 3 digitos')
-            .matches(onlyNumbersRegex, 'Solo puedes ingresar numeros'),
+    const [formData, setFormData] = useState<IPay>({
+        name: '',
+        cardNumber: '',
+        expDate: {
+            month: '',
+            year: '',
+        },
+        cvv: '',
     });
 
-    const {
-        handleSubmit,
-        register,
-        formState: { errors, isSubmitting },
-    } = useForm<PaymentInterface>({ resolver: yupResolver(validationSchema) });
+    const { cart, total } = useContext(CartContext)
+    const { userInformation } = useContext(UserContext)
 
-    const onSubmit: SubmitHandler<PaymentInterface> = (data) => {
-        console.log(data);
+    const navigate = useNavigate()
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        console.log('Form data:', formData);
+        if (formData.cardNumber.length >= 16 && formData.name.length >= 6 && formData.cvv.length >= 3) {
+            try {
+                await addOrder(cart, total, formData.cardNumber, userInformation.uid)
+                navigate('/success')
+            } catch (e) {
+                throw e
+            }
+        }
     };
 
     return (
-        <Stack spacing={{ base: '6', md: '12' }}>
+        <Stack spacing={{ base: '6', md: '8' }}>
             <Heading size="lg">Información de pago</Heading>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit}>
                 <Stack spacing="6">
-                    <Stack direction="row" spacing="6">
-                        <FormControl isInvalid={!!errors.name}>
+                    <Stack direction='row'>
+                        <FormControl>
                             <FormLabel color={useColorModeValue('gray.700', 'gray.200')}>Nombre en la tarjeta</FormLabel>
                             <Input
+                                name="name"
                                 placeholder="Auriela Lourdes"
                                 focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
-                                {...register('name')}
+                                value={formData.name}
+                                onChange={handleChange}
                             />
-                            {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>}
                         </FormControl>
-                        <FormControl isInvalid={!!errors.cardNumber}>
+                        <FormControl>
                             <FormLabel color={useColorModeValue('gray.700', 'gray.200')}>Número en la tarjeta</FormLabel>
                             <Input
+                                name="cardNumber"
                                 placeholder="4321 1234 5432 7890"
                                 focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
-                                {...register('cardNumber')}
+                                value={formData.cardNumber}
+                                onChange={handleChange}
                                 maxLength={19}
                             />
-
-                            {errors.cardNumber && <FormErrorMessage>{errors.cardNumber.message}</FormErrorMessage>}
                         </FormControl>
                     </Stack>
                     <HStack spacing="6">
-                        <FormControl width="full" isInvalid={!!errors.expDate}>
+                        <FormControl>
                             <FormLabel color={useColorModeValue('gray.700', 'gray.200')}>Fecha de expiración</FormLabel>
                             <HStack spacing="3">
-                                <Select aria-label="Select Month" focusBorderColor={useColorModeValue('blue.500', 'blue.200')}>
-                                    <option>01</option>
-                                    <option>02</option>
-                                    <option>03</option>
-                                    <option>04</option>
-                                    <option>05</option>
-                                    <option>06</option>
-                                    <option>07</option>
-                                    <option>08</option>
-                                    <option>09</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
+                                <Select
+                                    name="month"
+                                    aria-label="Select Month"
+                                    focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
+                                    value={formData.expDate.month}
+                                    onChange={handleChange}
+                                >
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
                                 </Select>
-                                <Select aria-label="Select Year" focusBorderColor={useColorModeValue('blue.500', 'blue.200')}>
-                                    <option>2023</option>
-                                    <option>2024</option>
-                                    <option>2025</option>
-                                    <option>2026</option>
-                                    <option>2027</option>
-                                    <option>2028</option>
-                                    <option>2029</option>
-                                    <option>2030</option>
-                                    <option>2031</option>
-                                    <option>2032</option>
+                                <Select
+                                    name="year"
+                                    aria-label="Select Year"
+                                    focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
+                                    value={formData.expDate.year}
+                                    onChange={handleChange}
+                                >
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
                                 </Select>
                             </HStack>
                         </FormControl>
-                        <FormControl isInvalid={!!errors.cvv}>
+                        <FormControl>
                             <FormLabel color={useColorModeValue('gray.700', 'gray.200')}>CVV</FormLabel>
                             <Input
+                                name="cvv"
                                 placeholder="111"
                                 focusBorderColor={useColorModeValue('blue.500', 'blue.200')}
-                                {...register('cvv')}
+                                value={formData.cvv}
+                                onChange={handleChange}
                                 maxLength={3}
                             />
-                            {errors.cvv && <FormErrorMessage>{errors.cvv.message}</FormErrorMessage>}
                         </FormControl>
                     </HStack>
-                    <Button type="submit" isLoading={isSubmitting} colorScheme="blue">
+                    <Button type="submit" colorScheme="blue">
                         Realizar pago
                     </Button>
                 </Stack>

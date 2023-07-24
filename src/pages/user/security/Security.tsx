@@ -1,7 +1,14 @@
-import { Button, ButtonGroup, Center, FormControl, FormLabel, Heading, Input, Stack, VStack } from "@chakra-ui/react"
-import { FC } from "react"
+import { FC, lazy, useContext } from 'react'
+
+import { Center, FormControl, FormLabel, Heading, Input, Stack, VStack } from '@chakra-ui/react'
+
+import { UserContext } from '@/context'
+
+const SecurityModal = lazy(() => import('@/components/auth/SecurityModal'))
 
 const Security: FC = (): JSX.Element => {
+    const { userInformation } = useContext(UserContext)
+
     return (
         <VStack minH='calc(100vh - 64px)' bgColor='gray.100' p={4}>
             <Center bg='white' p={[6, 8]} borderRadius='lg' w={['sm', 'lg', 'xl', '2xl']}>
@@ -10,19 +17,15 @@ const Security: FC = (): JSX.Element => {
                     <Stack spacing={4} w='full'>
                         <FormControl>
                             <FormLabel>Correo electrónico</FormLabel>
-                            <Input />
+                            <Input value={userInformation.email} readOnly />
                         </FormControl>
                         <FormControl>
                             <FormLabel>Contraseña</FormLabel>
-                            <Input />
+                            <Input value='********' readOnly />
                         </FormControl>
                     </Stack>
-                    <ButtonGroup>
-                        <Button>Cambiar correo</Button>
-                        <Button>Cambiar contraseña</Button>
-                    </ButtonGroup>
+                    <SecurityModal />
                 </VStack>
-
             </Center>
         </VStack>
     )

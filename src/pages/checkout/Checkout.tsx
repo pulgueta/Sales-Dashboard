@@ -12,10 +12,10 @@ const Checkout: FC = (): JSX.Element => {
       <Helmet>
         <title>Checkout</title>
       </Helmet>
-      <Box bgGradient={useColorModeValue('linear(to-l, gray.50 50%, white 50%)', 'linear(to-l, gray.700 50%, gray.800 50%)')} h='100vh'>
+      <Box bgGradient={useColorModeValue('linear(to-l, gray.50 50%, white 50%)', 'linear(to-l, gray.700 50%, gray.800 50%)')} minH='100vh'>
         <Flex maxW="8xl" mx="auto" direction={{ base: 'column', md: 'row' }}>
           <Box flex="1" bg={useColorModeValue('white', 'gray.800')} px={{ base: '4', md: '8', lg: '12', xl: '20' }} py={{ base: '6', md: '8', lg: '12', xl: '20' }} h='100vh'>
-            <Stack spacing={{ base: '16', lg: '10' }}>
+            <Stack spacing={{ base: '16', lg: '8' }}>
               <ShippingInformation />
               <PaymentInformation />
             </Stack>

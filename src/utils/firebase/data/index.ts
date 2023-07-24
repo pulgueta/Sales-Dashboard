@@ -1,10 +1,10 @@
 import { FirebaseError } from "firebase/app"
-import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore"
+import { addDoc, arrayUnion, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore"
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { v4 } from 'uuid'
 
-import { db, storage } from "@/firebase"
-import { CommentInfo, Inputs, PersonalDataProps } from "@/interfaces"
+import { currentUser, db, storage } from "@/firebase"
+import { CommentInfo, Inputs, PersonalDataProps, Shipping } from "@/interfaces"
 
 export const updateInformation = async (values: PersonalDataProps, uid: string): Promise<void | FirebaseError> => {
     const { name, fatherSurname, motherSurname } = values
@@ -122,9 +122,64 @@ export const addComment = async (values: CommentInfo, product: string): Promise<
             product,
         })
 
-        return await setDoc(doc(db, 'products', prevComment.id), { id: prevComment.id }, { merge: true })
+        return await setDoc(doc(db, 'products', prevComment.id),
+            { id: prevComment.id },
+            { merge: true }
+        )
     } catch (error) {
         return error as FirebaseError
+    }
+}
+
+export const addOrder = async (items: any, total: number, card: string, uid: string) => {
+    try {
+        const trimmedCard = card.slice(-4)
+
+
+        const timeStamp = new Date()
+        const formatted = timeStamp.toISOString()
+
+        const orderRef = collection(db, `orders/${uid}`, formatted)
+
+        await addDoc(orderRef, {
+            items,
+            total,
+            cardUsed: trimmedCard,
+        });
+
+        return localStorage.removeItem('cart')
+    } catch (e) {
+        return e as FirebaseError
+    }
+}
+
+export const addAddress = async (values: Shipping, uid: string): Promise<void | FirebaseError> => {
+    try {
+        const userRef = doc(db, 'users', uid)
+
+        const valuesToAdd = {
+            names: values.names,
+            zipCode: values.zip,
+            address: values.address,
+            city: values.city,
+            state: values.state,
+            colony: values.colony
+        };
+
+        return await updateDoc(userRef, {
+            address: arrayUnion(valuesToAdd)
+        });
+
+    } catch (e) {
+        return e as FirebaseError
+    }
+}
+
+export const deleteAddress = async () => {
+    try {
+
+    } catch (e) {
+        return e as FirebaseError
     }
 }
 
